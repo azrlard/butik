@@ -115,7 +115,7 @@ class PengirimanResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPengirimen::route('/'),
+            'index' => Pages\ListPengiriman::route('/'),
             'create' => Pages\CreatePengiriman::route('/create'),
             'edit' => Pages\EditPengiriman::route('/{record}/edit'),
         ];
