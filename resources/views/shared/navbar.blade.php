@@ -4,14 +4,14 @@
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
                 <h1 class="text-2xl font-bold text-indigo-600 cursor-pointer" onclick="navigateTo('home')">
-                    ✨ Butik Online
+                    <a href="#home" class="no-underline text-indigo-600">✨ Butik Online</a>
                 </h1>
             </div>
             <div class="hidden md:flex space-x-8">
-                <a href="#" onclick="navigateTo('home')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
-                <a href="#" onclick="navigateTo('products')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Produk</a>
-                <a href="#" onclick="navigateTo('custom')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Custom</a>
-                <a href="#" onclick="navigateTo('cart')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors relative">
+                <a href="#home" onclick="navigateTo('home')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                <a href="#products" onclick="navigateTo('products')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Produk</a>
+                <a href="#custom" onclick="navigateTo('custom')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Custom</a>
+                <a href="#cart" onclick="navigateTo('cart')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors relative">
                     Keranjang
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-xs rounded-full h-5 w-5 flex items-center justify-center text-gray-800 font-semibold">0</span>
                 </a>
@@ -28,10 +28,10 @@
     </div>
     <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
         <div class="px-2 pt-2 pb-3 space-y-1">
-            <a href="#" onclick="navigateTo('home')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Home</a>
-            <a href="#" onclick="navigateTo('products')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Produk</a>
-            <a href="#" onclick="navigateTo('custom')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Custom</a>
-            <a href="#" onclick="navigateTo('cart')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Keranjang</a>
+            <a href="#home" onclick="navigateTo('home')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Home</a>
+            <a href="#products" onclick="navigateTo('products')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Produk</a>
+            <a href="#custom" onclick="navigateTo('custom')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Custom</a>
+            <a href="#cart" onclick="navigateTo('cart')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Keranjang</a>
             <a href="#" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Login</a>
         </div>
     </div>
