@@ -21,6 +21,7 @@ class PengirimanResource extends Resource
     protected static ?string $navigationLabel = 'Pengiriman';
     protected static ?string $modelLabel = 'Pengiriman';
     protected static ?string $pluralModelLabel = 'Pengiriman';
+    protected static ?string $slug = 'pengiriman';
 
     public static function form(Form $form): Form
     {
