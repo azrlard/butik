@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->integer('jumlah');
             $table->decimal('harga_satuan', 10, 2);
             $table->decimal('subtotal', 10, 2);
-            $table->decimal('harga', 10, 2);
+            $table->decimal('harga', 10, 2)->nullable();
             $table->timestamps();
         });
     }

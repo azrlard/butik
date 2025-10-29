@@ -23,13 +23,13 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function pengiriman()
-    {
-        return $this->hasOne(Pengiriman::class);
-    }
-
     public function pembayaran()
     {
         return $this->hasOne(Pembayaran::class);
+    }
+
+    public function pengiriman()
+    {
+        return $this->hasOne(Pengiriman::class);
     }
 }

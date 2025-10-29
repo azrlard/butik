@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Butik Online - Temukan Gaya Unikmu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -25,6 +26,33 @@
     @include('shared.footer')
     @include('shared.scroll-to-top')
 
+    <script>
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadDataFromAPI();
+
+
+            // Check URL hash for initial page
+            const hash = window.location.hash.substring(1); // Remove the '#'
+            const validPages = ['home', 'products', 'cart', 'custom'];
+
+            if (hash && validPages.includes(hash)) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function(event) {
+            const hash = window.location.hash.substring(1);
+            const validPages = ['home', 'products', 'cart', 'custom'];
+
+            if (hash && validPages.includes(hash)) {
+                navigateTo(hash);
+            }
+        });
+    </script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/navigation.js') }}"></script>
     <script src="{{ asset('js/products.js') }}"></script>

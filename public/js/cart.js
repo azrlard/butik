@@ -105,11 +105,228 @@ function loadCartItems() {
     totalElement.textContent = `Rp ${total.toLocaleString('id-ID')}`;
 }
 
-function checkout() {
-    if (cart.length === 0) return;
+function showCheckoutForm() {
+    if (cart.length === 0) {
+        showNotification('Keranjang kosong. Silakan tambahkan produk terlebih dahulu.');
+        return;
+    }
 
-    showNotification('Checkout berhasil! Terima kasih atas pesanan Anda. Tim kami akan segera memproses pesanan.');
-    cart = [];
-    updateCartCount();
-    loadCartItems();
+    // Update modal summary
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const totalPrice = cart.reduce((sum, item) => sum + (item.harga * item.quantity), 0);
+
+    document.getElementById('modal-total-items').textContent = `${totalItems} item`;
+    document.getElementById('modal-total-price').textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+
+    // Show modal
+    document.getElementById('checkout-modal').classList.remove('hidden');
+}
+
+function closeCheckoutModal() {
+    document.getElementById('checkout-modal').classList.add('hidden');
+}
+
+function closeSuccessModal() {
+    document.getElementById('success-modal').classList.add('hidden');
+}
+
+async function processCheckout(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    // Add cart items to form data
+    cart.forEach((item, index) => {
+        formData.append(`items[${index}][product_id]`, item.id);
+        formData.append(`items[${index}][jumlah]`, item.quantity);
+    });
+
+    // Add user_id
+    formData.append('user_id', '1');
+
+    try {
+        // Send order to API
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: formData
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+
+            // Close checkout modal
+            closeCheckoutModal();
+
+            // Show success notification
+            showNotification(result.message);
+
+            // Clear cart
+            cart = [];
+            updateCartCount();
+            loadCartItems();
+
+            // Navigate to cart page
+            navigateTo('cart');
+
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to create order');
+        }
+    } catch (error) {
+        console.error('Checkout error:', error);
+        showNotification('Terjadi kesalahan saat checkout. Silakan coba lagi.');
+    }
+}
+
+function createCheckoutModal() {
+    const modalHTML = `
+        <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">Informasi Pengiriman</h3>
+                        <button onclick="closeCheckoutModal()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form id="checkout-form" onsubmit="processCheckout(event)">
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <label for="customer-name" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                                <input type="text" id="customer-name" name="customer_name" required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label for="customer-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" id="customer-email" name="customer_email" required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label for="customer-phone" class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon</label>
+                                <input type="tel" id="customer-phone" name="customer_phone" required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label for="shipping-address" class="block text-sm font-medium text-gray-700 mb-1">Alamat Pengiriman</label>
+                                <textarea id="shipping-address" name="alamat_pengiriman" rows="3" required
+                                          placeholder="Masukkan alamat lengkap pengiriman"
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
+                            </div>
+
+                            <div>
+                                <label for="payment-method" class="block text-sm font-medium text-gray-700 mb-1">Metode Pembayaran</label>
+                                <select id="payment-method" name="metode_pembayaran" required
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    <option value="">Pilih metode pembayaran</option>
+                                    <option value="transfer">Transfer Bank</option>
+                                    <option value="cod">Cash on Delivery</option>
+                                    <option value="ewallet">E-Wallet</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                            <h4 class="font-semibold text-gray-800 mb-2">Ringkasan Pesanan</h4>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between">
+                                    <span>Total Item:</span>
+                                    <span id="modal-total-items">${cart.reduce((sum, item) => sum + item.quantity, 0)} item</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Total Harga:</span>
+                                    <span id="modal-total-price">Rp ${cart.reduce((sum, item) => sum + (item.harga * item.quantity), 0).toLocaleString('id-ID')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-3">
+                            <button type="button" onclick="closeCheckoutModal()"
+                                    class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+                                Batal
+                            </button>
+                            <button type="submit"
+                                    class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                                Konfirmasi Pesanan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function closeCheckoutModal() {
+    const modal = document.getElementById('checkout-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function processCheckout(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    // Add cart items to form data
+    cart.forEach((item, index) => {
+        formData.append(`items[${index}][product_id]`, item.id);
+        formData.append(`items[${index}][jumlah]`, item.quantity);
+    });
+
+    // Add user_id
+    formData.append('user_id', '1');
+
+    // Submit form via AJAX to API
+    submitCheckout(formData);
+}
+
+async function submitCheckout(formData) {
+    try {
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: formData
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+
+            // Close checkout modal
+            closeCheckoutModal();
+
+            // Show success notification
+            showNotification(result.message);
+
+            // Clear cart
+            cart = [];
+            updateCartCount();
+            loadCartItems();
+
+            // Navigate to cart page
+            navigateTo('cart');
+
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to create order');
+        }
+    } catch (error) {
+        console.error('Checkout error:', error);
+        showNotification('Terjadi kesalahan saat checkout. Silakan coba lagi.');
+    }
 }

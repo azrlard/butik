@@ -1,6 +1,6 @@
 <!-- Custom Form -->
 <div class="bg-white rounded-xl shadow-lg p-8">
-    <form id="custom-form" onsubmit="submitCustomRequest(event)">
+    <form id="custom-form" onsubmit="submitCustomRequest(event)" enctype="multipart/form-data">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label for="customer-name" class="block text-sm font-semibold text-gray-800 mb-2">Nama Lengkap</label>
@@ -28,13 +28,13 @@
 
         <div class="mb-6">
             <label for="design-description" class="block text-sm font-semibold text-gray-800 mb-2">Keterangan Desain</label>
-            <textarea id="design-description" name="design-description" rows="6" required placeholder="Jelaskan detail desain yang Anda inginkan, termasuk warna, ukuran, bahan, dan spesifikasi lainnya..." class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors resize-none"></textarea>
+            <textarea id="keterangan" name="keterangan" rows="6" required placeholder="Jelaskan detail desain yang Anda inginkan, termasuk warna, ukuran, bahan, dan spesifikasi lainnya..." class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors resize-none"></textarea>
         </div>
 
         <div class="mb-6">
             <label for="reference-photos" class="block text-sm font-semibold text-gray-800 mb-2">Upload Foto Referensi</label>
             <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors">
-                <input type="file" id="reference-photos" name="reference-photos" accept="image/*" multiple class="hidden" onchange="handleFileUpload(event)">
+                <input type="file" id="reference-photos" name="foto_referensi" accept="image/*" class="hidden" onchange="handleFileUpload(event)">
                 <div onclick="document.getElementById('reference-photos').click()" class="cursor-pointer">
                     <div class="text-6xl mb-4">📷</div>
                     <p class="text-gray-600 mb-2 font-semibold">Klik untuk upload foto referensi</p>
@@ -46,18 +46,15 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
-                <label for="budget-estimate" class="block text-sm font-semibold text-gray-800 mb-2">Estimasi Budget</label>
-                <select id="budget-estimate" name="budget-estimate" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors">
-                    <option value="">Pilih range budget</option>
-                    <option value="100000-300000">Rp 100.000 - Rp 300.000</option>
-                    <option value="300000-500000">Rp 300.000 - Rp 500.000</option>
-                    <option value="500000-1000000">Rp 500.000 - Rp 1.000.000</option>
-                    <option value="1000000+">Di atas Rp 1.000.000</option>
-                </select>
+                <label for="harga_estimasi" class="block text-sm font-semibold text-gray-800 mb-2">Estimasi Budget</label>
+                <input type="number" id="harga_estimasi" name="harga_estimasi" min="0" step="1000" placeholder="Masukkan estimasi harga" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors">
             </div>
             <div>
-                <label for="deadline" class="block text-sm font-semibold text-gray-800 mb-2">Target Selesai</label>
-                <input type="date" id="deadline" name="deadline" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors">
+                <label for="produk_id" class="block text-sm font-semibold text-gray-800 mb-2">Produk Terkait (Opsional)</label>
+                <select id="produk_id" name="produk_id" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors">
+                    <option value="">Pilih produk jika ada</option>
+                    <!-- Products will be loaded dynamically -->
+                </select>
             </div>
         </div>
 

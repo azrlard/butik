@@ -30,10 +30,10 @@ class CustomRequestResource extends Resource
                 Forms\Components\Select::make('produk_id')
                     ->relationship('product', 'nama_produk')
                     ->nullable(),
-                Forms\Components\FileUpload::make('foto_referensi')
+                Forms\Components\FileUpload::make('foto_request')
                     ->image()
                     ->nullable(),
-                Forms\Components\FileUpload::make('foto_request')
+                Forms\Components\FileUpload::make('foto_referensi')
                     ->image()
                     ->nullable(),
                 Forms\Components\Textarea::make('keterangan')
@@ -65,8 +65,8 @@ class CustomRequestResource extends Resource
                 Tables\Columns\TextColumn::make('product.nama_produk')
                     ->label('Produk')
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('foto_referensi'),
                 Tables\Columns\ImageColumn::make('foto_request'),
+                Tables\Columns\ImageColumn::make('foto_referensi'),
                 Tables\Columns\TextColumn::make('keterangan')
                     ->limit(50),
                 Tables\Columns\TextColumn::make('status')

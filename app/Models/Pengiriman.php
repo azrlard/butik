@@ -22,4 +22,9 @@ class Pengiriman extends Model
         'tanggal_kirim',
         'tanggal_terima',
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

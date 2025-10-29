@@ -10,7 +10,7 @@ class CustomRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'produk_id', 'foto_request', 'keterangan', 'status', 'harga_estimasi',
+        'user_id', 'produk_id', 'foto_request', 'keterangan', 'status', 'harga_estimasi', 'foto_referensi',
     ];
 
     public function user()

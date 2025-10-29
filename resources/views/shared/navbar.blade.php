@@ -15,7 +15,7 @@
                     Keranjang
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-xs rounded-full h-5 w-5 flex items-center justify-center text-gray-800 font-semibold">0</span>
                 </a>
-                <a href="#" class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Login</a>
+                <a href="/admin" target="_blank" class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors hidden">Admin Dashboard</a>
             </div>
             <div class="md:hidden">
                 <button onclick="toggleMobileMenu()" class="text-gray-700 hover:text-indigo-600">
@@ -32,7 +32,7 @@
             <a href="#products" onclick="navigateTo('products')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Produk</a>
             <a href="#custom" onclick="navigateTo('custom')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Custom</a>
             <a href="#cart" onclick="navigateTo('cart')" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Keranjang</a>
-            <a href="#" class="block px-3 py-2 text-gray-700 hover:text-indigo-600">Login</a>
+            <a href="/admin" target="_blank" class="block px-3 py-2 text-gray-700 hover:text-indigo-600 hidden">Admin Dashboard</a>
         </div>
     </div>
 </nav>

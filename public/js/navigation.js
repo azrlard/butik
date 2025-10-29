@@ -1,11 +1,16 @@
 // Navigation functions
-function navigateTo(page) {
+async function navigateTo(page) {
     // Hide all pages
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
     // Show selected page
     document.getElementById(page).classList.add('active');
     currentPage = page;
+
+    // Update URL hash without triggering page reload
+    if (window.location.hash !== '#' + page) {
+        history.pushState(null, null, '#' + page);
+    }
 
     // Load page content
     if (page === 'home') {
@@ -15,6 +20,8 @@ function navigateTo(page) {
         loadAllProducts();
     } else if (page === 'cart') {
         loadCartItems();
+    } else if (page === 'custom') {
+        loadProductsForCustom();
     }
 
     // Close mobile menu

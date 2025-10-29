@@ -28,7 +28,28 @@ class CustomRequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'produk_id' => 'nullable|exists:products,id',
+            'foto_request' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_referensi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'keterangan' => 'required|string',
+            'harga_estimasi' => 'nullable|numeric|min:0',
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('foto_request')) {
+            $data['foto_request'] = $request->file('foto_request')->store('custom-requests', 'public');
+        }
+
+        if ($request->hasFile('foto_referensi')) {
+            $data['foto_referensi'] = $request->file('foto_referensi')->store('custom-requests', 'public');
+        }
+
+        $customRequest = CustomRequest::create($data);
+
+        return redirect()->back()->with('success', 'Custom request berhasil dikirim!');
     }
 
     /**
