@@ -42,6 +42,8 @@ class ProductResource extends Resource
                     ->default(0),
                 Forms\Components\FileUpload::make('foto')
                     ->image()
+                    ->directory('products')
+                    ->visibility('public')
                     ->nullable(),
                 Forms\Components\Select::make('tipe_produk')
                     ->options([

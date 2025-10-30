@@ -5,9 +5,13 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomRequestController;
+use App\Models\Product;
+use App\Models\Category;
 
 Route::get('/', function () {
-    return view('welcome');
+    $productsData = Product::with('category')->get();
+    $categories = Category::all();
+    return view('welcome', compact('productsData', 'categories'));
 });
 
 Route::get('/home', function () {
@@ -36,4 +40,3 @@ Route::prefix('api')->group(function () {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/orders', [OrderController::class, 'store'])->withoutMiddleware(['csrf', 'web']);
 });
-

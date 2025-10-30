@@ -29,7 +29,7 @@ function createProductCard(product) {
     return `
         <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:scale-105">
             <div class="relative bg-gray-100 h-48 flex items-center justify-center">
-                <span class="text-6xl">${product.foto}</span>
+                <img src="${product.foto}" alt="${product.nama_produk}" class="w-full h-full object-cover" onerror="this.src='${window.location.origin}/images/placeholder.png'">
                 <div class="absolute top-3 right-3">
                     <span class="${stockClass} px-2 py-1 rounded-full text-xs font-bold">${isCustom ? 'Custom' : 'Ready'}</span>
                 </div>
