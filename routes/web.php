@@ -35,5 +35,6 @@ Route::prefix('api')->group(function () {
     Route::get('/products/{product}', [ProductController::class, 'show']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/orders', [OrderController::class, 'store'])->withoutMiddleware(['csrf', 'web']);
+    Route::post('/custom-requests', [CustomRequestController::class, 'store'])->withoutMiddleware(['csrf', 'web']);
 });
 

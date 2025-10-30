@@ -49,7 +49,7 @@ class CustomRequestController extends Controller
 
         $customRequest = CustomRequest::create($data);
 
-        return redirect()->back()->with('success', 'Custom request berhasil dikirim!');
+        return response()->json(['message' => 'Custom request berhasil dikirim!', 'data' => $customRequest], 201);
     }
 
     /**
