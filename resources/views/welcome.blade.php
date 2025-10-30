@@ -32,12 +32,15 @@
             await loadDataFromAPI();
 
 
-            // Check URL hash for initial page
-            const hash = window.location.hash.substring(1); // Remove the '#'
-            const validPages = ['home', 'products', 'cart', 'custom'];
+            // Check URL pathname for initial page
+            const path = window.location.pathname;
+            const validPages = ['/', '/products', '/cart', '/custom'];
 
-            if (hash && validPages.includes(hash)) {
-                navigateTo(hash);
+            if (path === '/' || path === '') {
+                navigateTo('home');
+            } else if (validPages.includes(path)) {
+                const page = path.substring(1); // Remove the leading '/'
+                navigateTo(page);
             } else {
                 navigateTo('home');
             }
@@ -45,11 +48,14 @@
 
         // Handle browser back/forward buttons
         window.addEventListener('popstate', function(event) {
-            const hash = window.location.hash.substring(1);
-            const validPages = ['home', 'products', 'cart', 'custom'];
+            const path = window.location.pathname;
+            const validPages = ['/', '/products', '/cart', '/custom'];
 
-            if (hash && validPages.includes(hash)) {
-                navigateTo(hash);
+            if (path === '/' || path === '') {
+                navigateTo('home');
+            } else if (validPages.includes(path)) {
+                const page = path.substring(1); // Remove the leading '/'
+                navigateTo(page);
             }
         });
     </script>

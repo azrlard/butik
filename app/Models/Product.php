@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id', 'nama_produk', 'deskripsi', 'harga', 'stok', 'foto', 'tipe_produk',
+        'category_id', 'nama_produk', 'deskripsi', 'harga', 'foto', 'tipe_produk',
     ];
 
     public function category()
@@ -26,5 +26,30 @@ class Product extends Model
     public function customRequests()
     {
         return $this->hasMany(CustomRequest::class, 'produk_id');
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function getHargaAttribute()
+    {
+        if ($this->tipe_produk === 'custom') {
+            return $this->attributes['harga'] ?? 0;
+        }
+
+        // For ready stock products, get price from variants or return 0
+        return $this->variants()->min('price_adjustment') ?? 0;
+    }
+
+    public function getStokAttribute()
+    {
+        if ($this->tipe_produk === 'custom') {
+            return 999; // Unlimited stock for custom products
+        }
+
+        // For ready stock products, sum all variant stocks
+        return $this->variants()->sum('stock');
     }
 }

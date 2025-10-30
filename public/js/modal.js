@@ -4,8 +4,21 @@ function showProductDetail(productId) {
     if (!product) return;
 
     const isCustom = product.tipe_produk === 'custom';
-    const stockText = isCustom ? 'Custom Order Available' : `Stok tersedia: ${product.stok} pcs`;
+    const stockText = isCustom ? 'Custom Order Available' : (availableSizes.length > 0 ? `Stok tersedia: ${availableSizes[0].stock} pcs` : `Stok tersedia: ${product.stok} pcs`);
     const stockClass = isCustom ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800';
+
+    // Get selected size and variant info
+    let selectedSize = null;
+    let selectedVariant = null;
+    let availableSizes = [];
+    let displayPrice = product.harga;
+
+    if (!isCustom && product.variants && product.variants.length > 0) {
+        availableSizes = product.variants;
+        selectedSize = availableSizes[0].size; // Default to first size
+        selectedVariant = availableSizes[0];
+        displayPrice = selectedVariant.price_adjustment; // Use variant price
+    }
 
     document.getElementById('modal-content').innerHTML = `
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -25,11 +38,10 @@ function showProductDetail(productId) {
                 <div>
                     <h2 class="text-3xl font-bold text-gray-800 mb-2">${product.nama_produk}</h2>
                     <div class="flex items-center mb-4">
-                        <span class="text-yellow-400 mr-1">⭐</span>
-                        <span class="text-gray-600 mr-4">${product.rating} (${product.terjual} terjual)</span>
+                        <span class="text-gray-600 mr-4">${product.terjual} terjual</span>
                         <span class="${stockClass} px-3 py-1 rounded-full text-sm font-medium">${isCustom ? 'Custom' : 'Ready Stock'}</span>
                     </div>
-                    <p class="text-3xl font-bold text-indigo-600 mb-4">Rp ${product.harga.toLocaleString('id-ID')}</p>
+                    <p class="text-3xl font-bold text-indigo-600 mb-4" id="product-price">Rp ${displayPrice.toLocaleString('id-ID')}</p>
                 </div>
 
                 <div>
@@ -38,27 +50,30 @@ function showProductDetail(productId) {
                 </div>
 
                 <div>
-                    <p class="text-sm text-gray-600 mb-4">${stockText}</p>
+                    <p class="text-sm text-gray-600 mb-4" id="stock-display">${stockText}</p>
                 </div>
 
-                ${!isCustom ? `
+                ${!isCustom && availableSizes.length > 0 ? `
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 mb-2">Ukuran</h3>
-                        <div class="flex space-x-2 mb-6">
-                            <button class="border border-gray-300 px-4 py-2 rounded-lg hover:border-indigo-600 hover:text-indigo-600 transition-colors">S</button>
-                            <button class="border border-gray-300 px-4 py-2 rounded-lg hover:border-indigo-600 hover:text-indigo-600 transition-colors">M</button>
-                            <button class="border border-gray-300 px-4 py-2 rounded-lg hover:border-indigo-600 hover:text-indigo-600 transition-colors">L</button>
-                            <button class="border border-gray-300 px-4 py-2 rounded-lg hover:border-indigo-600 hover:text-indigo-600 transition-colors">XL</button>
+                        <div class="flex space-x-2 mb-6" id="size-buttons">
+                            ${availableSizes.map(variant => `
+                                <button onclick="selectSize('${variant.size}', ${variant.id}, ${variant.stock}, ${variant.price_adjustment})"
+                                        class="size-btn border border-gray-300 px-4 py-2 rounded-lg hover:border-indigo-600 hover:text-indigo-600 transition-colors ${variant.size === selectedSize ? 'border-indigo-600 text-indigo-600 bg-indigo-50' : ''} ${variant.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
+                                        ${variant.stock === 0 ? 'disabled' : ''}>
+                                    ${variant.size} ${variant.stock === 0 ? '(Habis)' : `(${variant.stock})`}
+                                </button>
+                            `).join('')}
                         </div>
                     </div>
                 ` : ''}
 
                 <div class="flex space-x-4">
-                    <button onclick="addToCart(${product.id}); closeModal();" class="flex-1 bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+                    <button onclick="addToCart(${product.id}, ${selectedVariant ? selectedVariant.id : 'null'}); closeModal();" class="flex-1 bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors ${!isCustom && selectedVariant && selectedVariant.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${!isCustom && selectedVariant && selectedVariant.stock === 0 ? 'disabled' : ''}>
                         ${isCustom ? 'Pesan Custom' : 'Tambah ke Keranjang'}
                     </button>
                     ${!isCustom ? `
-                        <button class="flex-1 bg-yellow-400 text-gray-800 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 transition-colors">
+                        <button onclick="buyNow(${product.id}, ${selectedVariant ? selectedVariant.id : 'null'}); closeModal();" class="flex-1 bg-yellow-400 text-gray-800 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 transition-colors ${selectedVariant && selectedVariant.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${selectedVariant && selectedVariant.stock === 0 ? 'disabled' : ''}>
                             Beli Sekarang
                         </button>
                     ` : `
@@ -90,9 +105,54 @@ function showProductDetail(productId) {
         `;
     }
 
-    document.getElementById('product-modal').classList.add('show');
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('show');
+        console.log('Modal opened successfully for product:', productId);
+    } else {
+        console.error('Modal element not found! Cannot open modal for product:', productId);
+    }
+}
+
+function selectSize(size, variantId, stock, price) {
+    if (stock === 0) return; // Don't allow selection of out-of-stock items
+
+    selectedSize = size;
+    selectedVariant = { id: variantId, size: size, stock: stock, price_adjustment: price };
+
+    // Update price display
+    const priceElement = document.getElementById('product-price');
+    if (priceElement) {
+        priceElement.textContent = `Rp ${price.toLocaleString('id-ID')}`;
+    }
+
+    // Update stock display
+    const stockElement = document.getElementById('stock-display');
+    if (stockElement) {
+        stockElement.textContent = `Stok tersedia: ${stock} pcs`;
+    }
+
+    // Update button styles
+    const buttons = document.querySelectorAll('#size-buttons .size-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('border-indigo-600', 'text-indigo-600', 'bg-indigo-50');
+    });
+
+    // Highlight selected button
+    event.target.classList.add('border-indigo-600', 'text-indigo-600', 'bg-indigo-50');
+}
+
+function buyNow(productId, variantId) {
+    // For now, just add to cart and redirect to cart
+    addToCart(productId, variantId);
+    navigateTo('cart');
 }
 
 function closeModal() {
-    document.getElementById('product-modal').classList.remove('show');
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        modal.classList.add('hidden');
+    }
 }

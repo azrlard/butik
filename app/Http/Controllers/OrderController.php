@@ -49,14 +49,27 @@ class OrderController extends Controller
             foreach ($request->items as $item) {
                 $product = Product::find($item['product_id']);
                 if ($product) {
-                    $subtotal = $product->harga * $item['jumlah'];
+                    $hargaSatuan = $product->harga;
+                    $variant = null;
+
+                    // Check if variant is selected
+                    if (isset($item['variant_id']) && $item['variant_id']) {
+                        $variant = \App\Models\ProductVariant::find($item['variant_id']);
+                        if ($variant) {
+                            $hargaSatuan += $variant->price_adjustment;
+                        }
+                    }
+
+                    $subtotal = $hargaSatuan * $item['jumlah'];
                     $total += $subtotal;
                     $orderItems[] = [
                         'product_id' => $item['product_id'],
+                        'variant_id' => $item['variant_id'] ?? null,
                         'jumlah' => $item['jumlah'],
-                        'harga_satuan' => $product->harga,
-                        'harga' => $product->harga,
+                        'harga_satuan' => $hargaSatuan,
+                        'harga' => $hargaSatuan,
                         'subtotal' => $subtotal,
+                        'variant' => $variant,
                     ];
                 } else {
                     throw new \Exception("Product with ID {$item['product_id']} not found");
@@ -79,11 +92,22 @@ class OrderController extends Controller
                 $orderItem = new OrderItem();
                 $orderItem->order_id = $order->id;
                 $orderItem->product_id = $item['product_id'];
+                $orderItem->custom_request_id = null;
                 $orderItem->jumlah = $item['jumlah'];
                 $orderItem->harga_satuan = $item['harga_satuan'];
                 $orderItem->harga = $item['harga_satuan']; // Use harga_satuan for harga field
                 $orderItem->subtotal = $item['subtotal'];
                 $orderItem->save();
+
+                // Decrease stock
+                if (isset($item['variant']) && $item['variant']) {
+                    $item['variant']->decrement('stock', $item['jumlah']);
+                } else {
+                    $product = Product::find($item['product_id']);
+                    if ($product) {
+                        $product->decrement('stok', $item['jumlah']);
+                    }
+                }
             }
 
             return response()->json([

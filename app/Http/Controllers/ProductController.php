@@ -12,7 +12,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::with('category');
+        $query = Product::with(['category', 'variants']);
 
         // Filter by category
         if ($request->has('category') && $request->category !== 'all') {
@@ -50,7 +50,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json($product->load('category'));
+        return response()->json($product->load(['category', 'variants']));
     }
 
     /**
@@ -75,5 +75,14 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    /**
+     * Show product detail page
+     */
+    public function showDetail($id)
+    {
+        $product = Product::with(['category', 'variants'])->findOrFail($id);
+        return view('products.detail', compact('product'));
     }
 }

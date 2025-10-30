@@ -12,20 +12,8 @@ async function loadDataFromAPI() {
         const categoriesResponse = await fetch('/api/categories');
         categories = await categoriesResponse.json();
 
-        // Add icons and colors to categories (since not in DB)
-        const categoryIcons = {
-            'Pakaian': { icon: '👗', color: 'from-pink-400 to-pink-600' },
-            'Tas & Dompet': { icon: '👜', color: 'from-blue-400 to-blue-600' },
-            'Aksesoris': { icon: '💍', color: 'from-yellow-400 to-yellow-600' },
-            'Sepatu': { icon: '👠', color: 'from-purple-400 to-purple-600' },
-            'Elektronik': { icon: '📱', color: 'from-green-400 to-green-600' }
-        };
-
-        categories = categories.map(cat => ({
-            ...cat,
-            icon: categoryIcons[cat.nama_kategori]?.icon || '📦',
-            color: categoryIcons[cat.nama_kategori]?.color || 'from-gray-400 to-gray-600'
-        }));
+        // Icons and colors are now stored in the database
+        // No need for manual mapping anymore
 
         // Load products
         const productsResponse = await fetch('/api/products');
@@ -41,6 +29,10 @@ async function loadDataFromAPI() {
 
         filteredProducts = [...products];
 
+        // Load filter options after data is loaded
+        loadCategoryFilter();
+        loadTypeFilter();
+
     } catch (error) {
         console.error('Error loading data from API:', error);
         // Fallback to sample data if API fails
@@ -51,10 +43,8 @@ async function loadDataFromAPI() {
 function loadFallbackData() {
     categories = [
         { id: 1, nama_kategori: 'Pakaian', deskripsi: 'Koleksi pakaian trendy dan elegan untuk berbagai acara', icon: '👗', color: 'from-pink-400 to-pink-600' },
-        { id: 2, nama_kategori: 'Tas & Dompet', deskripsi: 'Tas berkualitas tinggi dan dompet stylish untuk melengkapi penampilan', icon: '👜', color: 'from-blue-400 to-blue-600' },
-        { id: 3, nama_kategori: 'Aksesoris', deskripsi: 'Aksesoris cantik untuk mempercantik outfit harian Anda', icon: '💍', color: 'from-yellow-400 to-yellow-600' },
-        { id: 4, nama_kategori: 'Sepatu', deskripsi: 'Koleksi sepatu nyaman dan fashionable untuk segala aktivitas', icon: '👠', color: 'from-purple-400 to-purple-600' },
-        { id: 5, nama_kategori: 'Elektronik', deskripsi: 'Elektronik berkualitas tinggi untuk kebutuhan modern', icon: '📱', color: 'from-green-400 to-green-600' }
+        { id: 2, nama_kategori: 'Aksesoris', deskripsi: 'Aksesoris cantik untuk mempercantik outfit harian Anda', icon: '💍', color: 'from-yellow-400 to-yellow-600' },
+        { id: 3, nama_kategori: 'Elektronik', deskripsi: 'Elektronik berkualitas tinggi untuk kebutuhan modern', icon: '📱', color: 'from-green-400 to-green-600' }
     ];
 
     products = [

@@ -18,6 +18,8 @@ Route::get('/products', function () {
     return view('products.index');
 });
 
+Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'showDetail'])->name('products.detail');
+
 Route::get('/cart', function () {
     return view('cart.index');
 });

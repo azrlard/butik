@@ -17,8 +17,10 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
     protected static ?string $slug = 'produk';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'Manajemen Produk';
 
     public static function form(Form $form): Form
     {
@@ -32,14 +34,6 @@ class ProductResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Textarea::make('deskripsi')
                     ->nullable(),
-                Forms\Components\TextInput::make('harga')
-                    ->required()
-                    ->numeric()
-                    ->prefix('Rp'),
-                Forms\Components\TextInput::make('stok')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
                 Forms\Components\FileUpload::make('foto')
                     ->image()
                     ->nullable(),
@@ -49,7 +43,19 @@ class ProductResource extends Resource
                         'custom' => 'Custom',
                     ])
                     ->required()
-                    ->default('ready'),
+                    ->default('ready')
+                    ->live()
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        if ($state === 'custom') {
+                            $set('harga', 0);
+                        }
+                    }),
+                Forms\Components\TextInput::make('harga')
+                    ->required()
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->hidden(fn (Forms\Get $get) => $get('tipe_produk') === 'ready')
+                    ->helperText('Harga untuk produk custom. Untuk produk ready stock, harga diatur per size di menu Varian Produk.'),
             ]);
     }
 
@@ -62,12 +68,18 @@ class ProductResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nama_produk')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('harga')
-                    ->money('IDR')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('stok')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('variants_count')
+                    ->label('Jumlah Varian')
+                    ->counts('variants')
+                    ->badge()
+                    ->color('success')
+                    ->hidden(fn ($record) => $record && $record->tipe_produk === 'custom'),
+                Tables\Columns\TextColumn::make('total_stock')
+                    ->label('Total Stok')
+                    ->getStateUsing(fn ($record) => $record && $record->tipe_produk === 'ready' ? $record->variants->sum('stock') : 'N/A')
+                    ->badge()
+                    ->color(fn ($state) => is_numeric($state) ? ($state > 0 ? 'success' : 'danger') : 'gray')
+                    ->hidden(fn ($record) => $record && $record->tipe_produk === 'custom'),
                 Tables\Columns\ImageColumn::make('foto'),
                 Tables\Columns\TextColumn::make('tipe_produk')
                     ->badge(),

@@ -1,5 +1,5 @@
 // Cart functions
-function addToCart(productId) {
+function addToCart(productId, variantId = null) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
@@ -9,37 +9,53 @@ function addToCart(productId) {
         return;
     }
 
-    const existingItem = cart.find(item => item.id === productId);
+    // For products with variants, variantId is required
+    if (product.tipe_produk === 'ready' && product.variants && product.variants.length > 0 && !variantId) {
+        showNotification('Silakan pilih ukuran terlebih dahulu!');
+        return;
+    }
+
+    const cartItemId = variantId ? `${productId}-${variantId}` : productId;
+    const existingItem = cart.find(item => item.cartItemId === cartItemId);
 
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
+        let selectedVariant = null;
+        if (variantId) {
+            selectedVariant = product.variants.find(v => v.id === variantId);
+        }
+
         cart.push({
+            cartItemId: cartItemId,
             id: product.id,
+            variant_id: variantId,
             nama_produk: product.nama_produk,
-            harga: product.harga,
+            harga: product.harga + (selectedVariant ? selectedVariant.price_adjustment : 0),
             foto: product.foto,
-            quantity: 1
+            quantity: 1,
+            size: selectedVariant ? selectedVariant.size : null,
+            variant: selectedVariant
         });
     }
 
     updateCartCount();
-    showNotification(`${product.nama_produk} berhasil ditambahkan ke keranjang!`);
+    showNotification(`${product.nama_produk}${selectedVariant ? ` (${selectedVariant.size})` : ''} berhasil ditambahkan ke keranjang!`);
 }
 
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
+function removeFromCart(cartItemId) {
+    cart = cart.filter(item => item.cartItemId !== cartItemId);
     updateCartCount();
     loadCartItems();
     showNotification('Produk berhasil dihapus dari keranjang');
 }
 
-function updateQuantity(productId, change) {
-    const item = cart.find(item => item.id === productId);
+function updateQuantity(cartItemId, change) {
+    const item = cart.find(item => item.cartItemId === cartItemId);
     if (item) {
         item.quantity += change;
         if (item.quantity <= 0) {
-            removeFromCart(productId);
+            removeFromCart(cartItemId);
         } else {
             updateCartCount();
             loadCartItems();
@@ -80,17 +96,17 @@ function loadCartItems() {
                     <span class="text-3xl">${item.foto}</span>
                 </div>
                 <div class="flex-1">
-                    <h4 class="font-semibold text-gray-800 text-lg">${item.nama_produk}</h4>
+                    <h4 class="font-semibold text-gray-800 text-lg">${item.nama_produk}${item.size ? ` (${item.size})` : ''}</h4>
                     <p class="text-gray-600">Rp ${item.harga.toLocaleString('id-ID')}</p>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button onclick="updateQuantity(${item.id}, -1)" class="bg-gray-200 hover:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center transition-colors font-bold">-</button>
+                    <button onclick="updateQuantity('${item.cartItemId}', -1)" class="bg-gray-200 hover:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center transition-colors font-bold">-</button>
                     <span class="font-semibold text-lg w-8 text-center">${item.quantity}</span>
-                    <button onclick="updateQuantity(${item.id}, 1)" class="bg-gray-200 hover:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center transition-colors font-bold">+</button>
+                    <button onclick="updateQuantity('${item.cartItemId}', 1)" class="bg-gray-200 hover:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center transition-colors font-bold">+</button>
                 </div>
                 <div class="text-right">
                     <p class="font-bold text-gray-800 text-lg">Rp ${itemTotal.toLocaleString('id-ID')}</p>
-                    <button onclick="removeFromCart(${item.id})" class="text-red-600 hover:text-red-800 transition-colors text-sm font-medium">Hapus</button>
+                    <button onclick="removeFromCart('${item.cartItemId}')" class="text-red-600 hover:text-red-800 transition-colors text-sm font-medium">Hapus</button>
                 </div>
             </div>
         `;
@@ -139,6 +155,7 @@ async function processCheckout(event) {
     // Add cart items to form data
     cart.forEach((item, index) => {
         formData.append(`items[${index}][product_id]`, item.id);
+        formData.append(`items[${index}][variant_id]`, item.variant_id || null);
         formData.append(`items[${index}][jumlah]`, item.quantity);
     });
 
