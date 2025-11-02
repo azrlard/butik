@@ -1,22 +1,84 @@
 // Load functions
 function loadCategories() {
     const container = document.getElementById('categories-grid');
-    if (!container) return; // Safety check
+    const loadingIndicator = document.getElementById('categories-loading');
+
+    console.log('Loading categories, container:', container, 'categories:', categories);
+
+    if (!container) {
+        console.error('Categories container not found!');
+        return;
+    }
+
+    // Hide loading and show content
+    if (loadingIndicator) {
+        loadingIndicator.style.display = 'none';
+    }
+    container.style.display = 'grid';
+
+    if (!categories || categories.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-500 col-span-full">Tidak ada kategori tersedia</p>';
+        console.log('No categories to display');
+        return;
+    }
 
     container.innerHTML = categories.map(category => `
-        <div onclick="filterByCategory('${category.id}')" class="bg-gray-100 rounded-xl p-8 text-center hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer">
-            <h3 class="text-xl font-bold mb-3 text-gray-800">${category.nama_kategori}</h3>
-            <p class="text-sm text-gray-600">${category.deskripsi || 'Kategori produk'}</p>
+        <div onclick="filterByCategory('${category.id}')" class="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 text-center hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 transform hover:scale-105 cursor-pointer border border-gray-100 hover:border-indigo-200 group">
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">${category.icon || '👗'}</div>
+            <h3 class="text-xl font-bold mb-3 text-gray-800 group-hover:text-indigo-700 transition-colors">${category.nama_kategori}</h3>
+            <p class="text-sm text-gray-600 group-hover:text-gray-700 transition-colors">${category.deskripsi || 'Kategori produk'}</p>
         </div>
     `).join('');
+
+    console.log('Categories loaded successfully:', categories.length, 'categories');
+
+    // Force visibility
+    container.style.display = 'grid';
+    container.style.opacity = '1';
 }
 
 function loadFeaturedProducts() {
     const container = document.getElementById('featured-products');
-    if (!container) return; // Safety check
+    const loadingIndicator = document.getElementById('featured-products-loading');
+
+    console.log('Loading featured products, container:', container, 'products:', products);
+
+    if (!container) {
+        console.error('Featured products container not found!');
+        return;
+    }
+
+    if (!products || products.length === 0) {
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'none';
+        }
+        container.style.display = 'grid';
+        container.innerHTML = '<p class="text-center text-gray-500 col-span-full">Tidak ada produk tersedia</p>';
+        console.log('No products array or empty products');
+        return;
+    }
 
     const featured = products.filter(p => p.tipe_produk === 'ready').slice(0, 4);
+    console.log('Featured products found:', featured.length, 'products');
+
+    // Hide loading and show content
+    if (loadingIndicator) {
+        loadingIndicator.style.display = 'none';
+    }
+    container.style.display = 'grid';
+
+    if (featured.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-500 col-span-full">Tidak ada produk ready stock tersedia</p>';
+        console.log('No featured products to display');
+        return;
+    }
+
     container.innerHTML = featured.map(product => createProductCard(product)).join('');
+    console.log('Featured products loaded successfully');
+
+    // Force visibility
+    container.style.display = 'grid';
+    container.style.opacity = '1';
 }
 
 function navigateToProductDetail(productId) {
@@ -25,30 +87,86 @@ function navigateToProductDetail(productId) {
 }
 
 function showProductDetail(productId) {
-    // Show modal with product detail
+    console.log('showProductDetail called with productId:', productId);
+
+    // Find product in local data first
+    let product = products.find(p => p.id === productId);
+
+    if (!product) {
+        console.log('Product not found in local data, fetching from API...');
+        // Fallback to API if not found locally
+        fetch(`/api/products/${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                product = data;
+                openProductModal(product, productId);
+            })
+            .catch(error => {
+                console.error('Error loading product detail:', error);
+                showErrorModal('Gagal memuat detail produk');
+            });
+    } else {
+        console.log('Product found in local data:', product);
+        openProductModal(product, productId);
+    }
+}
+
+function openProductModal(product, productId) {
+    console.log('Opening modal for product:', productId, product);
+
     const modal = document.getElementById('product-modal');
     const modalContent = document.getElementById('modal-content');
 
     if (!modal || !modalContent) {
-        console.error('Modal elements not found');
+        console.error('Modal elements not found! Modal:', modal, 'ModalContent:', modalContent);
+        console.error('Available elements:', document.querySelectorAll('[id*="modal"]'));
         return;
     }
 
-    // Load product detail from API
-    fetch(`/api/products/${productId}`)
-        .then(response => response.json())
-        .then(product => {
-            modalContent.innerHTML = createProductDetailModal(product);
-            modal.classList.remove('hidden');
-            modal.classList.add('show');
-            console.log('Modal opened for product:', productId);
-        })
-        .catch(error => {
-            console.error('Error loading product detail:', error);
-            modalContent.innerHTML = '<p class="text-center text-gray-500">Gagal memuat detail produk</p>';
-            modal.classList.remove('hidden');
-            modal.classList.add('show');
-        });
+    try {
+        // Create modal content
+        const modalHTML = createProductDetailModal(product);
+        console.log('Generated modal HTML:', modalHTML.substring(0, 200) + '...');
+
+        modalContent.innerHTML = modalHTML;
+
+        // Force display with multiple methods
+        modal.style.cssText = 'display: flex !important; z-index: 9999 !important; position: fixed !important;';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Add backdrop click to close
+        modal.onclick = function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        };
+
+        console.log('Modal opened successfully for product:', productId);
+        console.log('Modal element:', modal);
+        console.log('Modal computed display:', window.getComputedStyle(modal).display);
+        console.log('Modal computed z-index:', window.getComputedStyle(modal).zIndex);
+
+        // Force visibility check
+        setTimeout(() => {
+            console.log('Modal visibility after timeout:', window.getComputedStyle(modal).visibility);
+            console.log('Modal display after timeout:', window.getComputedStyle(modal).display);
+        }, 100);
+
+    } catch (error) {
+        console.error('Error opening modal:', error);
+    }
+}
+
+function showErrorModal(message) {
+    const modal = document.getElementById('product-modal');
+    const modalContent = document.getElementById('modal-content');
+
+    if (modal && modalContent) {
+        modalContent.innerHTML = `<p class="text-center text-gray-500 py-8">${message}</p>`;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
 }
 
 function createProductDetailModal(product) {
@@ -193,10 +311,10 @@ function createProductCard(product) {
             </div>
             <div class="p-6">
                 <h4 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">${product.nama_produk}</h4>
-                <div class="flex items-center mb-3">
-                    <span class="text-sm text-gray-600">${product.terjual} terjual</span>
-                </div>
                 <p class="text-2xl font-bold text-indigo-600 mb-4">${priceDisplay}</p>
+                <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium" onclick="event.stopPropagation(); showProductDetail(${product.id})">
+                    Lihat Detail
+                </button>
             </div>
         </div>
     `;
@@ -215,13 +333,185 @@ function filterProducts() {
     const categoryFilter = document.getElementById('category-filter').value;
     const typeFilter = document.getElementById('type-filter').value;
 
-    filteredProducts = products.filter(product => {
-        const categoryMatch = categoryFilter === 'all' || product.category_id == categoryFilter;
-        const typeMatch = typeFilter === 'all' || product.tipe_produk === typeFilter;
-        return categoryMatch && typeMatch;
-    });
+    console.log('Filtering products:', { categoryFilter, typeFilter, productsCount: window.products.length });
 
-    loadAllProducts();
+    // Reset to all products first
+    window.filteredProducts = [...window.products];
+
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+        window.filteredProducts = window.filteredProducts.filter(product => product.category_id == categoryFilter);
+        console.log('After category filter:', window.filteredProducts.length, 'products');
+    }
+
+    // Apply type filter
+    if (typeFilter !== 'all') {
+        window.filteredProducts = window.filteredProducts.filter(product => product.tipe_produk === typeFilter);
+        console.log('After type filter:', window.filteredProducts.length, 'products');
+    }
+
+    console.log('Final filtered products count:', window.filteredProducts.length);
+
+    // Update products grid
+    loadFilteredProducts();
+}
+
+function loadFilteredProducts() {
+    const productsGrid = document.getElementById('products-grid');
+    const emptyState = document.getElementById('empty-state');
+
+    if (window.filteredProducts.length === 0) {
+        if (emptyState) emptyState.classList.remove('hidden');
+        if (productsGrid) productsGrid.innerHTML = '';
+    } else {
+        if (emptyState) emptyState.classList.add('hidden');
+        if (productsGrid) {
+            productsGrid.innerHTML = window.filteredProducts.map(product => `
+                <div onclick="openProductModal('${product.id}')" class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-gray-100" data-product-id="${product.id}">
+                    <!-- Product Image -->
+                    <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-300">
+                        ${product.foto}
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-indigo-700 transition-colors line-clamp-2">${product.nama_produk}</h3>
+                            <span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-full font-semibold ml-2 flex-shrink-0">
+                                ${product.tipe_produk.charAt(0).toUpperCase() + product.tipe_produk.slice(1)}
+                            </span>
+                        </div>
+
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.deskripsi || 'Deskripsi produk tidak tersedia'}</p>
+
+                        <div class="text-2xl font-black text-indigo-600">
+                            Rp ${product.harga.toLocaleString('id-ID')}
+                        </div>
+
+                        ${product.category ? `
+                            <div class="mt-3 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">
+                                ${product.category.nama_kategori}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+}
+
+function openProductModal(productId) {
+    console.log('Opening modal for product:', productId);
+
+    // Find product in the filtered products array
+    const product = window.filteredProducts.find(p => p.id == productId);
+    if (!product) {
+        console.error('Product not found:', productId);
+        return;
+    }
+
+    console.log('Found product:', product);
+
+    // Show modal
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Load modal content
+        loadProductModalContent(product);
+    } else {
+        console.error('Modal element not found!');
+    }
+}
+
+function loadProductModalContent(product) {
+    const modalContent = document.getElementById('modal-content');
+    if (!modalContent) return;
+
+    const isCustom = product.tipe_produk === 'custom';
+    const stockText = isCustom ? 'Custom Order Available' : (product.variants && product.variants.length > 0 ? `Stok tersedia: ${product.variants[0].stock} pcs` : `Stok tersedia: ${product.stok} pcs`);
+    const stockClass = isCustom ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800';
+
+    // Get selected size and variant info
+    let selectedSize = null;
+    let selectedVariant = null;
+    let availableSizes = [];
+    let displayPrice = product.harga;
+
+    if (!isCustom && product.variants && product.variants.length > 0) {
+        availableSizes = product.variants;
+        selectedSize = availableSizes[0].size; // Default to first size
+        selectedVariant = availableSizes[0];
+        displayPrice = selectedVariant.price_adjustment; // Use variant price
+    }
+
+    modalContent.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+                <div class="bg-gray-100 rounded-xl h-96 flex items-center justify-center mb-4">
+                    <span class="text-8xl">${product.foto}</span>
+                </div>
+                <div class="grid grid-cols-4 gap-2">
+                    ${Array(4).fill().map(() => `
+                        <div class="bg-gray-100 rounded-lg h-20 flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors">
+                            <span class="text-2xl">${product.foto}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">${product.nama_produk}</h2>
+                    <div class="flex items-center mb-4">
+                        <span class="text-gray-600 mr-4">${Math.floor(Math.random() * 100) + 10} terjual</span>
+                        <span class="${stockClass} px-3 py-1 rounded-full text-sm font-medium">${isCustom ? 'Custom' : 'Ready Stock'}</span>
+                    </div>
+                    <p class="text-3xl font-bold text-indigo-600 mb-4" id="product-price">Rp ${displayPrice.toLocaleString('id-ID')}</p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Deskripsi Produk</h3>
+                    <p class="text-gray-600 leading-relaxed">${product.deskripsi || 'Deskripsi produk tidak tersedia'}</p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-gray-600 mb-4" id="stock-display">${stockText}</p>
+                </div>
+
+                ${!isCustom && availableSizes.length > 0 ? `
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Ukuran</h3>
+                        <div class="flex space-x-2 mb-6" id="size-buttons">
+                            ${availableSizes.map(variant => `
+                                <button onclick="selectSize('${variant.size}', ${variant.id}, ${variant.stock}, ${variant.price_adjustment})"
+                                        class="size-btn border border-gray-300 px-4 py-2 rounded-lg hover:border-indigo-600 hover:text-indigo-600 transition-colors ${variant.size === selectedSize ? 'border-indigo-600 text-indigo-600 bg-indigo-50' : ''} ${variant.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
+                                        ${variant.stock === 0 ? 'disabled' : ''}>
+                                    ${variant.size} ${variant.stock === 0 ? '(Habis)' : `(${variant.stock})`}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="flex space-x-4">
+                    <button onclick="addToCart(${product.id}, ${selectedVariant ? selectedVariant.id : 'null'}); closeModal();" class="flex-1 bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors ${!isCustom && selectedVariant && selectedVariant.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${!isCustom && selectedVariant && selectedVariant.stock === 0 ? 'disabled' : ''}>
+                        ${isCustom ? 'Pesan Custom' : 'Tambah ke Keranjang'}
+                    </button>
+                    ${!isCustom ? `
+                        <button onclick="buyNow(${product.id}, ${selectedVariant ? selectedVariant.id : 'null'}); closeModal();" class="flex-1 bg-yellow-400 text-gray-800 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 transition-colors ${selectedVariant && selectedVariant.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${selectedVariant && selectedVariant.stock === 0 ? 'disabled' : ''}>
+                            Beli Sekarang
+                        </button>
+                    ` : `
+                        <button onclick="navigateTo('custom'); closeModal();" class="flex-1 bg-yellow-400 text-gray-800 px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 transition-colors">
+                            Custom Request
+                        </button>
+                    `}
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 function loadCategoryFilter() {

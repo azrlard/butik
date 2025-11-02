@@ -28,16 +28,32 @@ class CustomRequestController extends Controller
      */
     public function store(Request $request)
     {
+        // For frontend submissions, make user_id optional and default to 1
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'nullable|exists:users,id',
             'produk_id' => 'nullable|exists:products,id',
             'foto_request' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'foto_referensi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'keterangan' => 'required|string',
             'harga_estimasi' => 'nullable|numeric|min:0',
+            'customer-name' => 'required|string|max:255',
+            'customer-email' => 'required|email|max:255',
+            'customer-phone' => 'required|string|max:20',
+            'product-category' => 'required|string|max:255',
         ]);
 
-        $data = $request->all();
+        $data = [
+            'user_id' => $request->user_id ?: 1, // Default to user ID 1 if not provided
+            'produk_id' => $request->produk_id,
+            'keterangan' => $request->keterangan,
+            'harga_estimasi' => $request->harga_estimasi,
+            'status' => 'pending',
+            // Store customer info in keterangan for now
+            'customer_name' => $request->{'customer-name'},
+            'customer_email' => $request->{'customer-email'},
+            'customer_phone' => $request->{'customer-phone'},
+            'product_category' => $request->{'product-category'},
+        ];
 
         if ($request->hasFile('foto_request')) {
             $data['foto_request'] = $request->file('foto_request')->store('custom-requests', 'public');

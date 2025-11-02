@@ -11,6 +11,7 @@ class CustomRequest extends Model
 
     protected $fillable = [
         'user_id', 'produk_id', 'foto_request', 'keterangan', 'status', 'harga_estimasi', 'foto_referensi',
+        'customer_name', 'customer_email', 'customer_phone', 'product_category',
     ];
 
     public function user()

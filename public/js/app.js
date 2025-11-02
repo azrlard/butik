@@ -8,30 +8,57 @@ let filteredProducts = [];
 // Load data from API
 async function loadDataFromAPI() {
     try {
+        console.log('Loading categories from API...');
         // Load categories
         const categoriesResponse = await fetch('/api/categories');
         categories = await categoriesResponse.json();
+        console.log('Categories loaded:', categories);
 
         // Icons and colors are now stored in the database
         // No need for manual mapping anymore
 
+        console.log('Loading products from API...');
         // Load products
         const productsResponse = await fetch('/api/products');
         products = await productsResponse.json();
+        console.log('Products loaded:', products);
 
         // Transform product data for frontend compatibility
         products = products.map(product => ({
             ...product,
             kategori: product.category?.nama_kategori.toLowerCase() || 'unknown',
             rating: 4.5, // Default rating since not in DB
-            terjual: Math.floor(Math.random() * 100) + 10 // Random sales count
+            terjual: Math.floor(Math.random() * 100) + 10, // Random sales count
+            foto: product.foto || '👕' // Default icon if no photo
         }));
+        console.log('Transformed products:', products);
 
         filteredProducts = [...products];
 
-        // Load filter options after data is loaded
+        // Load UI components after data is loaded
+        console.log('Loading UI components...');
+        console.log('Categories array:', categories);
+        console.log('Products array:', products);
+
+        // Load UI components immediately since data is already loaded
+        loadCategories();
+        loadFeaturedProducts();
         loadCategoryFilter();
         loadTypeFilter();
+        console.log('UI components loaded immediately');
+
+        // Force re-render after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            console.log('Force re-render check...');
+            if (categories && categories.length > 0) {
+                loadCategories();
+            }
+            if (products && products.length > 0) {
+                loadFeaturedProducts();
+            }
+        }, 500);
+
+        console.log('Data loading completed successfully!');
 
     } catch (error) {
         console.error('Error loading data from API:', error);

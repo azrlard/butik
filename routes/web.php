@@ -1,21 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomRequestController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $categories = App\Models\Category::all();
+    $products = App\Models\Product::with('category', 'variants')->get();
+    return view('home.index', compact('categories', 'products'));
 });
 
 Route::get('/home', function () {
-    return view('home.index');
+    $categories = App\Models\Category::all();
+    $products = App\Models\Product::with('category', 'variants')->get();
+    return view('home.index', compact('categories', 'products'));
 });
 
-Route::get('/products', function () {
-    return view('products.index');
+Route::get('/products', function (Request $request) {
+    $categories = App\Models\Category::all();
+    $products = App\Models\Product::with('category', 'variants')->get();
+
+    return view('products.index', compact('categories', 'products'));
 });
 
 Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'showDetail'])->name('products.detail');
@@ -31,7 +39,7 @@ Route::get('/custom', function () {
 // Form submission routes (without CSRF for simplicity)
 Route::post('/custom-request', [CustomRequestController::class, 'store'])->name('custom.request')->withoutMiddleware(['csrf']);
 
-// API routes for frontend data fetching (without CSRF for simplicity)
+// Keep API routes for backward compatibility (can be removed later if not needed)
 Route::prefix('api')->group(function () {
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{product}', [ProductController::class, 'show']);

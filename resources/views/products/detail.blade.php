@@ -13,7 +13,7 @@
     @include('shared.navbar')
 
     <!-- Product Detail Page -->
-    <div id="product-detail-page" class="page">
+    <div id="product-detail-page" class="hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             @if($product)
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">

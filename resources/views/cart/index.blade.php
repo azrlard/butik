@@ -1,12 +1,17 @@
+@extends('layouts.app')
+
+@section('title', 'Keranjang - Butik Online')
+
+@section('content')
 <!-- Page: Cart -->
-<div id="cart" class="page">
+<div id="cart">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 {{ session('success') }}
             </div>
         @endif
-        <h1 class="text-3xl font-bold text-gray-800 mb-8">Keranjang Belanja</h1>
+        <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-8">Keranjang Belanja</h1>
 
         <div id="cart-empty" class="text-center py-20">
             <div class="text-8xl mb-6">🛒</div>
@@ -67,6 +72,7 @@
         </div>
     </div>
 </div>
+@endsection
 
 <!-- Checkout Form Modal -->
 <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
