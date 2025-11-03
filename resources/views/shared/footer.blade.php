@@ -33,12 +33,6 @@
                         <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-pink-600 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
                             <span class="text-lg">📷</span>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                            <span class="text-lg">🐦</span>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                            <span class="text-lg">💬</span>
-                        </a>
                     </div>
                 </div>
 
@@ -79,12 +73,6 @@
                                 <span class="text-red-400">📍</span>
                             </div>
                             <span class="text-gray-400 group-hover:text-white transition-colors">Jakarta, Indonesia</span>
-                        </li>
-                        <li class="flex items-center group">
-                            <div class="w-8 h-8 bg-yellow-600/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-yellow-600/30 transition-colors">
-                                <span class="text-yellow-400">🕒</span>
-                            </div>
-                            <span class="text-gray-400 group-hover:text-white transition-colors">Senin - Sabtu: 09:00 - 21:00</span>
                         </li>
                     </ul>
                 </div>

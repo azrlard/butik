@@ -10,9 +10,6 @@
     <div class="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-pink-200/30 to-purple-200/30 rounded-full blur-3xl translate-x-32 translate-y-32"></div>
 
     <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="inline-block px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
-            🎨 Custom Design
-        </div>
         <h1 class="text-5xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
             Custom Request
         </h1>

@@ -148,11 +148,5 @@
             </svg>
             <span>Kirim Permintaan Custom</span>
         </button>
-
-        <!-- Terms -->
-        <p class="text-center text-sm text-gray-500 mt-4">
-            Dengan mengirim form ini, Anda menyetujui
-            <a href="#" class="text-indigo-600 hover:text-indigo-800 underline">syarat dan ketentuan</a> kami.
-        </p>
     </form>
 </div>
