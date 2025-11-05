@@ -40,6 +40,11 @@ Route::get('/collaboration', function () {
     return view('collaboration.index');
 });
 
+Route::get('/categories', function () {
+    $categories = App\Models\Category::with('products')->get();
+    return view('categories.index', compact('categories'));
+});
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');

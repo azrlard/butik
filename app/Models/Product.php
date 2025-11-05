@@ -13,6 +13,10 @@ class Product extends Model
         'category_id', 'nama_produk', 'deskripsi', 'harga', 'foto', 'tipe_produk',
     ];
 
+    protected $attributes = [
+        'harga' => 0,
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class);

@@ -9,10 +9,6 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        Category::insert([
-            ['nama_kategori' => 'Pakaian'],
-            ['nama_kategori' => 'Aksesoris'],
-            ['nama_kategori' => 'Elektronik'],
-        ]);
+        // Kosongkan seeder untuk testing input manual
     }
 }

@@ -32,19 +32,24 @@ function scrollToTop() {
 // Scroll to top button visibility
 window.addEventListener('scroll', function() {
     const scrollButton = document.querySelector('.scroll-to-top');
-    if (window.pageYOffset > 300) {
-        scrollButton.classList.add('show');
-    } else {
-        scrollButton.classList.remove('show');
+    if (scrollButton) {
+        if (window.pageYOffset > 300) {
+            scrollButton.classList.add('show');
+        } else {
+            scrollButton.classList.remove('show');
+        }
     }
 });
 
 // Close modal when clicking outside
-document.getElementById('product-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeModal();
-    }
-});
+const productModal = document.getElementById('product-modal');
+if (productModal) {
+    productModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+}
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {

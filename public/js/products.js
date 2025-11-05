@@ -332,28 +332,77 @@ function filterByCategory(category) {
 function filterProducts() {
     const categoryFilter = document.getElementById('category-filter').value;
     const typeFilter = document.getElementById('type-filter').value;
+    const searchFilter = document.getElementById('search-filter')?.value.toLowerCase() || '';
 
-    console.log('Filtering products:', { categoryFilter, typeFilter, productsCount: window.products.length });
+    console.log('Filtering products with DOM approach:', { categoryFilter, typeFilter, searchFilter });
 
-    // Reset to all products first
-    window.filteredProducts = [...window.products];
+    // Get all product cards
+    const productCards = document.querySelectorAll('.product-card');
+    const emptyState = document.getElementById('empty-state');
 
-    // Apply category filter
-    if (categoryFilter !== 'all') {
-        window.filteredProducts = window.filteredProducts.filter(product => product.category_id == categoryFilter);
-        console.log('After category filter:', window.filteredProducts.length, 'products');
+    console.log('Found product cards:', productCards.length);
+
+    let visibleCount = 0;
+
+    // Filter each card
+    productCards.forEach(card => {
+        const categoryId = card.getAttribute('data-category-id');
+        const productType = card.getAttribute('data-type');
+        const productName = card.getAttribute('data-name').toLowerCase();
+        const productDesc = card.getAttribute('data-description').toLowerCase();
+
+        console.log(`Checking card: category=${categoryId}, type=${productType}, name=${productName}`);
+
+        let showCard = true;
+
+        // Apply search filter
+        if (searchFilter) {
+            const matchesSearch = productName.includes(searchFilter) || productDesc.includes(searchFilter);
+            console.log(`Search filter "${searchFilter}": ${matchesSearch}`);
+            if (!matchesSearch) {
+                showCard = false;
+            }
+        }
+
+        // Apply category filter
+        if (showCard && categoryFilter !== 'all') {
+            const matchesCategory = categoryId === categoryFilter;
+            console.log(`Category filter "${categoryFilter}": ${matchesCategory} (card has ${categoryId})`);
+            if (!matchesCategory) {
+                showCard = false;
+            }
+        }
+
+        // Apply type filter
+        if (showCard && typeFilter !== 'all') {
+            const matchesType = productType === typeFilter;
+            console.log(`Type filter "${typeFilter}": ${matchesType} (card has ${productType})`);
+            if (!matchesType) {
+                showCard = false;
+            }
+        }
+
+        // Show/hide card
+        if (showCard) {
+            card.style.display = 'block';
+            visibleCount++;
+            console.log('Showing card');
+        } else {
+            card.style.display = 'none';
+            console.log('Hiding card');
+        }
+    });
+
+    // Show/hide empty state
+    if (emptyState) {
+        if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+        }
     }
 
-    // Apply type filter
-    if (typeFilter !== 'all') {
-        window.filteredProducts = window.filteredProducts.filter(product => product.tipe_produk === typeFilter);
-        console.log('After type filter:', window.filteredProducts.length, 'products');
-    }
-
-    console.log('Final filtered products count:', window.filteredProducts.length);
-
-    // Update products grid
-    loadFilteredProducts();
+    console.log(`Filter complete: ${visibleCount} products visible out of ${productCards.length}`);
 }
 
 function loadFilteredProducts() {

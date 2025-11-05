@@ -10,6 +10,7 @@
             <div class="hidden md:flex items-center space-x-1">
                 <a href="/" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Home</a>
                 <a href="/products" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Produk</a>
+                <a href="/categories" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Kategori</a>
                 <a href="/custom" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Custom</a>
                 <a href="/collaboration" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Kolaborasi</a>
                 <a href="/cart" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">
@@ -40,6 +41,7 @@
         <div class="px-4 pt-4 pb-6 space-y-2">
             <a href="/" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">Home</a>
             <a href="/products" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">Produk</a>
+            <a href="/categories" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">Kategori</a>
             <a href="/custom" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">Custom</a>
             <a href="/collaboration" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">Kolaborasi</a>
             <a href="/cart" class="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">

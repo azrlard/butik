@@ -28,26 +28,31 @@
                     <p class="text-gray-600">Temukan produk yang sesuai dengan preferensi Anda</p>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full lg:w-auto">
                     <div class="relative">
                         <label for="category-filter" class="block text-sm font-semibold text-gray-700 mb-2">Kategori</label>
                         <select id="category-filter" onchange="filterProducts()" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-white shadow-sm hover:shadow-md transition-shadow">
                             <option value="all">Semua Kategori</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->nama_kategori }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                             @foreach($categories as $category)
+                                 <option value="{{ $category->id }}">{{ $category->nama_kategori }}</option>
+                             @endforeach
+                         </select>
+                     </div>
 
-                    <div class="relative">
-                        <label for="type-filter" class="block text-sm font-semibold text-gray-700 mb-2">Tipe Produk</label>
-                        <select id="type-filter" onchange="filterProducts()" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <option value="all">Semua Tipe</option>
-                            <option value="ready">Ready Stock</option>
-                            <option value="custom">Custom Order</option>
-                        </select>
-                    </div>
-                </div>
+                     <div class="relative">
+                         <label for="type-filter" class="block text-sm font-semibold text-gray-700 mb-2">Tipe Produk</label>
+                         <select id="type-filter" onchange="filterProducts()" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-white shadow-sm hover:shadow-md transition-shadow">
+                             <option value="all">Semua Tipe</option>
+                             <option value="ready">Ready Stock</option>
+                             <option value="custom">Custom Order</option>
+                         </select>
+                     </div>
+
+                     <div class="relative">
+                         <label for="search-filter" class="block text-sm font-semibold text-gray-700 mb-2">Cari Produk</label>
+                         <input type="text" id="search-filter" onkeyup="filterProducts()" placeholder="Cari nama produk..." class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-white shadow-sm hover:shadow-md transition-shadow">
+                     </div>
+                 </div>
             </div>
         </div>
 
@@ -58,7 +63,6 @@
                     // Initialize products array if not exists
                     if (typeof window.products === 'undefined') {
                         window.products = [];
-                        window.filteredProducts = [...window.products];
                     }
                     // Add product to JavaScript array for filtering
                     window.products.push({
@@ -73,13 +77,19 @@
                         category: {{ $product->category ? json_encode(['nama_kategori' => $product->category->nama_kategori]) : 'null' }},
                         variants: {{ $product->variants ? json_encode($product->variants) : '[]' }}
                     });
-                    window.filteredProducts = [...window.products];
+                    console.log('Added product:', { id: {{ $product->id }}, category_id: {{ $product->category_id ?? 'null' }}, tipe_produk: '{{ $product->tipe_produk }}', nama: '{{ addslashes($product->nama_produk) }}' });
+                    });
                 </script>
-                <div onclick="openProductModal('{{ $product->id }}')" class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-gray-100" data-product-id="{{ $product->id }}">
+                <div onclick="openProductModal('{{ $product->id }}')" class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-gray-100 product-card" data-product-id="{{ $product->id }}" data-category-id="{{ $product->category_id }}" data-type="{{ $product->tipe_produk }}" data-name="{{ $product->nama_produk }}" data-description="{{ $product->deskripsi ?? '' }}">
                     <!-- Product Image -->
                     <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-300">
-                        @if($product->foto && file_exists(public_path('storage/' . $product->foto)))
-                            <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover rounded-lg">
+                        @php
+                            $imagePath = $product->foto;
+                            $fullImagePath = str_contains($imagePath, 'products/') ? $imagePath : 'products/' . $imagePath;
+                            $filePath = storage_path('app/public/' . $fullImagePath);
+                        @endphp
+                        @if($product->foto && file_exists($filePath))
+                            <img src="{{ asset('storage/' . $fullImagePath) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover rounded-lg">
                         @else
                             {{ $product->foto ?? '👕' }}
                         @endif
@@ -116,12 +126,26 @@
                         </div>
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">Tidak ada produk ditemukan</h3>
                         <p class="text-gray-600 mb-6">Coba ubah filter kategori atau tipe produk</p>
-                        <button onclick="document.getElementById('category-filter').value='all'; document.getElementById('type-filter').value='all'; filterProducts();" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors">
+                        <button onclick="document.getElementById('category-filter').value='all'; document.getElementById('type-filter').value='all'; document.getElementById('search-filter').value=''; filterProducts();" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors">
                             Tampilkan Semua Produk
                         </button>
                     </div>
                 </div>
             @endforelse
+
+            <script>
+                // Initialize filteredProducts after all products are loaded
+                if (typeof window.products !== 'undefined' && Array.isArray(window.products)) {
+                    window.filteredProducts = [...window.products];
+                    console.log('Products loaded:', window.products.length, 'products');
+                    console.log('All products data:', window.products);
+                    console.log('Initial filteredProducts:', window.filteredProducts.length, 'products');
+                } else {
+                    console.error('window.products is not properly initialized');
+                    window.products = [];
+                    window.filteredProducts = [];
+                }
+            </script>
         </div>
 
         <!-- Product Detail Modal -->

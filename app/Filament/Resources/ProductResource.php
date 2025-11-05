@@ -36,6 +36,7 @@ class ProductResource extends Resource
                     ->nullable(),
                 Forms\Components\FileUpload::make('foto')
                     ->image()
+                    ->directory('products')
                     ->nullable(),
                 Forms\Components\Select::make('tipe_produk')
                     ->options([
@@ -54,6 +55,7 @@ class ProductResource extends Resource
                     ->required()
                     ->numeric()
                     ->prefix('Rp')
+                    ->default(0)
                     ->hidden(fn (Forms\Get $get) => $get('tipe_produk') === 'ready')
                     ->helperText('Harga untuk produk custom. Untuk produk ready stock, harga diatur per size di menu Varian Produk.'),
             ]);
@@ -74,13 +76,13 @@ class ProductResource extends Resource
                     ->badge()
                     ->color('success')
                     ->hidden(fn ($record) => $record && $record->tipe_produk === 'custom'),
-                Tables\Columns\TextColumn::make('total_stock')
-                    ->label('Total Stok')
-                    ->getStateUsing(fn ($record) => $record && $record->tipe_produk === 'ready' ? $record->variants->sum('stock') : 'N/A')
-                    ->badge()
-                    ->color(fn ($state) => is_numeric($state) ? ($state > 0 ? 'success' : 'danger') : 'gray')
-                    ->hidden(fn ($record) => $record && $record->tipe_produk === 'custom'),
-                Tables\Columns\ImageColumn::make('foto'),
+                Tables\Columns\ImageColumn::make('foto')
+                    ->getStateUsing(function ($record) {
+                        if (!$record->foto) return null;
+                        return asset('storage/products/' . $record->foto);
+                    })
+                    ->height(60)
+                    ->width(60),
                 Tables\Columns\TextColumn::make('tipe_produk')
                     ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
