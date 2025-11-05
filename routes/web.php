@@ -36,6 +36,14 @@ Route::get('/custom', function () {
     return view('custom.index');
 });
 
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register');
+
 // Form submission routes (without CSRF for simplicity)
 Route::post('/custom-request', [CustomRequestController::class, 'store'])->name('custom.request')->withoutMiddleware(['csrf']);
 
