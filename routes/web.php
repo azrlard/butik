@@ -36,6 +36,10 @@ Route::get('/custom', function () {
     return view('custom.index');
 });
 
+Route::get('/collaboration', function () {
+    return view('collaboration.index');
+});
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');

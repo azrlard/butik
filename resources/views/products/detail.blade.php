@@ -13,13 +13,17 @@
     @include('shared.navbar')
 
     <!-- Product Detail Page -->
-    <div id="product-detail-page" class="hidden">
+    <div id="product-detail-page">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             @if($product)
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div>
                         <div class="bg-gray-100 rounded-xl h-96 flex items-center justify-center mb-6">
-                            <span class="text-8xl">{{ $product->foto ?: '📦' }}</span>
+                            @if($product->foto && file_exists(public_path('storage/' . $product->foto)))
+                                <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover rounded-xl">
+                            @else
+                                <span class="text-8xl">{{ $product->foto ?: '📦' }}</span>
+                            @endif
                         </div>
                         <div class="grid grid-cols-4 gap-2 mb-6">
                             @for($i = 0; $i < 4; $i++)

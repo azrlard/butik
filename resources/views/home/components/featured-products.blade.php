@@ -33,7 +33,11 @@
                 <div onclick="openProductModal('{{ $product->id }}')" class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-gray-100">
                     <!-- Product Image -->
                     <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-300">
-                        {{ $product->foto ?? '👕' }}
+                        @if($product->foto && file_exists(public_path('storage/' . $product->foto)))
+                            <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover rounded-lg">
+                        @else
+                            {{ $product->foto ?? '👕' }}
+                        @endif
                     </div>
 
                     <!-- Product Info -->
@@ -51,11 +55,10 @@
                             Rp {{ number_format($product->harga, 0, ',', '.') }}
                         </div>
 
-                        @if($product->category)
-                            <div class="mt-3 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">
-                                {{ $product->category->nama_kategori }}
-                            </div>
-                        @endif
+                        <!-- View Button -->
+                        <button onclick="event.stopPropagation(); window.location.href='/products/{{ $product->id }}'" class="mt-4 w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                            View
+                        </button>
                     </div>
                 </div>
             @empty
