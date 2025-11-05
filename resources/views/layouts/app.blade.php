@@ -15,6 +15,10 @@
         let currentPage = 'home';
         let filteredProducts = [];
 
+        // User authentication status
+        let userId = {{ auth()->check() ? auth()->id() : 'null' }};
+        let isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+
         // Load data when page loads
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Page loaded, loading data from API...');
@@ -35,6 +39,7 @@
 
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/navigation.js') }}"></script>
+    <script src="{{ asset('js/navbar.js') }}"></script>
     <script src="{{ asset('js/products.js') }}"></script>
     <script src="{{ asset('js/cart.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>

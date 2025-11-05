@@ -1,5 +1,18 @@
+// Helper function to check if user is logged in
+function isUserLoggedIn() {
+    // Check if user is authenticated via Laravel session
+    return typeof isLoggedIn !== 'undefined' && isLoggedIn === true;
+}
+
 // Cart functions
 function addToCart(productId, variantId = null) {
+    // Check if user is logged in
+    if (!isUserLoggedIn()) {
+        showNotification('Silakan login terlebih dahulu untuk menambahkan produk ke keranjang');
+        window.location.href = '/login';
+        return;
+    }
+
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
@@ -127,6 +140,13 @@ function loadCartItems() {
 }
 
 function showCheckoutForm() {
+    // Check if user is logged in
+    if (!isUserLoggedIn()) {
+        showNotification('Silakan login terlebih dahulu untuk melakukan checkout');
+        window.location.href = '/login';
+        return;
+    }
+
     if (cart.length === 0) {
         showNotification('Keranjang kosong. Silakan tambahkan produk terlebih dahulu.');
         return;
@@ -317,6 +337,13 @@ function processCheckout(event) {
 }
 
 async function submitCheckout(formData) {
+    // Check if user is logged in before submitting
+    if (!isUserLoggedIn()) {
+        showNotification('Silakan login terlebih dahulu untuk menyelesaikan pesanan');
+        window.location.href = '/login';
+        return;
+    }
+
     try {
         const response = await fetch('/api/orders', {
             method: 'POST',
