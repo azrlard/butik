@@ -52,7 +52,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                 @forelse($categories as $category)
-                    <div onclick="filterByCategory({{ $category->id }})" class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group">
+                    <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group">
                         <div class="text-center mb-6">
                             <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                                 <span class="text-3xl">
@@ -88,15 +88,12 @@
                                 @endswitch
                             </p>
                         </div>
-                        <div class="flex justify-between items-center text-sm text-gray-500">
-                            <span class="flex items-center">
+                        <div class="text-center text-sm text-gray-500">
+                            <span class="flex items-center justify-center">
                                 <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
                                 {{ $category->products->count() }} Produk
-                            </span>
-                            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
-                                Lihat Produk
                             </span>
                         </div>
                     </div>
@@ -298,12 +295,6 @@
                     <span>Jelajahi Produk</span>
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                    </svg>
-                </a>
-                <a href="/collaboration" class="inline-flex items-center px-8 py-4 bg-blue-500/20 backdrop-blur-sm border-2 border-white/30 text-white font-bold rounded-2xl hover:bg-blue-500/30 transition-all duration-300">
-                    <span>Lihat Vendor</span>
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
                 </a>
             </div>

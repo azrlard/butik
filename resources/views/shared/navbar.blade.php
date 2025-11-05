@@ -12,7 +12,6 @@
                 <a href="/products" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Produk</a>
                 <a href="/categories" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Kategori</a>
                 <a href="/custom" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Custom</a>
-                <a href="/collaboration" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Kolaborasi</a>
                 <a href="/cart" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">
                     <span class="flex items-center">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

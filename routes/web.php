@@ -36,10 +36,6 @@ Route::get('/custom', function () {
     return view('custom.index');
 });
 
-Route::get('/collaboration', function () {
-    return view('collaboration.index');
-});
-
 Route::get('/categories', function () {
     $categories = App\Models\Category::with('products')->get();
     return view('categories.index', compact('categories'));
