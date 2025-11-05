@@ -74,6 +74,21 @@
 </div>
 @endsection
 
+<script>
+    // Initialize cart when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Cart page loaded, initializing cart...');
+        console.log('Current cart:', cart);
+        console.log('Cart length:', cart.length);
+
+        // Load cart items
+        loadCartItems();
+
+        // Update cart count in navbar
+        updateCartCount();
+    });
+</script>
+
 <!-- Checkout Form Modal -->
 <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">

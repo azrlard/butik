@@ -1,7 +1,7 @@
 // Global variables for dynamic data
 let categories = [];
 let products = [];
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let currentPage = 'home';
 let filteredProducts = [];
 

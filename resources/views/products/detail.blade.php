@@ -146,7 +146,7 @@
                         <!-- Action Buttons -->
                         <div class="space-y-4">
                             <div class="flex gap-4">
-                                <button onclick="addToCart({{ $product->id }}, {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }}); showNotification('{{ $product->nama_produk }} berhasil ditambahkan ke keranjang!');"
+                                <button onclick="addToCart({{ $product->id }}, {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }}); showNotification('{{ $product->nama_produk }} berhasil ditambahkan ke keranjang!'); updateCartCount();"
                                         class="flex-1 bg-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-indigo-700 transition-all transform hover:scale-105 shadow-lg">
                                     <div class="flex items-center justify-center gap-2">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,7 +157,7 @@
                                 </button>
 
                                 @if($product->tipe_produk === 'ready')
-                                    <button onclick="buyNow({{ $product->id }}, {{ ($product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }}); showNotification('Melanjutkan ke checkout...');"
+                                    <button onclick="buyNow({{ $product->id }}, {{ ($product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }}); showNotification('Melanjutkan ke checkout...'); updateCartCount(); navigateTo('cart');"
                                             class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-8 py-4 rounded-xl font-semibold hover:from-yellow-500 hover:to-orange-500 transition-all transform hover:scale-105 shadow-lg">
                                         <div class="flex items-center justify-center gap-2">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,7 +261,7 @@
         // Global variables
         let categories = [];
         let products = [];
-        let cart = [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let currentProduct = @json($product);
 
         // Load data from API

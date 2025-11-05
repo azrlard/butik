@@ -65,7 +65,12 @@ function updateQuantity(cartItemId, change) {
 
 function updateCartCount() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById('cart-count').textContent = totalItems;
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+    }
+    // Save to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 function loadCartItems() {
