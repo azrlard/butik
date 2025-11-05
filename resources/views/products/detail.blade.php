@@ -110,11 +110,6 @@
                                         <span id="product-price" class="text-3xl lg:text-4xl font-bold text-indigo-600">
                                             Rp {{ number_format($product->variants->first()->price_adjustment, 0, ',', '.') }}
                                         </span>
-                                        @if($product->variants->min('price_adjustment') !== $product->variants->max('price_adjustment'))
-                                            <span class="text-xl text-gray-500 line-through">
-                                                - Rp {{ number_format($product->variants->max('price_adjustment'), 0, ',', '.') }}
-                                            </span>
-                                        @endif
                                     </div>
                                 @else
                                     <span id="product-price" class="text-3xl lg:text-4xl font-bold text-indigo-600">

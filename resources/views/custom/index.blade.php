@@ -3,6 +3,11 @@
 @section('title', 'Custom Request - Butik Online')
 
 @section('content')
+@php
+    $currentPage = 'Custom Request';
+@endphp
+@include('shared.breadcrumb')
+
 <!-- Hero Section -->
 <section class="bg-gradient-to-br from-purple-50 via-indigo-50 to-pink-50 py-16 relative overflow-hidden">
     <!-- Background Elements -->

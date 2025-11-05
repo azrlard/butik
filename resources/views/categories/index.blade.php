@@ -5,6 +5,11 @@
 @section('content')
 <!-- Page: Categories -->
 <div id="categories">
+    @php
+        $currentPage = 'Kategori';
+    @endphp
+    @include('shared.breadcrumb')
+
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white py-24 relative overflow-hidden">
         <!-- Background Elements -->

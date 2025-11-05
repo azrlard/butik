@@ -5,6 +5,11 @@
 @section('content')
 <!-- Page: Products -->
 <div id="products">
+    @php
+        $currentPage = 'Produk';
+    @endphp
+    @include('shared.breadcrumb')
+
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-indigo-50 to-white py-16 border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
