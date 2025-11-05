@@ -13,12 +13,8 @@
                 <a href="/categories" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Kategori</a>
                 <a href="/custom" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">Custom</a>
                 <a href="/cart" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">
-                    <span class="flex items-center">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H19M7 13v8a2 2 0 002 2h10a2 2 0 002-2v-3" />
-                        </svg>
-                        <span id="cart-count" class="ml-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-xs rounded-full h-5 w-5 flex items-center justify-center text-white font-semibold shadow-lg">0</span>
-                    </span>
+                    Keranjang
+                    <span id="cart-count" class="ml-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-xs rounded-full h-5 w-5 inline-flex items-center justify-center text-white font-semibold shadow-lg">0</span>
                 </a>
                 <a href="/login" class="nav-link text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 relative group">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -44,9 +40,7 @@
             <a href="/custom" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">Custom</a>
             <a href="/collaboration" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">Kolaborasi</a>
             <a href="/cart" class="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H19M7 13v8a2 2 0 002 2h10a2 2 0 002-2v-3" />
-                </svg>
+                Keranjang
                 <span id="cart-count-mobile" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-xs rounded-full h-5 w-5 flex items-center justify-center text-white font-semibold">0</span>
             </a>
             <a href="/login" class="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 font-medium">
