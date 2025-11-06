@@ -9,13 +9,6 @@ class CustomRequestSeeder extends Seeder
 {
     public function run(): void
     {
-        CustomRequest::create([
-            'user_id' => 1,
-            'foto_referensi' => 'custom_kaos.png',
-            'foto_request' => null,
-            'keterangan' => 'Ingin desain warna biru dengan logo di tengah.',
-            'status' => 'pending',
-            'harga_estimasi' => 150000,
-        ]);
+
     }
 }
