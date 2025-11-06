@@ -18,25 +18,25 @@
                 @if(auth()->check())
                     <div class="relative user-menu-container">
                         <button onclick="toggleUserMenu()" class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-50 flex items-center">
-                            👤 {{ auth()->user()->name }}
+                            {{ auth()->user()->name }}
                         </button>
 
                         <div class="user-menu-dropdown absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50 hidden">
                             <a href="/profile" onclick="closeUserMenu()" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                                📝 Informasi Akun
+                                Informasi Akun
                             </a>
                             <a href="/orders" onclick="closeUserMenu()" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                                📦 Riwayat Pesanan
+                                Riwayat Pesanan
                             </a>
                             <a href="/settings" onclick="closeUserMenu()" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                                ⚙️ Pengaturan
+                                Pengaturan
                             </a>
                             <hr class="my-2 border-gray-200">
                             <div class="px-4">
                                 <form method="POST" action="/logout" onsubmit="closeUserMenu()">
                                     @csrf
                                     <button type="submit" class="flex items-center w-full px-0 py-2 text-sm text-red-600 hover:text-red-700 transition-colors">
-                                        🚪 Logout
+                                        Logout
                                     </button>
                                 </form>
                             </div>
@@ -70,19 +70,19 @@
             @if(auth()->check())
                 <div class="space-y-2">
                     <a href="/profile" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">
-                        📝 Informasi Akun
+                        Informasi Akun
                     </a>
                     <a href="/orders" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">
-                        📦 Riwayat Pesanan
+                        Riwayat Pesanan
                     </a>
                     <a href="/settings" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">
-                        ⚙️ Pengaturan
+                        Pengaturan
                     </a>
                     <hr class="border-gray-200">
                     <form method="POST" action="/logout" class="px-4">
                         @csrf
                         <button type="submit" class="block w-full text-left px-0 py-3 text-red-600 hover:text-red-700 transition-colors font-medium">
-                            🚪 Logout
+                            Logout
                         </button>
                     </form>
                 </div>
