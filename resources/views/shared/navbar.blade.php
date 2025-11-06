@@ -3,13 +3,14 @@
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
                 <a href="/" class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent cursor-pointer">
-                    ✨ Butik Online
+                    Butik Online
                 </a>
             </div>
             <div class="hidden md:flex items-center space-x-1">
                 <a href="/" class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-50">Home</a>
-                <a href="/products" class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-50">Produk</a>
+                <!-- POSISI DITUKAR: Kategori sekarang sebelum Produk -->
                 <a href="/categories" class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-50">Kategori</a>
+                <a href="/products" class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-50">Produk</a>
                 <a href="/custom" class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-50">Custom</a>
                 <a href="/cart" class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-50 flex items-center">
                     Keranjang
@@ -44,7 +45,7 @@
                     </div>
                 @else
                     <a href="/login" class="text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-50">
-                        👤 Login
+                        Login
                     </a>
                 @endif
             </div>
@@ -56,12 +57,13 @@
         </div>
     </div>
     
-    <!-- Mobile Menu -->
+    <!-- Mobile Menu - POSISI JUGA DITUKAR -->
     <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100 shadow-lg">
         <div class="px-4 pt-4 pb-6 space-y-2">
             <a href="/" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">Home</a>
-            <a href="/products" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">Produk</a>
+            <!-- POSISI DITUKAR: Kategori sekarang sebelum Produk -->
             <a href="/categories" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">Kategori</a>
+            <a href="/products" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">Produk</a>
             <a href="/custom" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">Custom</a>
             <a href="/cart" class="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">
                 Keranjang
@@ -88,7 +90,7 @@
                 </div>
             @else
                 <a href="/login" class="block w-full text-left px-4 py-3 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-medium">
-                    👤 Login
+                    Login
                 </a>
             @endif
         </div>
