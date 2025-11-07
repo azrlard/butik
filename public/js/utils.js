@@ -55,5 +55,5 @@ if (productModal) {
 document.addEventListener('DOMContentLoaded', function() {
     loadCategories();
     loadFeaturedProducts();
-    updateCartCount();
+    // updateCartCount() is now called after loadDataFromAPI in layout
 });

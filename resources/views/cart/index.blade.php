@@ -84,9 +84,71 @@
         // Load cart items
         loadCartItems();
 
-        // Update cart count in navbar
-        updateCartCount();
+        // Update cart count in navbar (but don't override the global cart)
+        initializeCartDisplay();
     });
+
+    // Cart is already loaded in layout, but ensure it's available here
+    if (typeof cart === 'undefined') {
+        cart = JSON.parse(localStorage.getItem('cart')) || [];
+    }
+
+    function processCheckout(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        // Add cart items to form data
+        cart.forEach((item, index) => {
+            formData.append(`items[${index}][product_id]`, item.id);
+            formData.append(`items[${index}][variant_id]`, item.variant_id || null);
+            formData.append(`items[${index}][jumlah]`, item.quantity);
+        });
+
+        // Add user_id
+        formData.append('user_id', userId);
+
+        try {
+            // Send order to API
+            fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Close checkout modal
+                    closeCheckoutModal();
+
+                    // Show success notification
+                    showNotification(result.message);
+
+                    // Clear cart
+                    cart = [];
+                    updateCartCount();
+                    initializeCartDisplay(); // Update navbar display immediately
+                    loadCartItems();
+
+                    // Navigate to cart page
+                    setTimeout(() => navigateTo('cart'), 100);
+                } else {
+                    throw new Error(result.message || 'Failed to create order');
+                }
+            })
+            .catch(error => {
+                console.error('Checkout error:', error);
+                showNotification('Terjadi kesalahan saat checkout. Silakan coba lagi.');
+            });
+
+        } catch (error) {
+            console.error('Checkout error:', error);
+            showNotification('Terjadi kesalahan saat checkout. Silakan coba lagi.');
+        }
+    }
 </script>
 
 <!-- Checkout Form Modal -->
@@ -102,7 +164,8 @@
                 </button>
             </div>
 
-            <form id="checkout-form" onsubmit="processCheckout(event)">
+            <form id="checkout-form" onsubmit="processCheckout(event)" method="POST" action="/api/orders">
+                @csrf
                 <div class="space-y-4 mb-6">
                     <div>
                         <label for="customer-name" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>

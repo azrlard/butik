@@ -1,7 +1,21 @@
 // Helper function to check if user is logged in
 function isUserLoggedIn() {
     // Check if user is authenticated via Laravel session
-    return typeof isLoggedIn !== 'undefined' && isLoggedIn === true;
+    const loggedIn = (typeof window.isLoggedIn !== 'undefined' && window.isLoggedIn === true) ||
+                     (typeof isLoggedIn !== 'undefined' && isLoggedIn === true);
+    const userIdValid = (typeof window.userId !== 'undefined' && window.userId !== null && window.userId !== 'null') ||
+                        (typeof userId !== 'undefined' && userId !== null && userId !== 'null');
+
+    console.log('Checking login status:', {
+        window_isLoggedIn: window.isLoggedIn,
+        global_isLoggedIn: isLoggedIn,
+        window_userId: window.userId,
+        global_userId: userId,
+        loggedIn,
+        userIdValid
+    });
+
+    return loggedIn && userIdValid;
 }
 
 // Cart functions
@@ -14,7 +28,10 @@ function addToCart(productId, variantId = null) {
     }
 
     const product = products.find(p => p.id === productId);
-    if (!product) return;
+    if (!product) {
+        console.error('Product not found:', productId, 'Available products:', products);
+        return;
+    }
 
     if (product.tipe_produk === 'custom') {
         showNotification(`${product.nama_produk} - Silakan buat custom request untuk produk ini`);
@@ -53,12 +70,15 @@ function addToCart(productId, variantId = null) {
     }
 
     updateCartCount();
+    initializeCartDisplay(); // Update navbar display immediately
+    console.log('Cart updated, current cart:', cart);
     showNotification(`${product.nama_produk}${selectedVariant ? ` (${selectedVariant.size})` : ''} berhasil ditambahkan ke keranjang!`);
 }
 
 function removeFromCart(cartItemId) {
     cart = cart.filter(item => item.cartItemId !== cartItemId);
     updateCartCount();
+    initializeCartDisplay(); // Update navbar display immediately
     loadCartItems();
     showNotification('Produk berhasil dihapus dari keranjang');
 }
@@ -71,6 +91,7 @@ function updateQuantity(cartItemId, change) {
             removeFromCart(cartItemId);
         } else {
             updateCartCount();
+            initializeCartDisplay(); // Update navbar display immediately
             loadCartItems();
         }
     }
@@ -209,10 +230,11 @@ async function processCheckout(event) {
             // Clear cart
             cart = [];
             updateCartCount();
+            initializeCartDisplay(); // Update navbar display immediately
             loadCartItems();
 
             // Navigate to cart page
-            navigateTo('cart');
+            setTimeout(() => navigateTo('cart'), 100);
 
         } else {
             const errorData = await response.json();
