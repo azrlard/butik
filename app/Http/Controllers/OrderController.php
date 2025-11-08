@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -32,15 +33,23 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
-            // For API requests, expect JSON format from frontend
+            // For web requests, expect form data from frontend
             $request->validate([
                 'user_id' => 'required|exists:users,id',
                 'metode_pembayaran' => 'required|string',
                 'alamat_pengiriman' => 'required|string',
+                'customer_name' => 'required|string',
+                'customer_email' => 'required|email',
+                'customer_phone' => 'required|string',
                 'items' => 'required|array|min:1',
                 'items.*.product_id' => 'required|exists:products,id',
                 'items.*.jumlah' => 'required|integer|min:1',
             ]);
+
+            // Check if user is authenticated or matches the user_id
+            if (!Auth::check() || Auth::id() != $request->user_id) {
+                return redirect()->back()->with('error', 'Anda harus login untuk melakukan checkout');
+            }
 
             $total = 0;
             $orderItems = [];
@@ -86,6 +95,9 @@ class OrderController extends Controller
                 'status' => 'pending',
                 'metode_pembayaran' => $request->metode_pembayaran,
                 'alamat_pengiriman' => $request->alamat_pengiriman,
+                'customer_name' => $request->customer_name,
+                'customer_email' => $request->customer_email,
+                'customer_phone' => $request->customer_phone,
             ]);
 
             foreach ($orderItems as $item) {
@@ -110,17 +122,10 @@ class OrderController extends Controller
                 }
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Pesanan Anda berhasil dikonfirmasi! Terima kasih atas pesanan Anda.',
-                'order' => $order->load('orderItems.product')
-            ], 201);
+            return redirect()->route('orders')->with('success', 'Pesanan Anda berhasil dikonfirmasi! Terima kasih atas pesanan Anda.');
 
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat membuat order: ' . $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat order: ' . $e->getMessage());
         }
     }
 

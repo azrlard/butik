@@ -11,7 +11,8 @@
         <p class="text-purple-100">Isi detail permintaan Anda dengan lengkap</p>
     </div>
 
-    <form id="custom-form" onsubmit="submitCustomRequest(event)" enctype="multipart/form-data" class="p-8">
+    <form x-data="customForm()" @submit.prevent="submitForm" method="POST" action="/custom-request" enctype="multipart/form-data" class="p-8">
+        @csrf
         <!-- Personal Information -->
         <div class="mb-8">
             <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -101,8 +102,8 @@
                 <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mr-3 text-sm font-bold">3</span>
                 Upload Referensi
             </h4>
-            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-indigo-400 hover:bg-indigo-50/50 transition-all duration-200 group cursor-pointer" onclick="document.getElementById('reference-photos').click()">
-                <input type="file" id="reference-photos" name="foto_referensi" accept="image/*" class="hidden" onchange="handleFileUpload(event)">
+            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-indigo-400 hover:bg-indigo-50/50 transition-all duration-200 group cursor-pointer" @click="$refs.fileInput.click()">
+                <input type="file" x-ref="fileInput" name="foto_referensi" accept="image/*" class="hidden" @change="handleFileSelect">
                 <div class="text-6xl mb-4 text-gray-400 group-hover:text-indigo-500 transition-colors">📷</div>
                 <p class="text-gray-600 mb-2 font-semibold group-hover:text-indigo-600 transition-colors">Klik untuk upload foto referensi</p>
                 <p class="text-sm text-gray-500">Format: JPG, PNG, GIF (Max 5MB per file)</p>
@@ -110,7 +111,21 @@
                     Pilih File
                 </div>
             </div>
-            <div id="uploaded-files" class="mt-4 space-y-2"></div>
+            <div class="mt-4 space-y-2">
+                <template x-for="(file, index) in selectedFiles" :key="index">
+                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <img :src="file.preview" class="w-10 h-10 object-cover rounded" :alt="file.name">
+                            <span class="text-sm text-gray-700" x-text="file.name"></span>
+                        </div>
+                        <button @click="removeFile(index)" class="text-red-500 hover:text-red-700">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </template>
+            </div>
         </div>
 
         <!-- Budget & Related Product -->
@@ -142,11 +157,61 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-2xl text-lg font-bold hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02] shadow-2xl shadow-purple-500/25 hover:shadow-purple-500/40 flex items-center justify-center gap-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button type="submit" :disabled="isSubmitting" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-2xl text-lg font-bold hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02] shadow-2xl shadow-purple-500/25 hover:shadow-purple-500/40 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg x-show="!isSubmitting" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
             </svg>
-            <span>Kirim Permintaan Custom</span>
+            <svg x-show="isSubmitting" x-cloak class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span x-text="isSubmitting ? 'Mengirim...' : 'Kirim Permintaan Custom'"></span>
         </button>
     </form>
 </div>
+
+<script>
+function customForm() {
+    return {
+        selectedFiles: [],
+        isSubmitting: false,
+
+        handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File terlalu besar. Maksimal 5MB.');
+                    return;
+                }
+
+                // Create preview
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.selectedFiles.push({
+                        file: file,
+                        name: file.name,
+                        preview: e.target.result
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+
+        removeFile(index) {
+            this.selectedFiles.splice(index, 1);
+        },
+
+        submitForm() {
+            if (this.selectedFiles.length === 0) {
+                alert('Silakan upload minimal satu foto referensi.');
+                return;
+            }
+
+            this.isSubmitting = true;
+
+            // The form will submit normally to the server
+            // Alpine.js will handle the reactive state
+        }
+    }
+}
+</script>

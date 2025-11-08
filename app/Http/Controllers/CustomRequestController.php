@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomRequestController extends Controller
 {
@@ -42,8 +43,13 @@ class CustomRequestController extends Controller
             'product-category' => 'required|string|max:255',
         ]);
 
+        // Check if user is authenticated for custom requests
+        if (!$request->user_id && !Auth::check()) {
+            return redirect()->back()->with('error', 'Silakan login terlebih dahulu untuk membuat custom request');
+        }
+
         $data = [
-            'user_id' => $request->user_id ?: 1, // Default to user ID 1 if not provided
+            'user_id' => $request->user_id ?: (Auth::check() ? Auth::id() : 1), // Use authenticated user or default to 1
             'produk_id' => $request->produk_id,
             'keterangan' => $request->keterangan,
             'harga_estimasi' => $request->harga_estimasi,
@@ -65,7 +71,7 @@ class CustomRequestController extends Controller
 
         $customRequest = CustomRequest::create($data);
 
-        return response()->json(['message' => 'Custom request berhasil dikirim!', 'data' => $customRequest], 201);
+        return redirect()->back()->with('success', 'Custom request berhasil dikirim!');
     }
 
     /**

@@ -8,24 +8,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomRequestController;
 
-Route::get('/', function () {
-    $categories = App\Models\Category::all();
-    $products = App\Models\Product::with('category', 'variants')->get();
-    return view('home.index', compact('categories', 'products'));
-});
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/home', function () {
-    $categories = App\Models\Category::all();
-    $products = App\Models\Product::with('category', 'variants')->get();
-    return view('home.index', compact('categories', 'products'));
-});
-
-Route::get('/products', function (Request $request) {
-    $categories = App\Models\Category::all();
-    $products = App\Models\Product::with('category', 'variants')->get();
-
-    return view('products.index', compact('categories', 'products'));
-});
+Route::get('/products', [ProductController::class, 'indexView'])->name('products.index');
 
 Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'showDetail'])->name('products.detail');
 
@@ -37,10 +23,7 @@ Route::get('/custom', function () {
     return view('custom.index');
 });
 
-Route::get('/categories', function () {
-    $categories = App\Models\Category::with('products')->get();
-    return view('categories.index', compact('categories'));
-});
+Route::get('/categories', [CategoryController::class, 'indexView'])->name('categories.index');
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -104,15 +87,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('settings');
 });
 
-// Form submission routes (without CSRF for simplicity)
-Route::post('/custom-request', [CustomRequestController::class, 'store'])->name('custom.request')->withoutMiddleware(['csrf']);
-
-// Keep API routes for backward compatibility (can be removed later if not needed)
-Route::prefix('api')->group(function () {
-    Route::get('/products', [ProductController::class, 'index']);
-    Route::get('/products/{product}', [ProductController::class, 'show']);
-    Route::get('/categories', [CategoryController::class, 'index']);
-    Route::post('/orders', [OrderController::class, 'store'])->withoutMiddleware(['csrf', 'web']);
-    Route::post('/custom-requests', [CustomRequestController::class, 'store'])->withoutMiddleware(['csrf', 'web']);
-});
+// Form submission routes
+Route::post('/custom-request', [CustomRequestController::class, 'store'])->name('custom.request');
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 

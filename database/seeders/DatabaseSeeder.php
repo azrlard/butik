@@ -18,13 +18,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            // CategorySeeder::class, // Disabled for manual testing
-            // ProductSeeder::class, // Disabled for manual testing
-            // CustomRequestSeeder::class, // Disabled for manual testing
-            // OrderSeeder::class, // Disabled for manual testing
-            // OrderItemSeeder::class, // Disabled for manual testing
-            // PengirimanSeeder::class, // Disabled for manual testing
-            // PembayaranSeeder::class, // Disabled for manual testing
         ]);
     }
 

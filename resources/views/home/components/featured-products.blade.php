@@ -37,8 +37,7 @@
                 $featuredProducts = $products->where('tipe_produk', 'ready')->take(4);
             @endphp
             @forelse($featuredProducts as $product)
-                <div onclick="openProductModal('{{ $product->id }}')"
-                    class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-gray-100">
+                <div x-data="{ showModal: false }" class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-gray-100">
                     <!-- Product Image -->
                     <div
                         class="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden rounded-t-2xl">
@@ -70,7 +69,7 @@
                         </div>
 
                         <!-- View Button -->
-                        <button onclick="event.stopPropagation(); window.location.href='/products/{{ $product->id }}'"
+                        <button @click="window.location.href='/products/{{ $product->id }}'"
                             class="mt-4 w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
                             View
                         </button>

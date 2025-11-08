@@ -26,7 +26,55 @@ class ProductController extends Controller
 
         $products = $query->get();
 
-        return response()->json($products);
+        // Ensure proper JSON response format
+        return response()->json($products->map(function($product) {
+            return [
+                'id' => $product->id,
+                'nama_produk' => $product->nama_produk,
+                'deskripsi' => $product->deskripsi,
+                'harga' => $product->harga,
+                'stok' => $product->stok,
+                'foto' => $product->foto,
+                'tipe_produk' => $product->tipe_produk,
+                'category_id' => $product->category_id,
+                'category' => $product->category,
+                'variants' => $product->variants,
+                'terjual' => $product->terjual ?? 0
+            ];
+        }));
+    }
+
+    /**
+     * Display products page with server-side data
+     */
+    public function indexView(Request $request)
+    {
+        $categories = \App\Models\Category::all();
+
+        $query = Product::with(['category', 'variants']);
+
+        // Filter by category
+        if ($request->has('category') && $request->category !== 'all') {
+            $query->where('category_id', $request->category);
+        }
+
+        // Filter by type
+        if ($request->has('type') && $request->type !== 'all') {
+            $query->where('tipe_produk', $request->type);
+        }
+
+        // Search filter
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_produk', 'LIKE', '%' . $search . '%')
+                  ->orWhere('deskripsi', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $products = $query->get();
+
+        return view('products.index', compact('categories', 'products'));
     }
 
     /**
@@ -50,7 +98,22 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json($product->load(['category', 'variants']));
+        $productData = $product->load(['category', 'variants']);
+
+        // Ensure proper JSON response format
+        return response()->json([
+            'id' => $productData->id,
+            'nama_produk' => $productData->nama_produk,
+            'deskripsi' => $productData->deskripsi,
+            'harga' => $productData->harga,
+            'stok' => $productData->stok,
+            'foto' => $productData->foto,
+            'tipe_produk' => $productData->tipe_produk,
+            'category_id' => $productData->category_id,
+            'category' => $productData->category,
+            'variants' => $productData->variants,
+            'terjual' => $productData->terjual ?? 0
+        ]);
     }
 
     /**

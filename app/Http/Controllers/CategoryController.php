@@ -13,7 +13,26 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return response()->json($categories);
+
+        // Ensure proper JSON response format
+        return response()->json($categories->map(function($category) {
+            return [
+                'id' => $category->id,
+                'nama_kategori' => $category->nama_kategori,
+                'deskripsi' => $category->deskripsi,
+                'icon' => $category->icon,
+                'color' => $category->color
+            ];
+        }));
+    }
+
+    /**
+     * Display categories page with server-side data
+     */
+    public function indexView()
+    {
+        $categories = Category::with('products')->get();
+        return view('categories.index', compact('categories'));
     }
 
     /**
