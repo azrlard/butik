@@ -207,6 +207,13 @@ function customForm() {
                 return;
             }
 
+            // Check if user is logged in
+            @if(!auth()->check())
+                // Redirect to login page if not logged in
+                window.location.href = '/login';
+                return;
+            @endif
+
             this.isSubmitting = true;
 
             // The form will submit normally to the server
