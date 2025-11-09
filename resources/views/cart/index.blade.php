@@ -20,14 +20,14 @@
             {{ session('error') }}
         </div>
     @endif
-    <h1 class="text-4xl md:text-5xl font-black text-text mb-8">Keranjang Belanja</h1>
+    <h1 class="text-4xl md:text-5xl font-black text-[#3E2723] mb-8">Keranjang Belanja</h1>
 
     <!-- Empty Cart -->
     <div x-show="cart.length === 0" class="text-center py-20">
-        <div class="text-8xl mb-6">🛒</div>
-        <h2 class="text-2xl font-semibold text-secondary mb-4">Keranjang Anda Kosong</h2>
-        <p class="text-accent mb-8">Mulai berbelanja dan tambahkan produk favorit Anda</p>
-        <a href="/products" class="bg-primary text-background px-8 py-3 rounded-xl font-semibold hover:bg-secondary transition-colors">
+        <div class="text-8xl mb-6 text-[#8B4513]">🛒</div>
+        <h2 class="text-2xl font-semibold text-[#8B4513] mb-4">Keranjang Anda Kosong</h2>
+        <p class="text-[#3E2723] mb-8 opacity-80">Mulai berbelanja dan tambahkan produk favorit Anda</p>
+        <a href="/products" class="bg-[#8B4513] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#D2691E] transition-colors">
             Mulai Belanja
         </a>
     </div>
@@ -36,26 +36,31 @@
     <div x-show="cart.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Cart Items -->
         <div class="lg:col-span-2">
-            <div class="bg-background rounded-xl shadow-lg overflow-hidden">
-                <div class="p-6 border-b border-secondary">
-                    <h3 class="text-xl font-semibold text-text">Item Belanja</h3>
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-[#F5F5DC]">
+                <div class="p-6 border-b border-[#D2691E]/30 bg-[#F5F5DC]">
+                    <h3 class="text-xl font-semibold text-[#3E2723]">Item Belanja</h3>
                 </div>
-                <div class="divide-y divide-secondary">
+                <div class="divide-y divide-[#F5F5DC]">
                     <template x-for="(item, index) in cart" :key="item.id">
-                        <div class="p-6 flex items-center space-x-4">
-                            <img :src="item.foto ? '/storage/' + item.foto : '👕'" :alt="item.nama_produk" class="w-20 h-20 object-cover rounded-lg">
+                        <div class="p-6 flex items-center space-x-4 hover:bg-[#F5F5DC]/50 transition-colors">
+                            <img :src="item.foto ? '/storage/' + item.foto : '👕'" :alt="item.nama_produk" 
+                                 class="w-20 h-20 object-cover rounded-lg border border-[#D2691E]/20">
                             <div class="flex-1">
-                                <h4 class="font-semibold text-text" x-text="item.nama_produk"></h4>
-                                <p class="text-accent text-sm" x-text="item.deskripsi || 'Deskripsi tidak tersedia'"></p>
-                                <div class="flex items-center space-x-2 mt-2">
-                                    <button @click="updateQuantity(index, item.quantity - 1)" class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">-</button>
-                                    <span x-text="item.quantity" class="w-8 text-center"></span>
-                                    <button @click="updateQuantity(index, item.quantity + 1)" class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">+</button>
+                                <h4 class="font-semibold text-[#3E2723]" x-text="item.nama_produk"></h4>
+                                <p class="text-[#3E2723] text-sm opacity-75 mt-1" x-text="item.deskripsi || 'Deskripsi tidak tersedia'"></p>
+                                <div class="flex items-center space-x-2 mt-3">
+                                    <button @click="updateQuantity(index, item.quantity - 1)" 
+                                            class="w-8 h-8 bg-[#8B4513] text-white rounded-full flex items-center justify-center hover:bg-[#D2691E] transition-colors">-</button>
+                                    <span x-text="item.quantity" class="w-8 text-center font-semibold text-[#3E2723]"></span>
+                                    <button @click="updateQuantity(index, item.quantity + 1)" 
+                                            class="w-8 h-8 bg-[#8B4513] text-white rounded-full flex items-center justify-center hover:bg-[#D2691E] transition-colors">+</button>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="font-bold text-primary" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(item.harga * item.quantity)"></div>
-                                <button @click="removeItem(index)" class="text-red-500 hover:text-red-700 mt-2">
+                                <div class="font-bold text-[#8B4513] text-lg" 
+                                     x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(item.harga * item.quantity)"></div>
+                                <button @click="removeItem(index)" 
+                                        class="text-red-600 hover:text-red-800 mt-2 transition-colors p-1 rounded hover:bg-red-50">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                     </svg>
@@ -69,28 +74,30 @@
 
         <!-- Order Summary -->
         <div class="lg:col-span-1">
-            <div class="bg-background rounded-xl shadow-lg p-6 sticky top-24">
-                <h3 class="text-xl font-semibold text-text mb-6">Ringkasan Pesanan</h3>
+            <div class="bg-white rounded-xl shadow-lg p-6 sticky top-24 border border-[#F5F5DC]">
+                <h3 class="text-xl font-semibold text-[#3E2723] mb-6">Ringkasan Pesanan</h3>
                 <div class="space-y-4 mb-6">
-                    <div class="flex justify-between text-accent">
-                        <span>Total Item</span>
-                        <span x-text="cart.length + ' item'"></span>
+                    <div class="flex justify-between text-[#3E2723]">
+                        <span class="opacity-80">Total Item</span>
+                        <span class="font-semibold" x-text="cart.length + ' item'"></span>
                     </div>
-                    <div class="flex justify-between text-accent">
-                        <span>Total Harga</span>
-                        <span x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal)"></span>
+                    <div class="flex justify-between text-[#3E2723]">
+                        <span class="opacity-80">Total Harga</span>
+                        <span class="font-semibold" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal)"></span>
                     </div>
-                    <hr class="border-secondary">
-                    <div class="flex justify-between text-xl font-bold text-text">
+                    <hr class="border-[#D2691E]/30">
+                    <div class="flex justify-between text-xl font-bold text-[#3E2723]">
                         <span>Total</span>
                         <span x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal)"></span>
                     </div>
                 </div>
 
-                <button @click="showCheckout = true" class="w-full bg-primary text-background px-6 py-4 rounded-xl text-lg font-semibold hover:bg-secondary transition-colors mb-4">
+                <button @click="showCheckout = true" 
+                        class="w-full bg-[#8B4513] text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-[#D2691E] transition-colors mb-4 shadow-lg">
                     Checkout Sekarang
                 </button>
-                <a href="/products" class="w-full bg-accent text-text px-6 py-3 rounded-xl font-semibold hover:bg-secondary hover:text-background transition-colors inline-block text-center">
+                <a href="/products" 
+                   class="w-full bg-[#F5F5DC] text-[#3E2723] px-6 py-3 rounded-xl font-semibold hover:bg-[#D2691E] hover:text-white transition-colors inline-block text-center border border-[#D2691E]/30">
                     Lanjut Belanja
                 </a>
             </div>
@@ -98,12 +105,15 @@
     </div>
 
     <!-- Checkout Modal -->
-    <div x-show="showCheckout" x-cloak x-transition.opacity x-transition.duration.300ms style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div x-show="showCheckout" x-transition x-transition.duration.300ms x-transition.delay.100ms style="display: none;" class="bg-background rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div x-show="showCheckout" x-cloak x-transition.opacity x-transition.duration.300ms style="display: none;" 
+         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div x-show="showCheckout" x-transition x-transition.duration.300ms x-transition.delay.100ms style="display: none;" 
+             class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto border border-[#D2691E]/20">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-text">Form Checkout</h3>
-                    <button @click="showCheckout = false" class="text-accent hover:text-secondary">
+                    <h3 class="text-xl font-bold text-[#3E2723]">Form Checkout</h3>
+                    <button @click="showCheckout = false" 
+                            class="text-[#3E2723] hover:text-[#8B4513] transition-colors p-1 rounded hover:bg-[#F5F5DC]">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
@@ -115,34 +125,34 @@
                     <input type="hidden" name="user_id" :value="{{ auth()->check() ? auth()->id() : '1' }}">
                     <div class="space-y-4 mb-6">
                         <div>
-                            <label for="customer-name" class="block text-sm font-medium text-text mb-1">Nama Lengkap</label>
+                            <label for="customer-name" class="block text-sm font-medium text-[#3E2723] mb-1">Nama Lengkap</label>
                             <input type="text" id="customer-name" name="customer_name" required
-                                   class="w-full px-3 py-2 border border-secondary rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                   class="w-full px-3 py-2 border border-[#D2691E]/30 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent text-[#3E2723] bg-white">
                         </div>
 
                         <div>
-                            <label for="customer-email" class="block text-sm font-medium text-text mb-1">Email</label>
+                            <label for="customer-email" class="block text-sm font-medium text-[#3E2723] mb-1">Email</label>
                             <input type="email" id="customer-email" name="customer_email" required
-                                   class="w-full px-3 py-2 border border-secondary rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                   class="w-full px-3 py-2 border border-[#D2691E]/30 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent text-[#3E2723] bg-white">
                         </div>
 
                         <div>
-                            <label for="customer-phone" class="block text-sm font-medium text-text mb-1">Nomor Telepon</label>
+                            <label for="customer-phone" class="block text-sm font-medium text-[#3E2723] mb-1">Nomor Telepon</label>
                             <input type="tel" id="customer-phone" name="customer_phone" required
-                                   class="w-full px-3 py-2 border border-secondary rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                   class="w-full px-3 py-2 border border-[#D2691E]/30 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent text-[#3E2723] bg-white">
                         </div>
 
                         <div>
-                            <label for="shipping-address" class="block text-sm font-medium text-text mb-1">Alamat Pengiriman</label>
+                            <label for="shipping-address" class="block text-sm font-medium text-[#3E2723] mb-1">Alamat Pengiriman</label>
                             <textarea id="shipping-address" name="alamat_pengiriman" rows="3" required
                                       placeholder="Masukkan alamat lengkap pengiriman"
-                                      class="w-full px-3 py-2 border border-secondary rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"></textarea>
+                                      class="w-full px-3 py-2 border border-[#D2691E]/30 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent text-[#3E2723] bg-white resize-none"></textarea>
                         </div>
 
                         <div>
-                            <label for="payment-method" class="block text-sm font-medium text-text mb-1">Metode Pembayaran</label>
+                            <label for="payment-method" class="block text-sm font-medium text-[#3E2723] mb-1">Metode Pembayaran</label>
                             <select id="payment-method" name="metode_pembayaran" required
-                                    class="w-full px-3 py-2 border border-secondary rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    class="w-full px-3 py-2 border border-[#D2691E]/30 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent text-[#3E2723] bg-white">
                                 <option value="">Pilih metode pembayaran</option>
                                 <option value="transfer">Transfer Bank</option>
                                 <option value="cod">Cash on Delivery</option>
@@ -151,27 +161,27 @@
                         </div>
                     </div>
 
-                    <div class="bg-accent rounded-lg p-4 mb-6">
-                        <h4 class="font-semibold text-text mb-2">Ringkasan Pesanan</h4>
-                        <div class="space-y-1 text-sm">
+                    <div class="bg-[#F5F5DC] rounded-lg p-4 mb-6 border border-[#D2691E]/20">
+                        <h4 class="font-semibold text-[#3E2723] mb-2">Ringkasan Pesanan</h4>
+                        <div class="space-y-1 text-sm text-[#3E2723]">
                             <div class="flex justify-between">
-                                <span>Total Item:</span>
-                                <span x-text="cart.length + ' item'"></span>
+                                <span class="opacity-80">Total Item:</span>
+                                <span class="font-semibold" x-text="cart.length + ' item'"></span>
                             </div>
                             <div class="flex justify-between">
-                                <span>Total Harga:</span>
-                                <span x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(total)"></span>
+                                <span class="opacity-80">Total Harga:</span>
+                                <span class="font-semibold" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(total)"></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="flex space-x-3">
                         <button type="button" @click="showCheckout = false"
-                                class="flex-1 bg-accent text-text px-4 py-2 rounded-lg font-semibold hover:bg-secondary hover:text-background transition-colors">
+                                class="flex-1 bg-[#F5F5DC] text-[#3E2723] px-4 py-2 rounded-lg font-semibold hover:bg-[#D2691E] hover:text-white transition-colors border border-[#D2691E]/30">
                             Batal
                         </button>
                         <button type="submit"
-                                class="flex-1 bg-primary text-background px-4 py-2 rounded-lg font-semibold hover:bg-secondary transition-colors">
+                                class="flex-1 bg-[#8B4513] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#D2691E] transition-colors">
                             Konfirmasi Pesanan
                         </button>
                     </div>
@@ -190,9 +200,7 @@ function cartComponent() {
         init() {
             console.log('Cart component initialized with:', this.cart.length, 'items');
             console.log('Cart data:', this.cart);
-            // Ensure modal is hidden on page load
             this.showCheckout = false;
-            // Force hide modals on init
             this.$nextTick(() => {
                 const modals = document.querySelectorAll('[x-show="showCheckout"]');
                 modals.forEach(modal => modal.style.display = 'none');
@@ -209,11 +217,8 @@ function cartComponent() {
 
         updateQuantity(index, newQuantity) {
             if (newQuantity < 1) return;
-
-            // Update quantity in Alpine.js
             this.cart[index].quantity = newQuantity;
 
-            // Send AJAX request to update server-side cart
             fetch('/cart/update', {
                 method: 'POST',
                 headers: {
@@ -230,24 +235,19 @@ function cartComponent() {
             .then(data => {
                 if (!data.success) {
                     console.error('Failed to update cart:', data.error);
-                    // Revert quantity if update failed
                     this.cart[index].quantity = this.cart[index].quantity;
                 }
             })
             .catch(error => {
                 console.error('Error updating cart:', error);
-                // Revert quantity if update failed
                 this.cart[index].quantity = this.cart[index].quantity;
             });
         },
 
         removeItem(index) {
             const item = this.cart[index];
-
-            // Remove from Alpine.js cart immediately for UI responsiveness
             this.cart.splice(index, 1);
 
-            // Send AJAX request to remove from server-side cart
             fetch('/cart/remove', {
                 method: 'POST',
                 headers: {
@@ -263,21 +263,17 @@ function cartComponent() {
             .then(data => {
                 if (!data.success) {
                     console.error('Failed to remove item:', data.error);
-                    // Add item back if removal failed
                     this.cart.splice(index, 0, item);
                 }
             })
             .catch(error => {
                 console.error('Error removing item:', error);
-                // Add item back if removal failed
                 this.cart.splice(index, 0, item);
             });
         },
 
         processCheckout() {
-            // Add cart items as hidden inputs to form
             const form = document.querySelector('form[action="/orders"]');
-            // Clear existing cart inputs
             form.querySelectorAll('input[name^="items"]').forEach(input => input.remove());
 
             this.cart.forEach((item, index) => {
@@ -302,23 +298,9 @@ function cartComponent() {
                 }
             });
 
-            // Submit the form
             form.submit();
-        },
-
-        init() {
-            console.log('Cart component initialized with:', this.cart.length, 'items');
-            console.log('Cart data:', this.cart);
-            // Ensure modal is hidden on page load
-            this.showCheckout = false;
-            // Force hide modals on init
-            this.$nextTick(() => {
-                const modals = document.querySelectorAll('[x-show="showCheckout"]');
-                modals.forEach(modal => modal.style.display = 'none');
-            });
         }
     }
 }
 </script>
 @endsection
-
