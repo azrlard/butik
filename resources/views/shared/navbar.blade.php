@@ -7,18 +7,18 @@
                 </a>
             </div>
             <div class="hidden md:flex items-center space-x-1">
-                <a href="/" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Home</a>
+                <a href="/" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Home</a>
                 <!-- POSISI DITUKAR: Kategori sekarang sebelum Produk -->
-                <a href="/categories" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Kategori</a>
-                <a href="/products" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Produk</a>
-                <a href="/custom" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Custom</a>
-                <a href="/cart" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent flex items-center">
+                <a href="/categories" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Kategori</a>
+                <a href="/products" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Produk</a>
+                <a href="/custom" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Custom</a>
+                <a href="/cart" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent flex items-center">
                     Keranjang
                     <span x-data="{ cartCount: 0 }" x-init="cartCount = JSON.parse(localStorage.getItem('cart') || '[]').reduce((sum, item) => sum + item.quantity, 0)" x-text="cartCount" class="ml-2 bg-accent text-xs rounded-full h-5 w-5 flex items-center justify-center text-text font-semibold">0</span>
                 </a>
                 @if(auth()->check())
                     <div x-data="{ userMenuOpen: false }" class="relative">
-                        <button @click="userMenuOpen = !userMenuOpen" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent flex items-center">
+                        <button @click="userMenuOpen = !userMenuOpen" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent flex items-center">
                             {{ auth()->user()->name }}
                         </button>
 
@@ -44,13 +44,13 @@
                         </div>
                     </div>
                 @else
-                    <a href="/login" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">
+                    <a href="/login" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">
                         Login
                     </a>
                 @endif
             </div>
             <div class="md:hidden">
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white hover:text-accent">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white hover:text-text">
                     ☰
                 </button>
             </div>
@@ -58,26 +58,26 @@
     </div>
     
     <!-- Mobile Menu - POSISI JUGA DITUKAR -->
-    <div x-show="mobileMenuOpen" x-cloak class="hidden md:hidden bg-primary/95 backdrop-blur-sm border-t border-secondary shadow-lg">
+    <div x-show="mobileMenuOpen" x-transition x-cloak class="md:hidden bg-primary/95 backdrop-blur-sm border-t border-secondary shadow-lg">
         <div class="px-4 pt-4 pb-6 space-y-2">
-            <a href="/" class="block w-full text-left px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">Home</a>
+            <a href="/" class="block w-full text-left px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">Home</a>
             <!-- POSISI DITUKAR: Kategori sekarang sebelum Produk -->
-            <a href="/categories" class="block w-full text-left px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">Kategori</a>
-            <a href="/products" class="block w-full text-left px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">Produk</a>
-            <a href="/custom" class="block w-full text-left px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">Custom</a>
-            <a href="/cart" class="flex items-center justify-between w-full px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">
+            <a href="/categories" class="block w-full text-left px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">Kategori</a>
+            <a href="/products" class="block w-full text-left px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">Produk</a>
+            <a href="/custom" class="block w-full text-left px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">Custom</a>
+            <a href="/cart" class="flex items-center justify-between w-full px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">
                 Keranjang
                 <span id="cart-count-mobile" class="bg-accent text-xs rounded-full h-5 w-5 flex items-center justify-center text-text font-semibold">0</span>
             </a>
             @if(auth()->check())
                 <div class="space-y-2">
-                    <a href="/profile" class="block w-full text-left px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">
+                    <a href="/profile" class="block w-full text-left px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">
                         Informasi Akun
                     </a>
-                    <a href="/orders" class="block w-full text-left px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">
+                    <a href="/orders" class="block w-full text-left px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">
                         Riwayat Pesanan
                     </a>
-                    <a href="/settings" class="block w-full text-left px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">
+                    <a href="/settings" class="block w-full text-left px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">
                         Pengaturan
                     </a>
                     <hr class="border-secondary">
@@ -89,7 +89,7 @@
                     </form>
                 </div>
             @else
-                <a href="/login" class="block w-full text-left px-4 py-3 text-white hover:text-accent hover:bg-accent rounded-lg transition-colors font-medium">
+                <a href="/login" class="block w-full text-left px-4 py-3 text-white hover:text-text hover:bg-accent rounded-lg transition-colors font-medium">
                     Login
                 </a>
             @endif
