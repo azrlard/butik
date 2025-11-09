@@ -5,29 +5,14 @@
 @section('content')
 
     <!-- Product Detail Page -->
-    <div id="product-detail-page">
-        <!-- Breadcrumb -->
-        <div class="bg-gray-50 py-4 mt-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <nav class="flex" aria-label="Breadcrumb">
-                    <ol class="flex items-center space-x-2">
-                        <li><a href="/" class="text-gray-500 hover:text-indigo-600">Home</a></li>
-                        <li class="flex items-center">
-                            <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <a href="/products" class="text-gray-500 hover:text-indigo-600">Produk</a>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-gray-900">{{ $product->nama_produk ?? 'Detail Produk' }}</span>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+    <div x-data="productDetailComponent()" id="product-detail-page">
+        @php
+            $breadcrumbs = [
+                ['label' => 'Produk', 'url' => '/products']
+            ];
+            $currentPage = $product->nama_produk ?? 'Detail Produk';
+        @endphp
+        @include('shared.breadcrumb')
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             @if($product)
@@ -117,7 +102,7 @@
                                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Pilih Ukuran</h3>
                                 <div class="grid grid-cols-4 gap-3 mb-6" id="size-buttons">
                                     @foreach($product->variants as $variant)
-                                        <button onclick="selectSize('{{ $variant->size }}', {{ $variant->id }}, {{ $variant->stock }}, {{ $variant->price_adjustment }})"
+                                        <button @click="selectSize('{{ $variant->size }}', {{ $variant->id }}, {{ $variant->stock }}, {{ $variant->price_adjustment }})"
                                                 class="size-btn border-2 border-gray-200 px-4 py-3 rounded-xl hover:border-indigo-600 hover:text-indigo-600 transition-all font-medium {{ $loop->first ? 'border-indigo-600 text-indigo-600 bg-indigo-50' : '' }} {{ $variant->stock === 0 ? 'opacity-50 cursor-not-allowed bg-gray-100' : '' }}"
                                                 {{ $variant->stock === 0 ? 'disabled' : '' }}>
                                             <div class="text-center">
@@ -133,7 +118,7 @@
                         <!-- Action Buttons -->
                         <div class="space-y-4">
                             <div class="flex gap-4">
-                                <button onclick="addToCart({{ $product->id }}, {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }}); showNotification('{{ $product->nama_produk }} berhasil ditambahkan ke keranjang!'); updateCartCount();"
+                                <button @click="addToCart({{ $product->id }}, {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }}, {{ auth()->check() ? 'true' : 'false' }})"
                                         class="flex-1 bg-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-indigo-700 transition-all transform hover:scale-105 shadow-lg">
                                     <div class="flex items-center justify-center gap-2">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,4 +216,73 @@
     </div>
 
     @include('shared.notification')
+
+    <script>
+        function productDetailComponent() {
+            return {
+                selectedVariantId: {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }},
+
+                addToCart(productId, variantId, isLoggedIn) {
+                    console.log('addToCart called with:', { productId, variantId, isLoggedIn });
+
+                    if (!isLoggedIn) {
+                        // Redirect to login page if not logged in
+                        window.location.href = '/login';
+                        return;
+                    }
+
+                    // Use selected variant if available
+                    const finalVariantId = variantId !== 'null' ? variantId : this.selectedVariantId;
+
+                    // If logged in, add to cart via AJAX and redirect to cart
+                    console.log('Sending AJAX request to /cart/add with variant:', finalVariantId);
+                    fetch('/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            product_id: productId,
+                            variant_id: finalVariantId,
+                            quantity: 1
+                        })
+                    })
+                    .then(response => {
+                        console.log('Response received:', response);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Data received:', data);
+                        if (data.success) {
+                            console.log('Success! Redirecting to cart...');
+                            // Redirect to cart page
+                            window.location.href = '/cart';
+                        } else {
+                            console.error('Failed to add to cart:', data.error);
+                            alert('Gagal menambahkan ke keranjang: ' + (data.error || 'Unknown error'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat menambahkan ke keranjang');
+                    });
+                },
+
+                selectSize(size, variantId, stock, priceAdjustment) {
+                    console.log('Size selected:', { size, variantId, stock, priceAdjustment });
+                    this.selectedVariantId = variantId;
+
+                    // Update UI to show selected size
+                    document.querySelectorAll('.size-btn').forEach(btn => {
+                        btn.classList.remove('border-indigo-600', 'text-indigo-600', 'bg-indigo-50');
+                        btn.classList.add('border-gray-200');
+                    });
+
+                    event.target.closest('.size-btn').classList.remove('border-gray-200');
+                    event.target.closest('.size-btn').classList.add('border-indigo-600', 'text-indigo-600', 'bg-indigo-50');
+                }
+            }
+        }
+    </script>
 @endsection

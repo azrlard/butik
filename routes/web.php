@@ -91,3 +91,8 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/custom-request', [CustomRequestController::class, 'store'])->name('custom.request');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
+// Cart routes
+Route::post('/cart/add', [App\Http\Controllers\CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [App\Http\Controllers\CartController::class, 'updateCart'])->name('cart.update');
+Route::post('/cart/remove', [App\Http\Controllers\CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart/count', [App\Http\Controllers\CartController::class, 'getCartCount'])->name('cart.count');
