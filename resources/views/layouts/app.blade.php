@@ -6,9 +6,24 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Butik Online - Temukan Gaya Unikmu')</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B4513',
+                        secondary: '#D2691E',
+                        accent: '#F5F5DC',
+                        background: '#FFFFFF',
+                        text: '#3E2723',
+                    }
+                }
+            }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="h-full bg-gray-50 overflow-x-hidden font-['Poppins']">
+<body class="h-full bg-background overflow-x-hidden font-['Poppins'] text-text">
     <div class="h-16"></div> <!-- Spacer for fixed navbar -->
     @include('shared.navbar')
 
