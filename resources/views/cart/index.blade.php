@@ -155,8 +155,6 @@
                                     class="w-full px-3 py-2 border border-[#D2691E]/30 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent text-[#3E2723] bg-white">
                                 <option value="">Pilih metode pembayaran</option>
                                 <option value="transfer">Transfer Bank</option>
-                                <option value="cod">Cash on Delivery</option>
-                                <option value="ewallet">E-Wallet</option>
                             </select>
                         </div>
                     </div>

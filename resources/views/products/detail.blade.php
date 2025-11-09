@@ -20,8 +20,8 @@
                     <!-- Product Images -->
                     <div class="space-y-4">
                         <!-- Main Image -->
-                        <div class="bg-background rounded-2xl shadow-lg overflow-hidden">
-                            <div class="aspect-square bg-accent flex items-center justify-center">
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-[#D2691E]/20">
+                            <div class="aspect-square bg-[#F5F5DC] flex items-center justify-center">
                                 @php
                                     $imagePath = $product->foto;
                                     $fullImagePath = str_contains($imagePath, 'products/') ? $imagePath : 'products/' . $imagePath;
@@ -30,7 +30,7 @@
                                 @if($product->foto && file_exists($filePath))
                                     <img src="{{ asset('storage/' . $fullImagePath) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover">
                                 @else
-                                    <span class="text-8xl">{{ $product->foto ?: '📦' }}</span>
+                                    <span class="text-8xl text-[#3E2723]">📦</span>
                                 @endif
                             </div>
                         </div>
@@ -38,8 +38,8 @@
                         <!-- Thumbnail Images -->
                         <div class="grid grid-cols-4 gap-3">
                             @for($i = 0; $i < 4; $i++)
-                                <div class="bg-background rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
-                                    <div class="aspect-square bg-accent flex items-center justify-center">
+                                <div class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow border border-[#D2691E]/20">
+                                    <div class="aspect-square bg-[#F5F5DC] flex items-center justify-center">
                                         @php
                                             $imagePath = $product->foto;
                                             $fullImagePath = str_contains($imagePath, 'products/') ? $imagePath : 'products/' . $imagePath;
@@ -48,7 +48,7 @@
                                         @if($product->foto && file_exists($filePath))
                                             <img src="{{ asset('storage/' . $fullImagePath) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover">
                                         @else
-                                            <span class="text-3xl">{{ $product->foto ?: '📦' }}</span>
+                                            <span class="text-3xl text-[#3E2723]">📦</span>
                                         @endif
                                     </div>
                                 </div>
@@ -62,34 +62,34 @@
                         <div>
                             <div class="flex items-center gap-3 mb-4">
                                 @if($product->category)
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-secondary text-background">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#8B4513] text-white">
                                         {{ $product->category->nama_kategori }}
                                     </span>
                                 @endif
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $product->tipe_produk === 'custom' ? 'bg-accent text-text' : 'bg-secondary text-background' }}">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $product->tipe_produk === 'custom' ? 'bg-[#F5F5DC] text-[#3E2723] border border-[#D2691E]/30' : 'bg-[#8B4513] text-white' }}">
                                     {{ $product->tipe_produk === 'custom' ? 'Custom Order' : 'Ready Stock' }}
                                 </span>
                             </div>
 
-                            <h1 class="text-3xl lg:text-4xl font-bold text-text mb-4 leading-tight">{{ $product->nama_produk }}</h1>
+                            <h1 class="text-3xl lg:text-4xl font-bold text-[#3E2723] mb-4 leading-tight">{{ $product->nama_produk }}</h1>
 
                             <!-- Sales Info -->
                             <div class="flex items-center gap-4 mb-6">
-                                <span class="text-sm text-accent">{{ $product->terjual ?? 0 }} terjual</span>
-                                <span class="text-secondary">|</span>
-                                <span id="availability-text" class="text-sm text-secondary">✓ Stok tersedia</span>
+                                <span class="text-sm text-[#3E2723] opacity-80">{{ $product->terjual ?? 0 }} terjual</span>
+                                <span class="text-[#D2691E]">|</span>
+                                <span id="availability-text" class="text-sm text-[#8B4513] font-medium">✓ Stok tersedia</span>
                             </div>
 
                             <!-- Price -->
                             <div class="mb-6">
                                 @if($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0)
                                     <div class="flex items-baseline gap-3">
-                                        <span id="product-price" class="text-3xl lg:text-4xl font-bold text-primary">
+                                        <span id="product-price" class="text-3xl lg:text-4xl font-bold text-[#8B4513]">
                                             Rp {{ number_format($product->variants->first()->price_adjustment, 0, ',', '.') }}
                                         </span>
                                     </div>
                                 @else
-                                    <span id="product-price" class="text-3xl lg:text-4xl font-bold text-primary">
+                                    <span id="product-price" class="text-3xl lg:text-4xl font-bold text-[#8B4513]">
                                         Rp {{ number_format($product->harga, 0, ',', '.') }}
                                     </span>
                                 @endif
@@ -99,15 +99,15 @@
                         <!-- Size Selection -->
                         @if($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0)
                             <div>
-                                <h3 class="text-lg font-semibold text-text mb-4">Pilih Ukuran</h3>
+                                <h3 class="text-lg font-semibold text-[#3E2723] mb-4">Pilih Ukuran</h3>
                                 <div class="grid grid-cols-4 gap-3 mb-6" id="size-buttons">
                                     @foreach($product->variants as $variant)
                                         <button @click="selectSize('{{ $variant->size }}', {{ $variant->id }}, {{ $variant->stock }}, {{ $variant->price_adjustment }})"
-                                                class="size-btn border-2 border-secondary px-4 py-3 rounded-xl hover:border-primary hover:text-primary transition-all font-medium {{ $loop->first ? 'border-primary text-primary bg-accent' : '' }} {{ $variant->stock === 0 ? 'opacity-50 cursor-not-allowed bg-accent' : '' }}"
+                                                class="size-btn border-2 px-4 py-3 rounded-xl transition-all font-medium {{ $loop->first ? 'border-[#8B4513] text-[#8B4513] bg-[#F5F5DC]' : 'border-[#D2691E] text-[#3E2723]' }} {{ $variant->stock === 0 ? 'opacity-50 cursor-not-allowed bg-gray-100' : 'hover:border-[#8B4513] hover:text-[#8B4513]' }}"
                                                 {{ $variant->stock === 0 ? 'disabled' : '' }}>
                                             <div class="text-center">
                                                 <div class="font-semibold">{{ $variant->size }}</div>
-                                                <div class="text-xs text-accent mt-1">Stok: {{ $variant->stock }}</div>
+                                                <div class="text-xs mt-1 {{ $variant->stock === 0 ? 'text-gray-500' : 'text-[#3E2723] opacity-70' }}">Stok: {{ $variant->stock }}</div>
                                             </div>
                                         </button>
                                     @endforeach
@@ -119,7 +119,7 @@
                         <div class="space-y-4">
                             <div class="flex gap-4">
                                 <button @click="addToCart({{ $product->id }}, {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }}, {{ auth()->check() ? 'true' : 'false' }})"
-                                        class="flex-1 bg-primary text-background px-8 py-4 rounded-xl font-semibold hover:bg-secondary transition-all transform hover:scale-105 shadow-lg">
+                                        class="flex-1 bg-[#8B4513] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#D2691E] transition-all transform hover:scale-105 shadow-lg">
                                     <div class="flex items-center justify-center gap-2">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H19M7 13v8a2 2 0 002 2h10a2 2 0 002-2v-3"></path>
@@ -130,7 +130,7 @@
 
                                 @if($product->tipe_produk === 'custom')
                                     <button onclick="navigateTo('custom'); showNotification('Melanjutkan ke custom request...');"
-                                            class="flex-1 bg-gradient-to-r from-secondary to-accent text-text px-8 py-4 rounded-xl font-semibold hover:from-primary hover:to-secondary hover:text-background transition-all transform hover:scale-105 shadow-lg">
+                                            class="flex-1 bg-gradient-to-r from-[#D2691E] to-[#F5F5DC] text-[#3E2723] px-8 py-4 rounded-xl font-semibold hover:from-[#8B4513] hover:to-[#D2691E] hover:text-white transition-all transform hover:scale-105 shadow-lg border border-[#D2691E]/30">
                                         <div class="flex items-center justify-center gap-2">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -144,32 +144,32 @@
 
                         <!-- Product Description -->
                         <div class="mt-8">
-                            <h3 class="text-lg font-semibold text-text mb-4">Deskripsi Produk</h3>
-                            <div class="prose prose-lg max-w-none text-accent leading-relaxed">
-                                <p class="mb-4">{{ $product->deskripsi }}</p>
+                            <h3 class="text-lg font-semibold text-[#3E2723] mb-4">Deskripsi Produk</h3>
+                            <div class="text-[#3E2723] leading-relaxed">
+                                <p class="mb-4 opacity-90">{{ $product->deskripsi }}</p>
                             </div>
                         </div>
 
                         <!-- Product Details -->
                         <div class="mt-6">
-                            <h3 class="text-lg font-semibold text-text mb-4">Detail Produk</h3>
+                            <h3 class="text-lg font-semibold text-[#3E2723] mb-4">Detail Produk</h3>
                             <div class="grid grid-cols-1 gap-4">
-                                <div class="flex justify-between py-2 border-b border-secondary">
-                                    <span class="text-accent">Kategori</span>
-                                    <span class="text-text font-medium">{{ $product->category->nama_kategori ?? 'Tidak dikategorikan' }}</span>
+                                <div class="flex justify-between py-2 border-b border-[#D2691E]/30">
+                                    <span class="text-[#3E2723] opacity-80">Kategori</span>
+                                    <span class="text-[#3E2723] font-medium">{{ $product->category->nama_kategori ?? 'Tidak dikategorikan' }}</span>
                                 </div>
-                                <div class="flex justify-between py-2 border-b border-secondary">
-                                    <span class="text-accent">Tipe Produk</span>
-                                    <span class="text-text font-medium">{{ $product->tipe_produk === 'custom' ? 'Custom Order' : 'Ready Stock' }}</span>
+                                <div class="flex justify-between py-2 border-b border-[#D2691E]/30">
+                                    <span class="text-[#3E2723] opacity-80">Tipe Produk</span>
+                                    <span class="text-[#3E2723] font-medium">{{ $product->tipe_produk === 'custom' ? 'Custom Order' : 'Ready Stock' }}</span>
                                 </div>
                                 @if($product->tipe_produk === 'ready')
-                                    <div class="flex justify-between py-2 border-b border-secondary">
-                                        <span class="text-accent">Ketersediaan</span>
-                                        <span id="detail-availability" class="text-secondary font-medium">{{ $product->variants->sum('stock') ?? 0 }} unit tersedia</span>
+                                    <div class="flex justify-between py-2 border-b border-[#D2691E]/30">
+                                        <span class="text-[#3E2723] opacity-80">Ketersediaan</span>
+                                        <span id="detail-availability" class="text-[#8B4513] font-medium">{{ $product->variants->sum('stock') ?? 0 }} unit tersedia</span>
                                     </div>
-                                    <div class="flex justify-between py-2 border-b border-secondary">
-                                        <span class="text-accent">Pengiriman</span>
-                                        <span class="text-text font-medium">Estimasi 2-5 hari kerja</span>
+                                    <div class="flex justify-between py-2 border-b border-[#D2691E]/30">
+                                        <span class="text-[#3E2723] opacity-80">Pengiriman</span>
+                                        <span class="text-[#3E2723] font-medium">Estimasi 2-5 hari kerja</span>
                                     </div>
                                 @endif
                             </div>
@@ -177,12 +177,11 @@
                     </div>
                 </div>
 
-
                 <!-- Similar Products -->
                 <div class="mb-16">
                     <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-2xl font-bold text-text">Produk Serupa</h2>
-                        <a href="/products" class="text-primary hover:text-secondary font-medium flex items-center gap-2">
+                        <h2 class="text-2xl font-bold text-[#3E2723]">Produk Serupa</h2>
+                        <a href="/products" class="text-[#8B4513] hover:text-[#D2691E] font-medium flex items-center gap-2">
                             Lihat Semua
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -195,18 +194,18 @@
                 </div>
             @else
                 <div class="text-center py-20">
-                    <div class="w-24 h-24 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-12 h-12 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-24 h-24 bg-[#F5F5DC] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#D2691E]/30">
+                        <svg class="w-12 h-12 text-[#8B4513]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m8-5v2m0 0v2m0-2h2m-2 0h-2"></path>
                         </svg>
                     </div>
-                    <h2 class="text-2xl font-bold text-text mb-4">Produk Tidak Ditemukan</h2>
-                    <p class="text-accent mb-8">Produk yang Anda cari tidak tersedia atau telah dihapus.</p>
+                    <h2 class="text-2xl font-bold text-[#3E2723] mb-4">Produk Tidak Ditemukan</h2>
+                    <p class="text-[#3E2723] mb-8 opacity-80">Produk yang Anda cari tidak tersedia atau telah dihapus.</p>
                     <div class="flex gap-4 justify-center">
-                        <a href="/" class="bg-primary text-background px-6 py-3 rounded-lg font-semibold hover:bg-secondary transition-colors">
+                        <a href="/" class="bg-[#8B4513] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#D2691E] transition-colors">
                             Kembali ke Beranda
                         </a>
-                        <a href="/products" class="border border-secondary text-text px-6 py-3 rounded-lg font-semibold hover:bg-accent transition-colors">
+                        <a href="/products" class="border border-[#D2691E] text-[#3E2723] px-6 py-3 rounded-lg font-semibold hover:bg-[#F5F5DC] transition-colors">
                             Lihat Produk Lain
                         </a>
                     </div>
@@ -275,12 +274,13 @@
 
                     // Update UI to show selected size
                     document.querySelectorAll('.size-btn').forEach(btn => {
-                        btn.classList.remove('border-primary', 'text-primary', 'bg-accent');
-                        btn.classList.add('border-secondary');
+                        btn.classList.remove('border-[#8B4513]', 'text-[#8B4513]', 'bg-[#F5F5DC]');
+                        btn.classList.add('border-[#D2691E]', 'text-[#3E2723]');
+                        btn.classList.remove('bg-[#F5F5DC]');
                     });
 
-                    event.target.closest('.size-btn').classList.remove('border-secondary');
-                    event.target.closest('.size-btn').classList.add('border-primary', 'text-primary', 'bg-accent');
+                    event.target.closest('.size-btn').classList.remove('border-[#D2691E]', 'text-[#3E2723]');
+                    event.target.closest('.size-btn').classList.add('border-[#8B4513]', 'text-[#8B4513]', 'bg-[#F5F5DC]');
                 }
             }
         }
