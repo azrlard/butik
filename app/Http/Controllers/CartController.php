@@ -121,12 +121,13 @@ class CartController extends Controller
         $quantity = $request->quantity;
 
         $cart = Session::get('cart', []);
-        $cartKey = $variantId ? "{$productId}-{$variantId}" : $productId;
+        $index = $this->findCartItemIndex($cart, $productId, $variantId);
 
-        if ($quantity <= 0) {
-            unset($cart[$cartKey]);
-        } else {
-            if (isset($cart[$cartKey])) {
+        if ($index !== false) {
+            if ($quantity <= 0) {
+                unset($cart[$index]);
+                $cart = array_values($cart); // Reindex array
+            } else {
                 // Check stock
                 if ($variantId) {
                     $variant = ProductVariant::find($variantId);
@@ -135,7 +136,7 @@ class CartController extends Controller
                     }
                 }
 
-                $cart[$cartKey]['quantity'] = $quantity;
+                $cart[$index]['quantity'] = $quantity;
             }
         }
 
@@ -162,9 +163,13 @@ class CartController extends Controller
         $variantId = $request->variant_id;
 
         $cart = Session::get('cart', []);
-        $cartKey = $variantId ? "{$productId}-{$variantId}" : $productId;
+        $index = $this->findCartItemIndex($cart, $productId, $variantId);
 
-        unset($cart[$cartKey]);
+        if ($index !== false) {
+            unset($cart[$index]);
+            $cart = array_values($cart); // Reindex array
+        }
+
         Session::put('cart', $cart);
 
         return response()->json([
@@ -180,7 +185,10 @@ class CartController extends Controller
     public function getCartCount()
     {
         $cart = Session::get('cart', []);
-        $count = array_sum(array_column($cart, 'quantity'));
+        $count = 0;
+        foreach ($cart as $item) {
+            $count += $item['quantity'];
+        }
         return response()->json(['count' => $count]);
     }
 
