@@ -51,7 +51,12 @@ class CartController extends Controller
             // Use variant price if exists
             $harga = $variant->price_adjustment;
         } else {
-            $harga = $product->harga;
+            // For ready stock products without variant selected, use the minimum variant price
+            if ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) {
+                $harga = $product->variants->min('price_adjustment');
+            } else {
+                $harga = $product->harga;
+            }
         }
 
         // Create cart item with consistent structure
@@ -65,7 +70,8 @@ class CartController extends Controller
             'deskripsi' => $product->deskripsi,
             'foto' => $product->foto,
             'tipe_produk' => $product->tipe_produk,
-            'category' => $product->category ? $product->category->nama_kategori : null
+            'category' => $product->category ? $product->category->nama_kategori : null,
+            'variant_size' => $variant ? $variant->size : null
         ];
 
         // Cek apakah item sudah ada di cart

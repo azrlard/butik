@@ -118,7 +118,7 @@
                         <!-- Action Buttons -->
                         <div class="space-y-4">
                             <div class="flex gap-4">
-                                <button @click="addToCart({{ $product->id }}, {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }}, {{ auth()->check() ? 'true' : 'false' }})"
+                                <button @click="addToCart({{ $product->id }}, selectedVariantId, {{ auth()->check() ? 'true' : 'false' }})"
                                         class="flex-1 bg-[#8B4513] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#D2691E] transition-all transform hover:scale-105 shadow-lg">
                                     <div class="flex items-center justify-center gap-2">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,8 +230,17 @@
                         return;
                     }
 
-                    // Use selected variant if available
-                    const finalVariantId = variantId !== 'null' ? variantId : this.selectedVariantId;
+                    // Use selected variant if available, otherwise use the currently selected one
+                    let finalVariantId = variantId;
+                    if (finalVariantId === null || finalVariantId === undefined || finalVariantId === 'null') {
+                        finalVariantId = this.selectedVariantId;
+                    }
+
+                    // Ensure we have a valid variant ID for ready stock products
+                    if (finalVariantId === null || finalVariantId === undefined || finalVariantId === 'null') {
+                        alert('Silakan pilih ukuran terlebih dahulu');
+                        return;
+                    }
 
                     // If logged in, add to cart via AJAX and redirect to cart
                     console.log('Sending AJAX request to /cart/add with variant:', finalVariantId);

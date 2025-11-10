@@ -41,13 +41,14 @@
                     <h3 class="text-xl font-semibold text-[#3E2723]">Item Belanja</h3>
                 </div>
                 <div class="divide-y divide-[#F5F5DC]">
-                    <template x-for="(item, index) in cart" :key="item.id">
+                    <template x-for="(item, index) in cart" :key="item.product_id + '-' + (item.variant_id || 'no-variant')">
                         <div class="p-6 flex items-center space-x-4 hover:bg-[#F5F5DC]/50 transition-colors">
                             <img :src="item.foto ? '/storage/' + item.foto : '👕'" :alt="item.nama_produk" 
                                  class="w-20 h-20 object-cover rounded-lg border border-[#D2691E]/20">
                             <div class="flex-1">
                                 <h4 class="font-semibold text-[#3E2723]" x-text="item.nama_produk"></h4>
                                 <p class="text-[#3E2723] text-sm opacity-75 mt-1" x-text="item.deskripsi || 'Deskripsi tidak tersedia'"></p>
+                                <p v-if="item.variant_size" class="text-[#8B4513] text-xs font-medium mt-1" x-text="'Ukuran: ' + item.variant_size"></p>
                                 <div class="flex items-center space-x-2 mt-3">
                                     <button @click="updateQuantity(index, item.quantity - 1)" 
                                             class="w-8 h-8 bg-[#8B4513] text-white rounded-full flex items-center justify-center hover:bg-[#D2691E] transition-colors">-</button>
