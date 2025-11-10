@@ -272,6 +272,12 @@
                     console.log('Size selected:', { size, variantId, stock, priceAdjustment });
                     this.selectedVariantId = variantId;
 
+                    // Update price display
+                    const priceElement = document.getElementById('product-price');
+                    if (priceElement) {
+                        priceElement.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(priceAdjustment);
+                    }
+
                     // Update UI to show selected size
                     document.querySelectorAll('.size-btn').forEach(btn => {
                         btn.classList.remove('border-[#8B4513]', 'text-[#8B4513]', 'bg-[#F5F5DC]');

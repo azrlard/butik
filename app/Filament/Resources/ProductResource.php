@@ -77,12 +77,12 @@ class ProductResource extends Resource
                     ->color('success')
                     ->hidden(fn ($record) => $record && $record->tipe_produk === 'custom'),
                 Tables\Columns\ImageColumn::make('foto')
-                    ->getStateUsing(function ($record) {
-                        if (!$record->foto) return null;
-                        return asset('storage/products/' . $record->foto);
-                    })
-                    ->height(60)
-                    ->width(60),
+                     ->getStateUsing(function ($record) {
+                         if (!$record->foto) return null;
+                         return asset('storage/' . $record->foto);
+                     })
+                     ->height(60)
+                     ->width(60),
                 Tables\Columns\TextColumn::make('tipe_produk')
                     ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
