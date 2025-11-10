@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'name' => 'User',
             'email' => 'user@butik.com',
             'password' => Hash::make('user123'),
-            'role' => 'user',
+            'role' => 'customer',
         ]);
     }
 }
