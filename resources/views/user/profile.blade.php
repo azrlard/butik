@@ -69,11 +69,6 @@
                                        class="w-full px-4 py-3 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
                             </div>
 
-                            <div>
-                                <label for="birth_date" class="block text-sm font-semibold text-text mb-2">Tanggal Lahir</label>
-                                <input type="date" id="birth_date" name="birth_date" value="{{ auth()->user()->birth_date ?? '' }}"
-                                       class="w-full px-4 py-3 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
-                            </div>
                         </div>
 
                         <div>
