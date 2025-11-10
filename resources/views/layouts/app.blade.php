@@ -35,5 +35,19 @@
     @include('shared.scroll-to-top')
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        // Initialize cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/cart/count')
+                .then(response => response.json())
+                .then(data => {
+                    const desktopCartCount = document.getElementById('cart-count-desktop');
+                    const mobileCartCount = document.getElementById('cart-count-mobile');
+                    if (desktopCartCount) desktopCartCount.textContent = data.count || 0;
+                    if (mobileCartCount) mobileCartCount.textContent = data.count || 0;
+                })
+                .catch(error => console.error('Error loading cart count:', error));
+        });
+    </script>
 </body>
 </html>

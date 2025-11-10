@@ -255,6 +255,19 @@
                         console.log('Data received:', data);
                         if (data.success) {
                             console.log('Success! Redirecting to cart...');
+                            // Update cart count in navbar
+                            if (data.cart_count !== undefined) {
+                                // Update desktop cart count
+                                const desktopCartCount = document.getElementById('cart-count-desktop');
+                                if (desktopCartCount) {
+                                    desktopCartCount.textContent = data.cart_count;
+                                }
+                                // Update mobile cart count
+                                const mobileCartCount = document.getElementById('cart-count-mobile');
+                                if (mobileCartCount) {
+                                    mobileCartCount.textContent = data.cart_count;
+                                }
+                            }
                             // Redirect to cart page
                             window.location.href = '/cart';
                         } else {

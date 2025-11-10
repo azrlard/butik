@@ -193,16 +193,27 @@
 function cartComponent() {
     return {
         cart: @json(session('cart', [])),
+        cartCount: 0,
         showCheckout: false,
 
         init() {
             console.log('Cart component initialized with:', this.cart.length, 'items');
             console.log('Cart data:', this.cart);
             this.showCheckout = false;
+            this.updateCartCount();
             this.$nextTick(() => {
                 const modals = document.querySelectorAll('[x-show="showCheckout"]');
                 modals.forEach(modal => modal.style.display = 'none');
             });
+        },
+
+        updateCartCount() {
+            this.cartCount = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+            // Update navbar cart count
+            const desktopCartCount = document.getElementById('cart-count-desktop');
+            const mobileCartCount = document.getElementById('cart-count-mobile');
+            if (desktopCartCount) desktopCartCount.textContent = this.cartCount;
+            if (mobileCartCount) mobileCartCount.textContent = this.cartCount;
         },
 
         get subtotal() {
@@ -216,6 +227,7 @@ function cartComponent() {
         updateQuantity(index, newQuantity) {
             if (newQuantity < 1) return;
             this.cart[index].quantity = newQuantity;
+            this.updateCartCount();
 
             fetch('/cart/update', {
                 method: 'POST',
@@ -234,17 +246,20 @@ function cartComponent() {
                 if (!data.success) {
                     console.error('Failed to update cart:', data.error);
                     this.cart[index].quantity = this.cart[index].quantity;
+                    this.updateCartCount();
                 }
             })
             .catch(error => {
                 console.error('Error updating cart:', error);
                 this.cart[index].quantity = this.cart[index].quantity;
+                this.updateCartCount();
             });
         },
 
         removeItem(index) {
             const item = this.cart[index];
-            this.cart.splice(index, 1);
+            const removedItem = this.cart.splice(index, 1)[0];
+            this.updateCartCount();
 
             fetch('/cart/remove', {
                 method: 'POST',
@@ -261,12 +276,14 @@ function cartComponent() {
             .then(data => {
                 if (!data.success) {
                     console.error('Failed to remove item:', data.error);
-                    this.cart.splice(index, 0, item);
+                    this.cart.splice(index, 0, removedItem);
+                    this.updateCartCount();
                 }
             })
             .catch(error => {
                 console.error('Error removing item:', error);
-                this.cart.splice(index, 0, item);
+                this.cart.splice(index, 0, removedItem);
+                this.updateCartCount();
             });
         },
 

@@ -180,7 +180,8 @@ class CartController extends Controller
     public function getCartCount()
     {
         $cart = Session::get('cart', []);
-        return array_sum(array_column($cart, 'quantity'));
+        $count = array_sum(array_column($cart, 'quantity'));
+        return response()->json(['count' => $count]);
     }
 
     /**

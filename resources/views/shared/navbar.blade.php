@@ -14,7 +14,7 @@
                 <a href="/custom" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent">Custom</a>
                 <a href="/cart" class="text-white hover:text-text px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent flex items-center">
                     Keranjang
-                    <span x-data="{ cartCount: 0 }" x-init="cartCount = JSON.parse(localStorage.getItem('cart') || '[]').reduce((sum, item) => sum + item.quantity, 0)" x-text="cartCount" class="ml-2 bg-accent text-xs rounded-full h-5 w-5 flex items-center justify-center text-text font-semibold">0</span>
+                    <span id="cart-count-desktop" class="ml-2 bg-accent text-xs rounded-full h-5 w-5 flex items-center justify-center text-text font-semibold">0</span>
                 </a>
                 @if(auth()->check())
                     <div x-data="{ userMenuOpen: false }" class="relative">
