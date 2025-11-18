@@ -2,8 +2,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
-                <a href="/" class="text-2xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent cursor-pointer">
-                    Butik Online
+                <a href="/" class="cursor-pointer">
+                    <img src="{{ asset('images/logo mitra jeki.jpg') }}" alt="Butik" class="h-10 w-auto">
                 </a>
             </div>
             <div class="hidden md:flex items-center space-x-1">
