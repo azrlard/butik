@@ -20,7 +20,6 @@
             {{ session('error') }}
         </div>
     @endif
-    <h1 class="text-4xl md:text-5xl font-black text-[#3E2723] mb-8">Keranjang Belanja</h1>
 
     <!-- Empty Cart -->
     <div x-show="cart.length === 0" class="text-center py-20">
