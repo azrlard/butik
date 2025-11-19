@@ -19,6 +19,8 @@ class OrderItemResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $slug = 'item-pesanan';
+    protected static ?string $navigationGroup = 'Manajemen Operasional';
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
