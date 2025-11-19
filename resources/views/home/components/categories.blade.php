@@ -13,14 +13,14 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="flex flex-wrap justify-center gap-8">
             @forelse($categories as $category)
-                        <div class="bg-background rounded-2xl p-8 text-center hover:shadow-2xl hover:shadow-secondary/20 transition-all duration-300 transform hover:scale-105 border border-secondary group">
+                        <div class="bg-background rounded-2xl p-8 text-center hover:shadow-2xl hover:shadow-secondary/20 transition-all duration-300 transform hover:scale-105 border border-secondary group min-w-[350px] max-w-[400px] flex-1">
                             <h3 class="text-xl font-bold mb-3 text-text group-hover:text-primary transition-colors">{{ $category->nama_kategori }}</h3>
                             <p class="text-sm text-text group-hover:text-text transition-colors">{{ $category->deskripsi ?? 'Kategori produk' }}</p>
                         </div>
                     @empty
-                <p class="text-center text-text col-span-full">Tidak ada kategori tersedia</p>
+                <p class="text-center text-text w-full">Tidak ada kategori tersedia</p>
             @endforelse
         </div>
     </div>
