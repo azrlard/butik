@@ -104,6 +104,7 @@ class OrderController extends Controller
                 $orderItem = new OrderItem();
                 $orderItem->order_id = $order->id;
                 $orderItem->product_id = $item['product_id'];
+                $orderItem->variant_id = $item['variant_id'];
                 $orderItem->custom_request_id = null;
                 $orderItem->jumlah = $item['jumlah'];
                 $orderItem->harga_satuan = $item['harga_satuan'];

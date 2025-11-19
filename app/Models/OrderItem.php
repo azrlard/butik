@@ -10,7 +10,7 @@ class OrderItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'order_id', 'product_id', 'custom_request_id', 'jumlah', 'harga_satuan', 'subtotal',
+        'order_id', 'product_id', 'variant_id', 'custom_request_id', 'jumlah', 'harga_satuan', 'subtotal',
     ];
 
     public function order()
@@ -26,5 +26,10 @@ class OrderItem extends Model
     public function customRequest()
     {
         return $this->belongsTo(CustomRequest::class);
+    }
+
+    public function variant()
+    {
+        return $this->belongsTo(\App\Models\ProductVariant::class);
     }
 }

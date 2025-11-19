@@ -63,20 +63,40 @@
 
                 <!-- Orders List -->
                 <div id="orders-list" class="space-y-6">
-                    <!-- Sample Order 1 -->
+                    @php
+                        $orders = auth()->user()->orders()->with(['orderItems.product', 'orderItems.variant'])->latest()->get();
+                    @endphp
+                    @forelse($orders as $order)
                     <div class="bg-background rounded-2xl shadow-lg border border-secondary overflow-hidden">
                         <div class="p-6 border-b border-secondary">
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div>
                                     <div class="flex items-center gap-3 mb-2">
-                                        <h3 class="text-xl font-bold text-text">Order #ORD-2024-001</h3>
-                                        <span class="px-3 py-1 bg-accent text-text rounded-full text-sm font-semibold">Menunggu Pembayaran</span>
+                                        <h3 class="text-xl font-bold text-text">Order #{{ $order->id }}</h3>
+                                        <span class="px-3 py-1 {{ $order->status === 'pending' ? 'bg-accent text-text' : ($order->status === 'processing' ? 'bg-yellow-100 text-yellow-800' : ($order->status === 'shipped' ? 'bg-blue-100 text-blue-800' : ($order->status === 'delivered' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'))) }} rounded-full text-sm font-semibold">
+                                            @switch($order->status)
+                                                @case('pending')
+                                                    Menunggu Pembayaran
+                                                    @break
+                                                @case('processing')
+                                                    Sedang Diproses
+                                                    @break
+                                                @case('shipped')
+                                                    Dalam Pengiriman
+                                                    @break
+                                                @case('delivered')
+                                                    Selesai
+                                                    @break
+                                                @default
+                                                    Dibatalkan
+                                            @endswitch
+                                        </span>
                                     </div>
-                                    <p class="text-text">Dipesan pada 15 November 2024, 14:30</p>
+                                    <p class="text-text">Dipesan pada {{ $order->created_at->format('d M Y, H:i') }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-2xl font-bold text-primary">Rp 250.000</p>
-                                    <p class="text-sm text-text">2 items</p>
+                                    <p class="text-2xl font-bold text-primary">Rp {{ number_format($order->total_harga, 0, ',', '.') }}</p>
+                                    <p class="text-sm text-text">{{ $order->orderItems->count() }} item{{ $order->orderItems->count() > 1 ? 's' : '' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -86,104 +106,59 @@
                                 <!-- Order Items -->
                                 <div class="flex-1">
                                     <div class="space-y-4">
+                                        @foreach($order->orderItems as $item)
                                         <div class="flex items-center gap-4">
                                             <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center">
-                                                <span class="text-2xl">👕</span>
+                                                @if($item->product && $item->product->foto)
+                                                    <img src="/storage/{{ $item->product->foto }}" alt="{{ $item->product->nama_produk }}" class="w-full h-full object-cover rounded-lg">
+                                                @else
+                                                    <span class="text-2xl">👕</span>
+                                                @endif
                                             </div>
                                             <div class="flex-1">
-                                                <h4 class="font-semibold text-text">Kaos Polos Premium</h4>
-                                                <p class="text-sm text-text">Size: M, Warna: Hitam</p>
-                                                <p class="text-sm text-text">Qty: 1 × Rp 125.000</p>
+                                                <h4 class="font-semibold text-text">{{ $item->product ? $item->product->nama_produk : 'Produk tidak tersedia' }}</h4>
+                                                @if($item->variant_id)
+                                                    <p class="text-sm text-text">Size: {{ $item->variant ? $item->variant->size : 'N/A' }}</p>
+                                                @endif
+                                                <p class="text-sm text-text">Qty: {{ $item->jumlah }} × Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</p>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center">
-                                                <span class="text-2xl">👖</span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <h4 class="font-semibold text-text">Celana Jeans Slim Fit</h4>
-                                                <p class="text-sm text-text">Size: 32, Warna: Biru</p>
-                                                <p class="text-sm text-text">Qty: 1 × Rp 125.000</p>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
 
                                 <!-- Order Actions -->
                                 <div class="md:w-48 flex flex-col gap-3">
-                                    <button onclick="viewOrderDetail('ORD-2024-001')" class="w-full bg-primary text-background px-4 py-3 rounded-xl font-semibold hover:bg-secondary transition-colors">
+                                    <button onclick="viewOrderDetail('{{ $order->id }}')" class="w-full bg-primary text-background px-4 py-3 rounded-xl font-semibold hover:bg-secondary transition-colors">
                                         Lihat Detail
                                     </button>
-                                    <button onclick="trackOrder('ORD-2024-001')" class="w-full bg-accent text-text px-4 py-3 rounded-xl font-semibold hover:bg-secondary hover:text-background transition-colors">
-                                        Lacak Pesanan
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sample Order 2 -->
-                    <div class="bg-background rounded-2xl shadow-lg border border-secondary overflow-hidden">
-                        <div class="p-6 border-b border-secondary">
-                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                <div>
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <h3 class="text-xl font-bold text-text">Order #ORD-2024-002</h3>
-                                        <span class="px-3 py-1 bg-secondary text-background rounded-full text-sm font-semibold">Selesai</span>
-                                    </div>
-                                    <p class="text-text">Dipesan pada 10 November 2024, 09:15</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-2xl font-bold text-primary">Rp 180.000</p>
-                                    <p class="text-sm text-text">1 item</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6">
-                            <div class="flex flex-col md:flex-row gap-6">
-                                <!-- Order Items -->
-                                <div class="flex-1">
-                                    <div class="space-y-4">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center">
-                                                <span class="text-2xl">🧥</span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <h4 class="font-semibold text-text">Jaket Bomber Premium</h4>
-                                                <p class="text-sm text-text">Size: L, Warna: Navy</p>
-                                                <p class="text-sm text-text">Qty: 1 × Rp 180.000</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Order Actions -->
-                                <div class="md:w-48 flex flex-col gap-3">
-                                    <button onclick="viewOrderDetail('ORD-2024-002')" class="w-full bg-primary text-background px-4 py-3 rounded-xl font-semibold hover:bg-secondary transition-colors">
-                                        Lihat Detail
-                                    </button>
-                                    <button onclick="writeReview('ORD-2024-002')" class="w-full bg-secondary text-background px-4 py-3 rounded-xl font-semibold hover:bg-primary transition-colors">
+                                    @if($order->status === 'delivered')
+                                    <button onclick="writeReview('{{ $order->id }}')" class="w-full bg-secondary text-background px-4 py-3 rounded-xl font-semibold hover:bg-primary transition-colors">
                                         Tulis Ulasan
                                     </button>
+                                    @else
+                                    <button onclick="trackOrder('{{ $order->id }}')" class="w-full bg-accent text-text px-4 py-3 rounded-xl font-semibold hover:bg-secondary hover:text-background transition-colors">
+                                        Lacak Pesanan
+                                    </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Empty State -->
-                <div id="empty-orders" class="hidden text-center py-20">
-                    <div class="w-24 h-24 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-12 h-12 text-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                        </svg>
+                    @empty
+                    <div id="empty-orders" class="text-center py-20">
+                        <div class="w-24 h-24 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-12 h-12 text-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-text mb-2">Belum ada pesanan</h3>
+                        <p class="text-text mb-6">Mulai berbelanja dan buat pesanan pertama Anda</p>
+                        <a href="/products" class="inline-flex items-center px-6 py-3 bg-primary text-background font-semibold rounded-xl hover:bg-secondary transition-colors">
+                            Mulai Belanja
+                        </a>
                     </div>
-                    <h3 class="text-xl font-semibold text-text mb-2">Belum ada pesanan</h3>
-                    <p class="text-text mb-6">Mulai berbelanja dan buat pesanan pertama Anda</p>
-                    <a href="/products" class="inline-flex items-center px-6 py-3 bg-primary text-background font-semibold rounded-xl hover:bg-secondary transition-colors">
-                        Mulai Belanja
-                    </a>
+                    @endforelse
                 </div>
     </div>
 </div>
