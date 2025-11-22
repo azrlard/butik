@@ -62,10 +62,9 @@
                         <select id="product-category" name="product-category" required
                                 class="w-full px-4 py-3 pl-12 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background appearance-none">
                             <option value="">Pilih kategori</option>
-                            <option value="pakaian">👗 Pakaian</option>
-                            <option value="tas">👜 Tas & Dompet</option>
-                            <option value="aksesoris">💍 Aksesoris</option>
-                            <option value="sepatu">👠 Sepatu</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->nama_kategori }}">{{ $category->nama_kategori }}</option>
+                            @endforeach
                         </select>
                         <div class="absolute left-3 top-3.5 text-text group-focus-within:text-primary transition-colors pointer-events-none">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,14 +143,6 @@
                             <span class="text-sm font-semibold">Rp</span>
                         </div>
                     </div>
-                </div>
-                <div class="group">
-                    <label for="produk_id" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Produk Terkait (Opsional)</label>
-                    <select id="produk_id" name="produk_id"
-                            class="w-full px-4 py-3 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
-                        <option value="">Pilih produk jika ada</option>
-                        <!-- Products will be loaded dynamically -->
-                    </select>
                 </div>
             </div>
         </div>

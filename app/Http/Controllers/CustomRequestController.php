@@ -32,7 +32,6 @@ class CustomRequestController extends Controller
         // For frontend submissions, make user_id optional and default to 1
         $request->validate([
             'user_id' => 'nullable|exists:users,id',
-            'produk_id' => 'nullable|exists:products,id',
             'foto_request' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'foto_referensi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'keterangan' => 'required|string',
@@ -50,7 +49,6 @@ class CustomRequestController extends Controller
 
         $data = [
             'user_id' => $request->user_id ?: (Auth::check() ? Auth::id() : 1), // Use authenticated user or default to 1
-            'produk_id' => $request->produk_id,
             'keterangan' => $request->keterangan,
             'harga_estimasi' => $request->harga_estimasi,
             'status' => 'pending',

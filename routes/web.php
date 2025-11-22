@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomRequestController;
+use App\Models\Category;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -20,7 +21,8 @@ Route::get('/cart', function () {
 });
 
 Route::get('/custom', function () {
-    return view('custom.index');
+    $categories = Category::all();
+    return view('custom.index', compact('categories'));
 });
 
 Route::get('/categories', [CategoryController::class, 'indexView'])->name('categories.index');
