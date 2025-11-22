@@ -42,7 +42,7 @@
                 <div class="divide-y divide-[#F5F5DC]">
                     <template x-for="(item, index) in cart" :key="item.product_id + '-' + (item.variant_id || 'no-variant')">
                         <div class="p-6 flex items-center space-x-4 hover:bg-[#F5F5DC]/50 transition-colors">
-                            <img :src="item.foto ? '/storage/' + item.foto : '👕'" :alt="item.nama_produk" 
+                            <img :src="item.foto ? (item.type === 'custom' ? '/images/' : '/storage/') + item.foto : '👕'" :alt="item.nama_produk"
                                  class="w-20 h-20 object-cover rounded-lg border border-[#D2691E]/20">
                             <div class="flex-1">
                                 <h4 class="font-semibold text-[#3E2723]" x-text="item.nama_produk"></h4>
@@ -348,24 +348,88 @@ function cartComponent() {
             form.querySelectorAll('input[name^="items"]').forEach(input => input.remove());
 
             this.cart.forEach((item, index) => {
-                const productIdInput = document.createElement('input');
-                productIdInput.type = 'hidden';
-                productIdInput.name = `items[${index}][product_id]`;
-                productIdInput.value = item.product_id;
-                form.appendChild(productIdInput);
+                if (item.type === 'custom') {
+                    // For custom items
+                    const typeInput = document.createElement('input');
+                    typeInput.type = 'hidden';
+                    typeInput.name = `items[${index}][type]`;
+                    typeInput.value = 'custom';
+                    form.appendChild(typeInput);
 
-                const quantityInput = document.createElement('input');
-                quantityInput.type = 'hidden';
-                quantityInput.name = `items[${index}][jumlah]`;
-                quantityInput.value = item.quantity;
-                form.appendChild(quantityInput);
+                    const keteranganInput = document.createElement('input');
+                    keteranganInput.type = 'hidden';
+                    keteranganInput.name = `items[${index}][keterangan]`;
+                    keteranganInput.value = item.deskripsi;
+                    form.appendChild(keteranganInput);
 
-                if (item.variant_id) {
-                    const variantInput = document.createElement('input');
-                    variantInput.type = 'hidden';
-                    variantInput.name = `items[${index}][variant_id]`;
-                    variantInput.value = item.variant_id;
-                    form.appendChild(variantInput);
+                    const hargaInput = document.createElement('input');
+                    hargaInput.type = 'hidden';
+                    hargaInput.name = `items[${index}][harga]`;
+                    hargaInput.value = item.harga;
+                    form.appendChild(hargaInput);
+
+                    const customerNameInput = document.createElement('input');
+                    customerNameInput.type = 'hidden';
+                    customerNameInput.name = `items[${index}][customer_name]`;
+                    customerNameInput.value = item.customer_name;
+                    form.appendChild(customerNameInput);
+
+                    const customerEmailInput = document.createElement('input');
+                    customerEmailInput.type = 'hidden';
+                    customerEmailInput.name = `items[${index}][customer_email]`;
+                    customerEmailInput.value = item.customer_email;
+                    form.appendChild(customerEmailInput);
+
+                    const customerPhoneInput = document.createElement('input');
+                    customerPhoneInput.type = 'hidden';
+                    customerPhoneInput.name = `items[${index}][customer_phone]`;
+                    customerPhoneInput.value = item.customer_phone;
+                    form.appendChild(customerPhoneInput);
+
+                    const alamatInput = document.createElement('input');
+                    alamatInput.type = 'hidden';
+                    alamatInput.name = `items[${index}][alamat_pengiriman]`;
+                    alamatInput.value = item.alamat_pengiriman;
+                    form.appendChild(alamatInput);
+
+                    const categoryInput = document.createElement('input');
+                    categoryInput.type = 'hidden';
+                    categoryInput.name = `items[${index}][product_category]`;
+                    categoryInput.value = item.product_category;
+                    form.appendChild(categoryInput);
+
+                    const fotoInput = document.createElement('input');
+                    fotoInput.type = 'hidden';
+                    fotoInput.name = `items[${index}][foto_referensi]`;
+                    fotoInput.value = item.foto;
+                    form.appendChild(fotoInput);
+
+                    const quantityInput = document.createElement('input');
+                    quantityInput.type = 'hidden';
+                    quantityInput.name = `items[${index}][jumlah]`;
+                    quantityInput.value = item.quantity;
+                    form.appendChild(quantityInput);
+                } else {
+                    // For product items
+                    const productIdInput = document.createElement('input');
+                    productIdInput.type = 'hidden';
+                    productIdInput.name = `items[${index}][product_id]`;
+                    productIdInput.value = item.product_id;
+                    form.appendChild(productIdInput);
+
+                    const quantityInput = document.createElement('input');
+                    quantityInput.type = 'hidden';
+                    quantityInput.name = `items[${index}][jumlah]`;
+                    quantityInput.value = item.quantity;
+                    form.appendChild(quantityInput);
+
+                    if (item.variant_id) {
+                        const variantInput = document.createElement('input');
+                        variantInput.type = 'hidden';
+                        variantInput.name = `items[${index}][variant_id]`;
+                        variantInput.value = item.variant_id;
+                        form.appendChild(variantInput);
+                    }
                 }
             });
 

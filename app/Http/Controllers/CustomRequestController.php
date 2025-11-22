@@ -61,38 +61,33 @@ class CustomRequestController extends Controller
             'product_category' => $request->{'product-category'},
         ];
 
-        if ($request->hasFile('foto_request')) {
-            $data['foto_request'] = $request->file('foto_request')->store('custom-requests', 'public');
-        }
-
         if ($request->hasFile('foto_referensi')) {
-            $data['foto_referensi'] = $request->file('foto_referensi')->store('custom-requests', 'public');
+            $data['foto_referensi'] = $request->file('foto_referensi')->move(public_path('images'), time() . '.' . $request->file('foto_referensi')->getClientOriginalExtension());
+            $data['foto_referensi'] = 'images/' . basename($data['foto_referensi']);
         }
 
-        $customRequest = CustomRequest::create($data);
+        // Add custom request to session cart
+        $cart = \Illuminate\Support\Facades\Session::get('cart', []);
 
-        // Create order for custom request
-        $order = Order::create([
-            'user_id' => $data['user_id'],
-            'total_harga' => $data['harga_estimasi'] ?? 0,
-            'status' => 'pending',
-            'metode_pembayaran' => 'pending', // Will be set later
-            'alamat_pengiriman' => 'Custom request - akan ditentukan nanti',
+        $cartItem = [
+            'id' => 'custom_' . time(), // Unique id for custom
+            'type' => 'custom',
+            'nama_produk' => 'Custom Request',
+            'harga' => $data['harga_estimasi'] ?? 0,
+            'quantity' => 1,
+            'deskripsi' => $data['keterangan'],
+            'foto' => $data['foto_referensi'] ?? null,
             'customer_name' => $data['customer_name'],
             'customer_email' => $data['customer_email'],
             'customer_phone' => $data['customer_phone'],
-        ]);
+            'alamat_pengiriman' => $request->alamat_pengiriman ?? '',
+            'product_category' => $data['product_category'],
+        ];
 
-        // Create order item linked to custom request
-        OrderItem::create([
-            'order_id' => $order->id,
-            'custom_request_id' => $customRequest->id,
-            'jumlah' => 1,
-            'harga_satuan' => $data['harga_estimasi'] ?? 0,
-            'subtotal' => $data['harga_estimasi'] ?? 0,
-        ]);
+        $cart[] = $cartItem;
+        \Illuminate\Support\Facades\Session::put('cart', $cart);
 
-        return redirect('/cart');
+        return redirect('/cart')->with('success', 'Custom request berhasil ditambahkan ke keranjang! Lakukan checkout untuk menyelesaikan pesanan.');
     }
 
     /**

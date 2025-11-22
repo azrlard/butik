@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\CustomRequest;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +45,6 @@ class OrderController extends Controller
                 'customer_email' => 'required|email',
                 'customer_phone' => 'required|string',
                 'items' => 'required|array|min:1',
-                'items.*.product_id' => 'required|exists:products,id',
                 'items.*.jumlah' => 'required|integer|min:1',
             ]);
 
@@ -58,35 +58,64 @@ class OrderController extends Controller
 
             // Parse cart items from request
             foreach ($request->items as $item) {
-                $product = Product::find($item['product_id']);
-                if ($product) {
-                    $variant = null;
+                if (isset($item['type']) && $item['type'] === 'custom') {
+                    // Handle custom item
+                    $customData = [
+                        'user_id' => $request->user_id,
+                        'keterangan' => $item['keterangan'],
+                        'harga_estimasi' => $item['harga'],
+                        'status' => 'pending',
+                        'customer_name' => $item['customer_name'],
+                        'customer_email' => $item['customer_email'],
+                        'customer_phone' => $item['customer_phone'],
+                        'product_category' => $item['product_category'],
+                        'foto_referensi' => $item['foto_referensi'] ?? null,
+                    ];
 
-                    // Check if variant is selected
-                    if (isset($item['variant_id']) && $item['variant_id']) {
-                        $variant = \App\Models\ProductVariant::find($item['variant_id']);
-                        if ($variant) {
-                            $hargaSatuan = $variant->price_adjustment;
-                        } else {
-                            throw new \Exception("Variant with ID {$item['variant_id']} not found");
-                        }
-                    } else {
-                        $hargaSatuan = $product->harga;
-                    }
+                    $customRequest = \App\Models\CustomRequest::create($customData);
 
+                    $hargaSatuan = $item['harga'];
                     $subtotal = $hargaSatuan * $item['jumlah'];
                     $total += $subtotal;
                     $orderItems[] = [
-                        'product_id' => $item['product_id'],
-                        'variant_id' => $item['variant_id'] ?? null,
+                        'custom_request_id' => $customRequest->id,
                         'jumlah' => $item['jumlah'],
                         'harga_satuan' => $hargaSatuan,
                         'harga' => $hargaSatuan,
                         'subtotal' => $subtotal,
-                        'variant' => $variant,
                     ];
                 } else {
-                    throw new \Exception("Product with ID {$item['product_id']} not found");
+                    // Handle product item
+                    $product = Product::find($item['product_id']);
+                    if ($product) {
+                        $variant = null;
+
+                        // Check if variant is selected
+                        if (isset($item['variant_id']) && $item['variant_id']) {
+                            $variant = \App\Models\ProductVariant::find($item['variant_id']);
+                            if ($variant) {
+                                $hargaSatuan = $variant->price_adjustment;
+                            } else {
+                                throw new \Exception("Variant with ID {$item['variant_id']} not found");
+                            }
+                        } else {
+                            $hargaSatuan = $product->harga;
+                        }
+
+                        $subtotal = $hargaSatuan * $item['jumlah'];
+                        $total += $subtotal;
+                        $orderItems[] = [
+                            'product_id' => $item['product_id'],
+                            'variant_id' => $item['variant_id'] ?? null,
+                            'jumlah' => $item['jumlah'],
+                            'harga_satuan' => $hargaSatuan,
+                            'harga' => $hargaSatuan,
+                            'subtotal' => $subtotal,
+                            'variant' => $variant,
+                        ];
+                    } else {
+                        throw new \Exception("Product with ID {$item['product_id']} not found");
+                    }
                 }
             }
 
