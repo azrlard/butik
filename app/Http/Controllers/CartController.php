@@ -240,6 +240,22 @@ class CartController extends Controller
     }
 
     /**
+     * Remove custom item from cart
+     */
+    public function removeCustom(Request $request)
+    {
+        $request->validate(['index' => 'required|integer']);
+        $cart = Session::get('cart', []);
+        if (isset($cart[$request->index]) && $cart[$request->index]['type'] === 'custom') {
+            unset($cart[$request->index]);
+            $cart = array_values($cart); // Reindex
+            Session::put('cart', $cart);
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false, 'error' => 'Item not found']);
+    }
+
+    /**
      * Clear cart
      */
     public function clearCart()

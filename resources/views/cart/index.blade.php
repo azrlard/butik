@@ -48,6 +48,7 @@
                                 <h4 class="font-semibold text-[#3E2723]" x-text="item.nama_produk"></h4>
                                 <p class="text-[#3E2723] text-sm opacity-75 mt-1" x-text="item.deskripsi || 'Deskripsi tidak tersedia'"></p>
                                 <p v-if="item.variant_size" class="text-[#8B4513] text-xs font-medium mt-1" x-text="'Ukuran: ' + item.variant_size"></p>
+                                <p v-if="item.ukuran" class="text-[#8B4513] text-xs font-medium mt-1" x-text="'Ukuran: ' + item.ukuran"></p>
                                 <div class="flex items-center space-x-2 mt-3">
                                     <button @click="updateQuantity(index, item.quantity - 1)" 
                                             class="w-8 h-8 bg-[#8B4513] text-white rounded-full flex items-center justify-center hover:bg-[#D2691E] transition-colors">-</button>
@@ -294,30 +295,51 @@ function cartComponent() {
             const removedItem = this.cart.splice(index, 1)[0];
             this.updateCartCount();
 
-            fetch('/cart/remove', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    product_id: item.product_id,
-                    variant_id: item.variant_id
+            if (item.type === 'custom') {
+                // For custom items, just remove from session
+                fetch('/cart/remove-custom', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        index: index
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    console.error('Failed to remove item:', data.error);
+                .catch(error => {
+                    console.error('Error removing custom item:', error);
+                    // Restore if failed
                     this.cart.splice(index, 0, removedItem);
                     this.updateCartCount();
-                }
-            })
-            .catch(error => {
-                console.error('Error removing item:', error);
-                this.cart.splice(index, 0, removedItem);
-                this.updateCartCount();
-            });
+                });
+            } else {
+                // For product items
+                fetch('/cart/remove', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        product_id: item.product_id,
+                        variant_id: item.variant_id
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        console.error('Failed to remove item:', data.error);
+                        this.cart.splice(index, 0, removedItem);
+                        this.updateCartCount();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error removing item:', error);
+                    this.cart.splice(index, 0, removedItem);
+                    this.updateCartCount();
+                });
+            }
         },
 
         removePendingOrder(index) {
@@ -348,24 +370,70 @@ function cartComponent() {
             form.querySelectorAll('input[name^="items"]').forEach(input => input.remove());
 
             this.cart.forEach((item, index) => {
-                const productIdInput = document.createElement('input');
-                productIdInput.type = 'hidden';
-                productIdInput.name = `items[${index}][product_id]`;
-                productIdInput.value = item.product_id;
-                form.appendChild(productIdInput);
+                if (item.type === 'custom') {
+                    // For custom items
+                    const typeInput = document.createElement('input');
+                    typeInput.type = 'hidden';
+                    typeInput.name = `items[${index}][type]`;
+                    typeInput.value = 'custom';
+                    form.appendChild(typeInput);
 
-                const quantityInput = document.createElement('input');
-                quantityInput.type = 'hidden';
-                quantityInput.name = `items[${index}][jumlah]`;
-                quantityInput.value = item.quantity;
-                form.appendChild(quantityInput);
+                    const keteranganInput = document.createElement('input');
+                    keteranganInput.type = 'hidden';
+                    keteranganInput.name = `items[${index}][keterangan]`;
+                    keteranganInput.value = item.deskripsi;
+                    form.appendChild(keteranganInput);
 
-                if (item.variant_id) {
-                    const variantInput = document.createElement('input');
-                    variantInput.type = 'hidden';
-                    variantInput.name = `items[${index}][variant_id]`;
-                    variantInput.value = item.variant_id;
-                    form.appendChild(variantInput);
+                    const hargaInput = document.createElement('input');
+                    hargaInput.type = 'hidden';
+                    hargaInput.name = `items[${index}][harga]`;
+                    hargaInput.value = item.harga;
+                    form.appendChild(hargaInput);
+
+                    const categoryInput = document.createElement('input');
+                    categoryInput.type = 'hidden';
+                    categoryInput.name = `items[${index}][product_category]`;
+                    categoryInput.value = item.product_category;
+                    form.appendChild(categoryInput);
+
+                    const ukuranInput = document.createElement('input');
+                    ukuranInput.type = 'hidden';
+                    ukuranInput.name = `items[${index}][ukuran]`;
+                    ukuranInput.value = item.ukuran || '';
+                    form.appendChild(ukuranInput);
+
+                    const fotoInput = document.createElement('input');
+                    fotoInput.type = 'hidden';
+                    fotoInput.name = `items[${index}][foto_referensi]`;
+                    fotoInput.value = item.foto;
+                    form.appendChild(fotoInput);
+
+                    const quantityInput = document.createElement('input');
+                    quantityInput.type = 'hidden';
+                    quantityInput.name = `items[${index}][jumlah]`;
+                    quantityInput.value = item.quantity;
+                    form.appendChild(quantityInput);
+                } else {
+                    // For product items
+                    const productIdInput = document.createElement('input');
+                    productIdInput.type = 'hidden';
+                    productIdInput.name = `items[${index}][product_id]`;
+                    productIdInput.value = item.product_id;
+                    form.appendChild(productIdInput);
+
+                    const quantityInput = document.createElement('input');
+                    quantityInput.type = 'hidden';
+                    quantityInput.name = `items[${index}][jumlah]`;
+                    quantityInput.value = item.quantity;
+                    form.appendChild(quantityInput);
+
+                    if (item.variant_id) {
+                        const variantInput = document.createElement('input');
+                        variantInput.type = 'hidden';
+                        variantInput.name = `items[${index}][variant_id]`;
+                        variantInput.value = item.variant_id;
+                        form.appendChild(variantInput);
+                    }
                 }
             });
 

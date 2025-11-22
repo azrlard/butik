@@ -13,49 +13,13 @@
 
     <form x-data="customForm()" @submit="return submitForm()" method="POST" action="/custom-request" enctype="multipart/form-data" class="p-8">
         @csrf
-        <!-- Personal Information -->
+        <!-- Product Information -->
         <div class="mb-8">
             <h4 class="text-lg font-semibold text-text mb-4 flex items-center">
                 <span class="w-8 h-8 bg-secondary text-background rounded-full flex items-center justify-center mr-3 text-sm font-bold">1</span>
-                Informasi Personal
+                Informasi Produk
             </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="group">
-                    <label for="customer-name" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Nama Lengkap</label>
-                    <div class="relative">
-                        <input type="text" id="customer-name" name="customer-name" required
-                               class="w-full px-4 py-3 pl-12 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
-                        <div class="absolute left-3 top-3.5 text-text group-focus-within:text-primary transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="group">
-                    <label for="customer-email" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Email</label>
-                    <div class="relative">
-                        <input type="email" id="customer-email" name="customer-email" required
-                               class="w-full px-4 py-3 pl-12 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
-                        <div class="absolute left-3 top-3.5 text-text group-focus-within:text-primary transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="group">
-                    <label for="customer-phone" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Nomor Telepon</label>
-                    <div class="relative">
-                        <input type="tel" id="customer-phone" name="customer-phone" required
-                               class="w-full px-4 py-3 pl-12 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
-                        <div class="absolute left-3 top-3.5 text-text group-focus-within:text-primary transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="group">
                     <label for="product-category" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Kategori Produk</label>
                     <div class="relative">
@@ -75,6 +39,28 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="group">
+                    <label for="ukuran" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Ukuran (Opsional)</label>
+                    <div class="relative">
+                        <input type="text" id="ukuran" name="ukuran" placeholder="Contoh: S, M, L, XL atau 30x40 cm"
+                               class="w-full px-4 py-3 pl-12 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
+                        <div class="absolute left-3 top-3.5 text-text group-focus-within:text-primary transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="group">
+                    <label for="harga_estimasi" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Estimasi Budget (Opsional)</label>
+                    <div class="relative">
+                        <input type="number" id="harga_estimasi" name="harga_estimasi" min="0" step="1000" placeholder="Masukkan estimasi harga"
+                               class="w-full px-4 py-3 pl-12 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
+                        <div class="absolute left-3 top-3.5 text-text group-focus-within:text-primary transition-colors">
+                            <span class="text-sm font-semibold">Rp</span>
                         </div>
                     </div>
                 </div>
@@ -127,25 +113,6 @@
             </div>
         </div>
 
-        <!-- Budget & Related Product -->
-        <div class="mb-8">
-            <h4 class="text-lg font-semibold text-text mb-4 flex items-center">
-                <span class="w-8 h-8 bg-secondary text-background rounded-full flex items-center justify-center mr-3 text-sm font-bold">4</span>
-                Informasi Tambahan
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="group">
-                    <label for="harga_estimasi" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Estimasi Budget (Opsional)</label>
-                    <div class="relative">
-                        <input type="number" id="harga_estimasi" name="harga_estimasi" min="0" step="1000" placeholder="Masukkan estimasi harga"
-                               class="w-full px-4 py-3 pl-12 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
-                        <div class="absolute left-3 top-3.5 text-text group-focus-within:text-primary transition-colors">
-                            <span class="text-sm font-semibold">Rp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Submit Button -->
         <button type="submit" :disabled="isSubmitting" class="w-full bg-primary text-background px-8 py-4 rounded-2xl text-lg font-bold hover:bg-secondary transition-all duration-300 transform hover:scale-[1.02] shadow-2xl shadow-primary/25 hover:shadow-primary/40 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">

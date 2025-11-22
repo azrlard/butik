@@ -67,7 +67,7 @@
                 <!-- Orders List -->
                 <div id="orders-list" class="space-y-6">
                     @php
-                        $orders = auth()->user()->orders()->with(['orderItems.product', 'orderItems.variant'])->latest()->get();
+                        $orders = auth()->user()->orders()->with(['orderItems.product', 'orderItems.variant', 'orderItems.customRequest'])->latest()->get();
                     @endphp
                     @forelse($orders as $order)
                     <div class="bg-background rounded-2xl shadow-lg border border-secondary overflow-hidden">
@@ -126,12 +126,14 @@
                                             <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center">
                                                 @if($item->product && $item->product->foto)
                                                     <img src="/storage/{{ $item->product->foto }}" alt="{{ $item->product->nama_produk }}" class="w-full h-full object-cover rounded-lg">
+                                                @elseif($item->customRequest && $item->customRequest->foto_referensi)
+                                                    <img src="{{ $item->customRequest->foto_referensi }}" alt="Custom Request" class="w-full h-full object-cover rounded-lg">
                                                 @else
                                                     <span class="text-2xl">👕</span>
                                                 @endif
                                             </div>
                                             <div class="flex-1">
-                                                <h4 class="font-semibold text-text">{{ $item->product ? $item->product->nama_produk : 'Produk tidak tersedia' }}</h4>
+                                                <h4 class="font-semibold text-text">{{ $item->product ? $item->product->nama_produk : ($item->customRequest ? 'Custom Request' : 'Produk tidak tersedia') }}</h4>
                                                 @if($item->variant_id)
                                                     <p class="text-sm text-text">Size: {{ $item->variant ? $item->variant->size : 'N/A' }}</p>
                                                 @endif

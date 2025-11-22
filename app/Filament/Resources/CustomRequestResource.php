@@ -68,7 +68,7 @@ class CustomRequestResource extends Resource
                 Tables\Columns\ImageColumn::make('foto_referensi')
                     ->getStateUsing(function ($record) {
                         if (!$record->foto_referensi) return null;
-                        return asset('storage/' . $record->foto_referensi);
+                        return asset($record->foto_referensi);
                     })
                     ->height(60)
                     ->width(60),

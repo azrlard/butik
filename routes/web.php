@@ -105,5 +105,6 @@ Route::post('/midtrans/notification', [OrderController::class, 'midtransNotifica
 Route::post('/cart/add', [App\Http\Controllers\CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update', [App\Http\Controllers\CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [App\Http\Controllers\CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/cart/remove-custom', [App\Http\Controllers\CartController::class, 'removeCustom'])->name('cart.remove.custom');
 Route::post('/cart/remove-pending/{order}', [App\Http\Controllers\CartController::class, 'removePendingOrder'])->name('cart.remove.pending');
 Route::get('/cart/count', [App\Http\Controllers\CartController::class, 'getCartCount'])->name('cart.count');
