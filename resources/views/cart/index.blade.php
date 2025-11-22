@@ -42,8 +42,8 @@
                 <div class="divide-y divide-[#F5F5DC]">
                     <template x-for="(item, index) in cart" :key="item.product_id + '-' + (item.variant_id || 'no-variant')">
                         <div class="p-6 flex items-center space-x-4 hover:bg-[#F5F5DC]/50 transition-colors">
-                            <img :src="item.foto ? '/storage/' + item.foto : '👕'" :alt="item.nama_produk" 
-                                 class="w-20 h-20 object-cover rounded-lg border border-[#D2691E]/20">
+                            <img :src="item.type === 'custom' ? item.foto : (item.foto ? '/storage/' + item.foto : '👕')" :alt="item.nama_produk"
+                                  class="w-20 h-20 object-cover rounded-lg border border-[#D2691E]/20">
                             <div class="flex-1">
                                 <h4 class="font-semibold text-[#3E2723]" x-text="item.nama_produk"></h4>
                                 <p class="text-[#3E2723] text-sm opacity-75 mt-1" x-text="item.deskripsi || 'Deskripsi tidak tersedia'"></p>
