@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomRequest;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -69,7 +71,28 @@ class CustomRequestController extends Controller
 
         $customRequest = CustomRequest::create($data);
 
-        return redirect()->back()->with('success', 'Custom request berhasil dikirim!');
+        // Create order for custom request
+        $order = Order::create([
+            'user_id' => $data['user_id'],
+            'total_harga' => $data['harga_estimasi'] ?? 0,
+            'status' => 'pending',
+            'metode_pembayaran' => 'pending', // Will be set later
+            'alamat_pengiriman' => 'Custom request - akan ditentukan nanti',
+            'customer_name' => $data['customer_name'],
+            'customer_email' => $data['customer_email'],
+            'customer_phone' => $data['customer_phone'],
+        ]);
+
+        // Create order item linked to custom request
+        OrderItem::create([
+            'order_id' => $order->id,
+            'custom_request_id' => $customRequest->id,
+            'jumlah' => 1,
+            'harga_satuan' => $data['harga_estimasi'] ?? 0,
+            'subtotal' => $data['harga_estimasi'] ?? 0,
+        ]);
+
+        return redirect('/cart');
     }
 
     /**

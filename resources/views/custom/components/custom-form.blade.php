@@ -11,7 +11,7 @@
         <p class="text-purple-100">Isi detail permintaan Anda dengan lengkap</p>
     </div>
 
-    <form x-data="customForm()" @submit.prevent="submitForm" method="POST" action="/custom-request" enctype="multipart/form-data" class="p-8">
+    <form x-data="customForm()" @submit="return submitForm()" method="POST" action="/custom-request" enctype="multipart/form-data" class="p-8">
         @csrf
         <!-- Personal Information -->
         <div class="mb-8">
@@ -195,20 +195,19 @@ function customForm() {
         submitForm() {
             if (this.selectedFiles.length === 0) {
                 alert('Silakan upload minimal satu foto referensi.');
-                return;
+                return false;
             }
 
             // Check if user is logged in
             @if(!auth()->check())
                 // Redirect to login page if not logged in
                 window.location.href = '/login';
-                return;
+                return false;
             @endif
 
             this.isSubmitting = true;
 
-            // The form will submit normally to the server
-            // Alpine.js will handle the reactive state
+            return true;
         }
     }
 }

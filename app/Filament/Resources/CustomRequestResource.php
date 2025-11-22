@@ -27,12 +27,6 @@ class CustomRequestResource extends Resource
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->required(),
-                Forms\Components\Select::make('produk_id')
-                    ->relationship('product', 'nama_produk')
-                    ->nullable(),
-                Forms\Components\FileUpload::make('foto_request')
-                    ->image()
-                    ->nullable(),
                 Forms\Components\FileUpload::make('foto_referensi')
                     ->image()
                     ->nullable(),
@@ -52,6 +46,15 @@ class CustomRequestResource extends Resource
                     ->numeric()
                     ->prefix('Rp')
                     ->default(0.00),
+                Forms\Components\TextInput::make('customer_name')
+                    ->label('Nama Customer'),
+                Forms\Components\TextInput::make('customer_email')
+                    ->label('Email Customer')
+                    ->email(),
+                Forms\Components\TextInput::make('customer_phone')
+                    ->label('Telepon Customer'),
+                Forms\Components\TextInput::make('product_category')
+                    ->label('Kategori Produk'),
             ]);
     }
 
@@ -62,17 +65,27 @@ class CustomRequestResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('User')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('product.nama_produk')
-                    ->label('Produk')
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('foto_request'),
-                Tables\Columns\ImageColumn::make('foto_referensi'),
+                Tables\Columns\ImageColumn::make('foto_referensi')
+                    ->getStateUsing(function ($record) {
+                        if (!$record->foto_referensi) return null;
+                        return asset('storage/' . $record->foto_referensi);
+                    })
+                    ->height(60)
+                    ->width(60),
                 Tables\Columns\TextColumn::make('keterangan')
                     ->limit(50),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
                 Tables\Columns\TextColumn::make('harga_estimasi')
                     ->money('IDR'),
+                Tables\Columns\TextColumn::make('customer_name')
+                    ->label('Nama Customer'),
+                Tables\Columns\TextColumn::make('customer_email')
+                    ->label('Email Customer'),
+                Tables\Columns\TextColumn::make('customer_phone')
+                    ->label('Telepon Customer'),
+                Tables\Columns\TextColumn::make('product_category')
+                    ->label('Kategori Produk'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

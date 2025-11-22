@@ -22,7 +22,7 @@
     @endif
 
     <!-- Empty Cart -->
-    <div x-show="cart.length === 0" class="text-center py-20">
+    <div x-show="cart.length === 0 && pendingOrders.length === 0" class="text-center py-20">
         <div class="text-8xl mb-6 text-[#8B4513]">🛒</div>
         <h2 class="text-2xl font-semibold text-[#8B4513] mb-4">Keranjang Anda Kosong</h2>
         <p class="text-[#3E2723] mb-8 opacity-80">Mulai berbelanja dan tambahkan produk favorit Anda</p>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Cart Content -->
-    <div x-show="cart.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div x-show="cart.length > 0 || pendingOrders.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Cart Items -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-[#F5F5DC]">
@@ -68,6 +68,36 @@
                             </div>
                         </div>
                     </template>
+                </div>
+            </div>
+
+            <!-- Pending Orders -->
+            <div x-show="pendingOrders.length > 0" class="mt-8">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-[#F5F5DC]">
+                    <div class="p-6 border-b border-[#D2691E]/30 bg-[#F5F5DC]">
+                        <h3 class="text-xl font-semibold text-[#3E2723]">Pesanan Custom Pending</h3>
+                    </div>
+                    <div class="divide-y divide-[#F5F5DC]">
+                        <template x-for="(order, index) in pendingOrders" :key="order.id">
+                            <div class="p-6 hover:bg-[#F5F5DC]/50 transition-colors">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-[#3E2723]">Custom Request #<span x-text="order.id"></span></h4>
+                                        <p class="text-[#3E2723] text-sm opacity-75 mt-1" x-text="order.orderItems && order.orderItems[0] && order.orderItems[0].custom_request ? order.orderItems[0].custom_request.keterangan : 'Custom order'"></p>
+                                        <p class="text-[#8B4513] text-xs font-medium mt-1">Status: <span x-text="order.status"></span></p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-[#8B4513] text-lg" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(order.total_harga)"></div>
+                                        <button @click="removePendingOrder(index)" class="text-red-600 hover:text-red-800 mt-2 transition-colors p-1 rounded hover:bg-red-50">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -192,7 +222,8 @@
 <script>
 function cartComponent() {
     return {
-        cart: @json(session('cart', [])),
+        cart: @json($cart),
+        pendingOrders: @json($pendingOrders),
         cartCount: 0,
         showCheckout: false,
 
@@ -208,7 +239,7 @@ function cartComponent() {
         },
 
         updateCartCount() {
-            this.cartCount = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+            this.cartCount = this.cart.reduce((sum, item) => sum + item.quantity, 0) + this.pendingOrders.length;
             // Update navbar cart count
             const desktopCartCount = document.getElementById('cart-count-desktop');
             const mobileCartCount = document.getElementById('cart-count-mobile');
@@ -217,7 +248,9 @@ function cartComponent() {
         },
 
         get subtotal() {
-            return this.cart.reduce((sum, item) => sum + (item.harga * item.quantity), 0);
+            const cartTotal = this.cart.reduce((sum, item) => sum + (item.harga * item.quantity), 0);
+            const pendingTotal = this.pendingOrders.reduce((sum, order) => sum + order.total_harga, 0);
+            return cartTotal + pendingTotal;
         },
 
         get total() {
@@ -284,6 +317,29 @@ function cartComponent() {
                 console.error('Error removing item:', error);
                 this.cart.splice(index, 0, removedItem);
                 this.updateCartCount();
+            });
+        },
+
+        removePendingOrder(index) {
+            const order = this.pendingOrders[index];
+            fetch('/cart/remove-pending/' + order.id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to remove order');
+                }
+            })
+            .catch(error => {
+                console.error('Error removing order:', error);
+                alert('Error removing order');
             });
         },
 

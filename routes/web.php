@@ -16,9 +16,7 @@ Route::get('/products', [ProductController::class, 'indexView'])->name('products
 
 Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'showDetail'])->name('products.detail');
 
-Route::get('/cart', function () {
-    return view('cart.index');
-});
+Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 
 Route::get('/custom', function () {
     $categories = Category::all();
@@ -107,4 +105,5 @@ Route::post('/midtrans/notification', [OrderController::class, 'midtransNotifica
 Route::post('/cart/add', [App\Http\Controllers\CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update', [App\Http\Controllers\CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [App\Http\Controllers\CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/cart/remove-pending/{order}', [App\Http\Controllers\CartController::class, 'removePendingOrder'])->name('cart.remove.pending');
 Route::get('/cart/count', [App\Http\Controllers\CartController::class, 'getCartCount'])->name('cart.count');

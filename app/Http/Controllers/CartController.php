@@ -7,9 +7,30 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    /**
+     * Display the cart page
+     */
+    public function index()
+    {
+        $cart = Session::get('cart', []);
+        $pendingOrders = [];
+        if (Auth::check()) {
+            $pendingOrders = Order::where('user_id', Auth::id())
+                ->where('status', 'pending')
+                ->whereHas('orderItems', function($q) {
+                    $q->whereNotNull('custom_request_id');
+                })
+                ->with('orderItems.customRequest')
+                ->get();
+        }
+        return view('cart.index', compact('cart', 'pendingOrders'));
+    }
+
     /**
      * Get cart items from session
      */
@@ -192,6 +213,30 @@ class CartController extends Controller
             $count += $item['quantity'];
         }
         return response()->json(['count' => $count]);
+    }
+
+    /**
+     * Remove pending order
+     */
+    public function removePendingOrder(Request $request, Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        if ($order->status !== 'pending') {
+            return response()->json(['error' => 'Cannot remove this order'], 400);
+        }
+
+        $order->update(['status' => 'cancelled']);
+
+        // Also cancel the custom request
+        $customRequest = $order->orderItems->first()->customRequest ?? null;
+        if ($customRequest) {
+            $customRequest->update(['status' => 'rejected']);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     /**
