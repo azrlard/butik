@@ -94,6 +94,7 @@ Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 // Payment routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{order}/payment', [OrderController::class, 'payment'])->name('payment');
+    Route::post('/orders/{order}/mark-paid', [OrderController::class, 'markPaid'])->name('mark.paid');
 });
 
 // Midtrans callback routes

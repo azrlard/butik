@@ -68,24 +68,33 @@ class MidtransService
             return false;
         }
 
+        $pembayaran = $order->pembayaran;
+
         if ($transaction == 'capture') {
             if ($type == 'credit_card') {
                 if ($fraud == 'challenge') {
                     $order->update(['status' => 'challenge']);
+                    if ($pembayaran) $pembayaran->update(['status_pembayaran' => 'pending']);
                 } else {
                     $order->update(['status' => 'success']);
+                    if ($pembayaran) $pembayaran->update(['status_pembayaran' => 'paid', 'tanggal_bayar' => now()]);
                 }
             }
         } elseif ($transaction == 'settlement') {
             $order->update(['status' => 'success']);
+            if ($pembayaran) $pembayaran->update(['status_pembayaran' => 'paid', 'tanggal_bayar' => now()]);
         } elseif ($transaction == 'pending') {
             $order->update(['status' => 'pending']);
+            if ($pembayaran) $pembayaran->update(['status_pembayaran' => 'pending']);
         } elseif ($transaction == 'deny') {
             $order->update(['status' => 'failed']);
+            if ($pembayaran) $pembayaran->update(['status_pembayaran' => 'failed']);
         } elseif ($transaction == 'expire') {
             $order->update(['status' => 'expired']);
+            if ($pembayaran) $pembayaran->update(['status_pembayaran' => 'failed']);
         } elseif ($transaction == 'cancel') {
             $order->update(['status' => 'cancelled']);
+            if ($pembayaran) $pembayaran->update(['status_pembayaran' => 'failed']);
         }
 
         return true;

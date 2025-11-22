@@ -43,9 +43,12 @@
                             <select id="status-filter" onchange="filterOrders()" class="w-full px-4 py-3 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent bg-background">
                                 <option value="all">Semua Status</option>
                                 <option value="pending">Menunggu Pembayaran</option>
+                                <option value="success">Pembayaran Berhasil</option>
                                 <option value="processing">Sedang Diproses</option>
                                 <option value="shipped">Dalam Pengiriman</option>
                                 <option value="delivered">Selesai</option>
+                                <option value="failed">Pembayaran Gagal</option>
+                                <option value="expired">Kadaluarsa</option>
                                 <option value="cancelled">Dibatalkan</option>
                             </select>
                         </div>
@@ -73,10 +76,13 @@
                                 <div>
                                     <div class="flex items-center gap-3 mb-2">
                                         <h3 class="text-xl font-bold text-text">Order #{{ $order->id }}</h3>
-                                        <span class="px-3 py-1 {{ $order->status === 'pending' ? 'bg-accent text-text' : ($order->status === 'processing' ? 'bg-yellow-100 text-yellow-800' : ($order->status === 'shipped' ? 'bg-blue-100 text-blue-800' : ($order->status === 'delivered' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'))) }} rounded-full text-sm font-semibold">
+                                        <span class="px-3 py-1 {{ $order->status === 'pending' ? 'bg-accent text-text' : ($order->status === 'success' ? 'bg-green-100 text-green-800' : ($order->status === 'processing' ? 'bg-yellow-100 text-yellow-800' : ($order->status === 'shipped' ? 'bg-blue-100 text-blue-800' : ($order->status === 'delivered' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')))) }} rounded-full text-sm font-semibold">
                                             @switch($order->status)
                                                 @case('pending')
                                                     Menunggu Pembayaran
+                                                    @break
+                                                @case('success')
+                                                    Pembayaran Berhasil
                                                     @break
                                                 @case('processing')
                                                     Sedang Diproses
@@ -87,8 +93,17 @@
                                                 @case('delivered')
                                                     Selesai
                                                     @break
-                                                @default
+                                                @case('failed')
+                                                    Pembayaran Gagal
+                                                    @break
+                                                @case('expired')
+                                                    Kadaluarsa
+                                                    @break
+                                                @case('cancelled')
                                                     Dibatalkan
+                                                    @break
+                                                @default
+                                                    Status Tidak Dikenal
                                             @endswitch
                                         </span>
                                     </div>

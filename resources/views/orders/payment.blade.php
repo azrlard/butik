@@ -36,7 +36,16 @@ document.getElementById('pay-button').onclick = function(){
     snap.pay('{{ $snapToken }}', {
         onSuccess: function(result){
             console.log('success', result);
-            window.location.href = '{{ route("orders") }}';
+            // Mark order as paid
+            fetch('{{ route("mark.paid", $order) }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => {
+                window.location.href = '{{ route("orders") }}';
+            });
         },
         onPending: function(result){
             console.log('pending', result);

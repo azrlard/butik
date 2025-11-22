@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
 {
@@ -59,15 +60,18 @@ class OrderController extends Controller
             foreach ($request->items as $item) {
                 $product = Product::find($item['product_id']);
                 if ($product) {
-                    $hargaSatuan = $product->harga;
                     $variant = null;
 
                     // Check if variant is selected
                     if (isset($item['variant_id']) && $item['variant_id']) {
                         $variant = \App\Models\ProductVariant::find($item['variant_id']);
                         if ($variant) {
-                            $hargaSatuan += $variant->price_adjustment;
+                            $hargaSatuan = $variant->price_adjustment;
+                        } else {
+                            throw new \Exception("Variant with ID {$item['variant_id']} not found");
                         }
+                    } else {
+                        $hargaSatuan = $product->harga;
                     }
 
                     $subtotal = $hargaSatuan * $item['jumlah'];
@@ -99,6 +103,14 @@ class OrderController extends Controller
                 'customer_name' => $request->customer_name,
                 'customer_email' => $request->customer_email,
                 'customer_phone' => $request->customer_phone,
+            ]);
+
+            // Create pembayaran record
+            \App\Models\Pembayaran::create([
+                'order_id' => $order->id,
+                'metode_pembayaran' => $request->metode_pembayaran,
+                'jumlah_bayar' => $total,
+                'status_pembayaran' => 'pending',
             ]);
 
             foreach ($orderItems as $item) {
@@ -213,6 +225,34 @@ class OrderController extends Controller
         } else {
             return response()->json(['status' => 'failed'], 400);
         }
+    }
+
+    /**
+     * Mark order as paid (for testing/sandbox).
+     */
+    public function markPaid(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $order->update(['status' => 'success']);
+
+        // Create or update pembayaran record
+        $pembayaran = \App\Models\Pembayaran::updateOrCreate(
+            ['order_id' => $order->id],
+            [
+                'metode_pembayaran' => $order->metode_pembayaran,
+                'jumlah_bayar' => $order->total_harga,
+                'status_pembayaran' => 'paid',
+                'tanggal_bayar' => now(),
+            ]
+        );
+
+        // Clear the cart after successful payment
+        Session::forget('cart');
+
+        return response()->json(['success' => true]);
     }
 
     /**

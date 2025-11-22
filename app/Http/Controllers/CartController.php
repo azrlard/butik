@@ -48,15 +48,11 @@ class CartController extends Controller
             if (!$variant || $variant->product_id !== $productId) {
                 return response()->json(['error' => 'Variant not found'], 404);
             }
-            // Use variant price if exists
+            // Use variant price
             $harga = $variant->price_adjustment;
         } else {
-            // For ready stock products without variant selected, use the minimum variant price
-            if ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) {
-                $harga = $product->variants->min('price_adjustment');
-            } else {
-                $harga = $product->harga;
-            }
+            // Use product price (for ready, it's min variant price)
+            $harga = $product->harga;
         }
 
         // Create cart item with consistent structure
