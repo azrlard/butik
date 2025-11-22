@@ -48,7 +48,6 @@
                                 <h4 class="font-semibold text-[#3E2723]" x-text="item.nama_produk"></h4>
                                 <p class="text-[#3E2723] text-sm opacity-75 mt-1" x-text="item.deskripsi || 'Deskripsi tidak tersedia'"></p>
                                 <p v-if="item.variant_size" class="text-[#8B4513] text-xs font-medium mt-1" x-text="'Ukuran: ' + item.variant_size"></p>
-                                <p v-if="item.ukuran" class="text-[#8B4513] text-xs font-medium mt-1" x-text="'Ukuran: ' + item.ukuran"></p>
                                 <div class="flex items-center space-x-2 mt-3">
                                     <button @click="updateQuantity(index, item.quantity - 1)" 
                                             class="w-8 h-8 bg-[#8B4513] text-white rounded-full flex items-center justify-center hover:bg-[#D2691E] transition-colors">-</button>
@@ -396,11 +395,6 @@ function cartComponent() {
                     categoryInput.value = item.product_category;
                     form.appendChild(categoryInput);
 
-                    const ukuranInput = document.createElement('input');
-                    ukuranInput.type = 'hidden';
-                    ukuranInput.name = `items[${index}][ukuran]`;
-                    ukuranInput.value = item.ukuran || '';
-                    form.appendChild(ukuranInput);
 
                     const fotoInput = document.createElement('input');
                     fotoInput.type = 'hidden';

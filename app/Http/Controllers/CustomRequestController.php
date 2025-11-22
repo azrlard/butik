@@ -38,7 +38,6 @@ class CustomRequestController extends Controller
             'keterangan' => 'required|string',
             'harga_estimasi' => 'nullable|numeric|min:0',
             'product-category' => 'required|string|max:255',
-            'ukuran' => 'nullable|string|max:255',
         ]);
 
         // Check if user is authenticated for custom requests
@@ -52,7 +51,6 @@ class CustomRequestController extends Controller
             'harga_estimasi' => $request->harga_estimasi,
             'status' => 'pending',
             'product_category' => $request->{'product-category'},
-            'ukuran' => $request->ukuran,
         ];
 
         if ($request->hasFile('foto_referensi')) {
@@ -66,13 +64,12 @@ class CustomRequestController extends Controller
         $cartItem = [
             'id' => 'custom_' . time(), // Unique id for custom
             'type' => 'custom',
-            'nama_produk' => 'Custom Request',
+            'nama_produk' => 'Custom Request - ' . $data['product_category'],
             'harga' => $data['harga_estimasi'] ?? 0,
             'quantity' => 1,
             'deskripsi' => $data['keterangan'],
             'foto' => isset($data['foto_referensi']) ? $data['foto_referensi'] : null,
             'product_category' => $data['product_category'],
-            'ukuran' => $data['ukuran'],
         ];
 
         $cart[] = $cartItem;

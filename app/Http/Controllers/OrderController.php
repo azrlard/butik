@@ -71,7 +71,6 @@ class OrderController extends Controller
                         'harga_estimasi' => $item['harga'],
                         'status' => 'pending',
                         'product_category' => $item['product_category'],
-                        'ukuran' => $item['ukuran'] ?? null,
                         'customer_name' => $request->customer_name,
                         'customer_email' => $request->customer_email,
                         'customer_phone' => $request->customer_phone,

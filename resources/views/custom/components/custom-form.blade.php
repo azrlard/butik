@@ -19,7 +19,7 @@
                 <span class="w-8 h-8 bg-secondary text-background rounded-full flex items-center justify-center mr-3 text-sm font-bold">1</span>
                 Informasi Produk
             </h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="group">
                     <label for="product-category" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Kategori Produk</label>
                     <div class="relative">
@@ -38,18 +38,6 @@
                         <div class="absolute right-3 top-3.5 text-text pointer-events-none">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="group">
-                    <label for="ukuran" class="block text-sm font-semibold text-text mb-2 group-focus-within:text-primary transition-colors">Ukuran (Opsional)</label>
-                    <div class="relative">
-                        <input type="text" id="ukuran" name="ukuran" placeholder="Contoh: S, M, L, XL atau 30x40 cm"
-                               class="w-full px-4 py-3 pl-12 border border-secondary rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-accent focus:bg-background">
-                        <div class="absolute left-3 top-3.5 text-text group-focus-within:text-primary transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                             </svg>
                         </div>
                     </div>
