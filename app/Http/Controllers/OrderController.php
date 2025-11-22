@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\MidtransService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -123,7 +124,14 @@ class OrderController extends Controller
                 }
             }
 
-            return redirect()->route('orders')->with('success', 'Pesanan Anda berhasil dikonfirmasi! Terima kasih atas pesanan Anda.');
+            // Create Midtrans transaction
+            $midtransService = new MidtransService();
+            $snapToken = $midtransService->createTransaction($order);
+
+            // Store snap token in session for payment page
+            session(['snap_token_' . $order->id => $snapToken]);
+
+            return redirect()->route('payment', ['order' => $order->id])->with('success', 'Pesanan Anda berhasil dibuat. Silakan lakukan pembayaran.');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat order: ' . $e->getMessage());
@@ -152,6 +160,59 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         //
+    }
+
+    /**
+     * Show payment page for the order.
+     */
+    public function payment(Order $order)
+    {
+        // Check if user owns the order
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $snapToken = session('snap_token_' . $order->id);
+
+        if (!$snapToken) {
+            return redirect()->route('orders')->with('error', 'Token pembayaran tidak ditemukan.');
+        }
+
+        return view('orders.payment', compact('order', 'snapToken'));
+    }
+
+    /**
+     * Handle Midtrans callback.
+     */
+    public function midtransCallback(Request $request)
+    {
+        $midtransService = new MidtransService();
+        $notification = $request->all();
+
+        $result = $midtransService->handleNotification($notification);
+
+        if ($result) {
+            return response()->json(['status' => 'success']);
+        } else {
+            return response()->json(['status' => 'failed'], 400);
+        }
+    }
+
+    /**
+     * Handle Midtrans notification.
+     */
+    public function midtransNotification(Request $request)
+    {
+        $midtransService = new MidtransService();
+        $notification = $request->all();
+
+        $result = $midtransService->handleNotification($notification);
+
+        if ($result) {
+            return response()->json(['status' => 'success']);
+        } else {
+            return response()->json(['status' => 'failed'], 400);
+        }
     }
 
     /**

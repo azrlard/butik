@@ -91,6 +91,15 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/custom-request', [CustomRequestController::class, 'store'])->name('custom.request');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
+// Payment routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/orders/{order}/payment', [OrderController::class, 'payment'])->name('payment');
+});
+
+// Midtrans callback routes
+Route::post('/midtrans/callback', [OrderController::class, 'midtransCallback'])->name('midtrans.callback');
+Route::post('/midtrans/notification', [OrderController::class, 'midtransNotification'])->name('midtrans.notification');
+
 // Cart routes
 Route::post('/cart/add', [App\Http\Controllers\CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update', [App\Http\Controllers\CartController::class, 'updateCart'])->name('cart.update');
