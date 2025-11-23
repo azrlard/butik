@@ -63,14 +63,162 @@
         <!-- Monthly Sales Chart -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Grafik Penjualan Harian Bulan Ini</h3>
-            <div class="h-64 flex items-center justify-center text-gray-500">
-                <div class="text-center">
-                    <x-heroicon-o-chart-bar class="w-12 h-12 mx-auto mb-2" />
-                    <p>Grafik penjualan harian akan ditampilkan di sini</p>
-                    <p class="text-sm">Data bulan ini: {{ $this->getMonthlySales()->count() }} hari</p>
-                </div>
+            <div class="h-64">
+                <canvas id="monthlySalesChart" width="400" height="200"></canvas>
             </div>
+            @if($this->getMonthlySales()->isEmpty())
+                <div class="flex items-center justify-center h-64 text-gray-500">
+                    <div class="text-center">
+                        <x-heroicon-o-chart-bar class="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                        <p>Belum ada data penjualan bulan ini</p>
+                    </div>
+                </div>
+            @endif
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('monthlySalesChart');
+                if (ctx) {
+                    const monthlySalesData = @json($this->getMonthlySales());
+
+                    if (monthlySalesData && monthlySalesData.length > 0) {
+                        const labels = monthlySalesData.map(item => {
+                            const date = new Date(item.date);
+                            return date.getDate().toString();
+                        });
+
+                        const salesData = monthlySalesData.map(item => parseFloat(item.total));
+                        const ordersData = monthlySalesData.map(item => parseInt(item.orders_count));
+
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Penjualan (Rp)',
+                                    data: salesData,
+                                    borderColor: 'rgb(59, 130, 246)',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    yAxisID: 'y',
+                                    tension: 0.4,
+                                    fill: true,
+                                    pointBackgroundColor: 'rgb(59, 130, 246)',
+                                    pointBorderColor: '#fff',
+                                    pointBorderWidth: 2,
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
+                                }, {
+                                    label: 'Jumlah Pesanan',
+                                    data: ordersData,
+                                    borderColor: 'rgb(16, 185, 129)',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    yAxisID: 'y1',
+                                    tension: 0.4,
+                                    fill: true,
+                                    pointBackgroundColor: 'rgb(16, 185, 129)',
+                                    pointBorderColor: '#fff',
+                                    pointBorderWidth: 2,
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                interaction: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'top'
+                                    },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                        titleColor: '#fff',
+                                        bodyColor: '#fff',
+                                        callbacks: {
+                                            title: function(context) {
+                                                return 'Tanggal ' + context[0].label;
+                                            },
+                                            label: function(context) {
+                                                let label = context.dataset.label || '';
+                                                if (label) {
+                                                    label += ': ';
+                                                }
+                                                if (context.datasetIndex === 0) {
+                                                    label += 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                                                } else {
+                                                    label += context.parsed.y + ' pesanan';
+                                                }
+                                                return label;
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        display: true,
+                                        title: {
+                                            display: true,
+                                            text: 'Tanggal',
+                                            color: '#6b7280'
+                                        },
+                                        grid: {
+                                            display: false
+                                        }
+                                    },
+                                    y: {
+                                        type: 'linear',
+                                        display: true,
+                                        position: 'left',
+                                        title: {
+                                            display: true,
+                                            text: 'Penjualan (Rp)',
+                                            color: '#6b7280'
+                                        },
+                                        ticks: {
+                                            callback: function(value) {
+                                                return 'Rp ' + value.toLocaleString('id-ID');
+                                            },
+                                            color: '#6b7280'
+                                        },
+                                        grid: {
+                                            color: 'rgba(0, 0, 0, 0.1)'
+                                        }
+                                    },
+                                    y1: {
+                                        type: 'linear',
+                                        display: true,
+                                        position: 'right',
+                                        title: {
+                                            display: true,
+                                            text: 'Jumlah Pesanan',
+                                            color: '#6b7280'
+                                        },
+                                        ticks: {
+                                            color: '#6b7280',
+                                            precision: 0
+                                        },
+                                        grid: {
+                                            drawOnChartArea: false,
+                                        },
+                                    }
+                                },
+                                elements: {
+                                    point: {
+                                        hoverBorderWidth: 3
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        </script>
 
         <!-- Summary -->
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 p-6">
