@@ -4,9 +4,12 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Actions\Action;
 use Illuminate\Support\Facades\DB;
 use App\Models\Order;
 use App\Models\Product;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class SalesReport extends Page
 {
@@ -97,5 +100,42 @@ class SalesReport extends Page
             ->groupBy('date')
             ->orderBy('date')
             ->get();
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('exportPdf')
+                ->label('Export PDF')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('success')
+                ->action(fn () => $this->exportToPdf()),
+        ];
+    }
+
+    public function exportToPdf()
+    {
+        $data = [
+            'stats' => $this->getStats(),
+            'topProducts' => $this->getTopProducts(),
+            'salesByStatus' => $this->getSalesByStatus(),
+            'monthlySales' => $this->getMonthlySales(),
+            'month' => now()->format('F Y'),
+        ];
+
+        $html = view('filament.pages.sales-report-pdf', $data)->render();
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return response()->streamDownload(function () use ($dompdf) {
+            echo $dompdf->output();
+        }, 'laporan-penjualan-' . now()->format('Y-m') . '.pdf');
     }
 }
