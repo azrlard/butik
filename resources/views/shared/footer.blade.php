@@ -43,8 +43,10 @@
                     </h4>
                     <ul class="space-y-3">
                         <li><a href="/" class="text-[#3E2723] hover:text-[#8B4513] transition-colors duration-200 inline-block">Beranda</a></li>
+                        <li><a href="/categories" class="text-[#3E2723] hover:text-[#8B4513] transition-colors duration-200 inline-block">Kategori</a></li>
                         <li><a href="/products" class="text-[#3E2723] hover:text-[#8B4513] transition-colors duration-200 inline-block">Produk</a></li>
-                        <li><a href="/custom" class="text-[#3E2723] hover:text-[#8B4513] transition-colors duration-200 inline-block">Custom Order</a></li>
+                        <li><a href="/custom" class="text-[#3E2723] hover:text-[#8B4513] transition-colors duration-200 inline-block">Custom</a></li>
+                        <li><a href="/cart" class="text-[#3E2723] hover:text-[#8B4513] transition-colors duration-200 inline-block">Keranjang</a></li>
                     </ul>
                 </div>
 
