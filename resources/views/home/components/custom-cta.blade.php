@@ -1,25 +1,33 @@
 <!-- Custom CTA Section -->
-<section class="py-20 bg-primary text-background">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-6">Punya Desain Sendiri?</h2>
-            <p class="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-                Kirim Permintaan Custom Sekarang! Tim ahli kami siap mewujudkan desain impian Anda dengan kualitas terbaik.
-            </p>
-        </div>
-    </div>
+<section class="py-24 bg-accent/30 border-y border-primary/5">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center space-y-8">
+            <!-- Header -->
+            <div class="space-y-2">
+                <span class="text-primary text-sm font-medium tracking-[0.2em] uppercase">Bespoke Service</span>
+                <h2 class="text-4xl md:text-5xl font-light text-text tracking-wide">
+                    Punya Desain <span class="font-serif italic text-primary">Sendiri?</span>
+                </h2>
+            </div>
 
-    <!-- Additional CTA -->
-        <div class="text-center mt-16">
-            <div class="bg-background/60 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-background/50 max-w-2xl mx-auto">
-                <h3 class="text-2xl font-bold text-text mb-4">Ingin Produk Custom?</h3>
-                <p class="text-text mb-6">Kami siap mewujudkan desain fashion impian Anda dengan kualitas terbaik</p>
-                <button onclick="window.location.href='/custom'" class="inline-flex items-center px-8 py-4 bg-secondary text-background font-semibold rounded-2xl hover:bg-primary transition-all duration-300 transform hover:scale-105 shadow-lg">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            <!-- Divider -->
+            <div class="w-16 h-px bg-primary/30 mx-auto"></div>
+
+            <!-- Description -->
+            <p class="text-lg text-text/70 leading-loose max-w-2xl mx-auto font-light">
+                Wujudkan visi fashion Anda bersama kami. Dari sketsa hingga menjadi karya nyata, 
+                tim artisan kami siap merealisasikan setiap detail impian Anda dengan standar kualitas tertinggi.
+            </p>
+
+            <!-- Action -->
+            <div class="pt-4">
+                <button onclick="window.location.href='/custom'" class="group inline-flex items-center px-10 py-4 border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-500 ease-out">
+                    <span class="text-sm tracking-[0.15em] uppercase mr-3">Mulai Konsultasi</span>
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                     </svg>
-                    <span>Buat Custom Sekarang</span>
                 </button>
             </div>
         </div>
+    </div>
 </section>
