@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('custom_requests', function (Blueprint $table) {
-            $table->text('alamat')->nullable()->after('customer_phone');
-        });
+        if (!Schema::hasColumn('custom_requests', 'alamat')) {
+            Schema::table('custom_requests', function (Blueprint $table) {
+                $table->text('alamat')->nullable()->after('customer_phone');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('custom_requests', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasColumn('custom_requests', 'alamat')) {
+            Schema::table('custom_requests', function (Blueprint $table) {
+                $table->dropColumn('alamat');
+            });
+        }
     }
 };
