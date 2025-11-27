@@ -218,67 +218,70 @@
     </section>
 
     <!-- Category Benefits Section -->
-    <section class="py-24 bg-background">
+    <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="text-4xl md:text-5xl font-black text-text mb-6">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 bg-primary/10 rounded-full mb-4">
+                    <span class="text-sm font-medium text-primary">Keuntungan Belanja</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                     Mengapa Belanja per Kategori?
                 </h2>
-                <p class="text-xl text-text max-w-3xl mx-auto">
-                    Sistem kategori kami memudahkan Anda menemukan produk yang tepat dengan fitur-fitur canggih.
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Sistem kategori memudahkan Anda menemukan produk yang tepat dengan lebih cepat dan efisien.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Benefit 1 -->
-                <div class="bg-background rounded-3xl p-8 shadow-xl border border-secondary hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                    <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="group bg-white p-8 rounded-xl border border-gray-200 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-text mb-4">Pencarian Mudah</h3>
-                    <p class="text-text leading-relaxed">
-                        Filter produk berdasarkan kategori untuk menemukan item yang Anda cari dengan cepat dan efisien.
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Pencarian Mudah</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Filter produk berdasarkan kategori untuk menemukan item yang Anda cari dengan cepat.
                     </p>
                 </div>
 
                 <!-- Benefit 2 -->
-                <div class="bg-background rounded-3xl p-8 shadow-xl border border-secondary hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                    <div class="w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                <div class="group bg-white p-8 rounded-xl border border-gray-200 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-secondary to-secondary/80 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-text mb-4">Produk Terorganisir</h3>
-                    <p class="text-text leading-relaxed">
-                        Semua produk tersusun rapi dalam kategori yang jelas, memudahkan browsing dan comparison.
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Produk Terorganisir</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Semua produk tersusun rapi dalam kategori yang jelas dan mudah dinavigasi.
                     </p>
                 </div>
 
                 <!-- Benefit 3 -->
-                <div class="bg-background rounded-3xl p-8 shadow-xl border border-secondary hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                    <div class="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                <div class="group bg-white p-8 rounded-xl border border-gray-200 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-text mb-4">Pengalaman Optimal</h3>
-                    <p class="text-text leading-relaxed">
-                        Interface yang intuitif dengan navigasi smooth untuk pengalaman belanja yang menyenangkan.
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Hemat Waktu</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Langsung ke kategori yang Anda butuhkan tanpa harus melihat semua produk.
                     </p>
                 </div>
 
                 <!-- Benefit 4 -->
-                <div class="bg-background rounded-3xl p-8 shadow-xl border border-secondary hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                    <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                <div class="group bg-white p-8 rounded-xl border border-gray-200 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-secondary to-secondary/80 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-text mb-4">Personalisasi</h3>
-                    <p class="text-text leading-relaxed">
-                        Rekomendasi produk berdasarkan kategori favorit Anda untuk pengalaman yang lebih personal.
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Mudah Dibandingkan</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Bandingkan produk dalam kategori yang sama untuk pilihan yang lebih baik.
                     </p>
                 </div>
             </div>
@@ -286,22 +289,35 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-24 bg-primary text-white">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl md:text-5xl font-black mb-6">
-                Mulai Belanja Sekarang
-            </h2>
-            <p class="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
-                Temukan produk favorit Anda dari berbagai kategori yang telah kami siapkan khusus untuk Anda.
-            </p>
+    <section class="py-24 bg-gradient-to-br from-primary/5 via-white to-secondary/5 border-t border-gray-200 relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-10 md:p-14 shadow-lg">
+                <div class="inline-block px-4 py-1 bg-primary/10 rounded-full mb-4">
+                    <span class="text-sm font-medium text-primary">Mulai Sekarang</span>
+                </div>
+                
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Siap Menemukan Produk Favorit Anda?
+                </h2>
+                <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                    Jelajahi koleksi lengkap kami dan temukan produk yang sesuai dengan kebutuhan dan gaya Anda.
+                </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/products" class="inline-flex items-center px-8 py-4 bg-white text-primary font-bold rounded-2xl hover:bg-surface transition-all duration-300 transform hover:scale-105 shadow-xl">
-                    <span>Jelajahi Produk</span>
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                    </svg>
-                </a>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="/products" class="group inline-flex items-center px-8 py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5">
+                        <span>Lihat Semua Produk</span>
+                        <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                    <a href="/custom" class="inline-flex items-center px-8 py-4 bg-white text-gray-700 font-semibold rounded-xl border-2 border-gray-200 hover:border-primary hover:text-primary transition-all duration-300">
+                        <span>Custom Order</span>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
