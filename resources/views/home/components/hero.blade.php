@@ -19,10 +19,6 @@
             </div>
         </div>
 
-        <!-- Navigation arrows -->
-        <div class="swiper-button-next text-white hover:text-secondary transition-colors z-20"></div>
-        <div class="swiper-button-prev text-white hover:text-secondary transition-colors z-20"></div>
-
         <!-- Pagination -->
         <div class="swiper-pagination z-20"></div>
     </div>
@@ -78,10 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         autoplay: {
             delay: 5000,
             disableOnInteraction: false,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
         },
         pagination: {
             el: '.swiper-pagination',
