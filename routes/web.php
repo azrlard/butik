@@ -78,6 +78,9 @@ Route::middleware(['auth'])->group(function () {
         return view('user.orders');
     })->name('orders');
 
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/track', [OrderController::class, 'track'])->name('orders.track');
+
     Route::get('/profile', function () {
         return view('user.profile');
     })->name('profile');

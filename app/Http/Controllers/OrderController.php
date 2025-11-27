@@ -201,7 +201,29 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        // Check if user owns the order
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $order->load(['orderItems.product', 'orderItems.variant', 'orderItems.customRequest']);
+        
+        return view('orders.detail', compact('order'));
+    }
+
+    /**
+     * Show tracking page for the order.
+     */
+    public function track(Order $order)
+    {
+        // Check if user owns the order
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $order->load(['orderItems.product', 'orderItems.variant', 'orderItems.customRequest']);
+        
+        return view('orders.track', compact('order'));
     }
 
     /**

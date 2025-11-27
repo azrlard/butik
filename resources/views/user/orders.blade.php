@@ -195,8 +195,8 @@ function viewOrderDetail(orderId) {
 }
 
 function trackOrder(orderId) {
-    // Show tracking modal or navigate to tracking page
-    showNotification(`Melacak pesanan ${orderId}`);
+    // Navigate to tracking page
+    window.location.href = `/orders/${orderId}/track`;
 }
 
 function writeReview(orderId) {
