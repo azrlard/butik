@@ -26,7 +26,7 @@
         <div class="text-8xl mb-6 text-primary">🛒</div>
         <h2 class="text-2xl font-semibold text-primary mb-4">Keranjang Anda Kosong</h2>
         <p class="text-textSecondary mb-8 opacity-80">Mulai berbelanja dan tambahkan produk favorit Anda</p>
-        <a href="/products" class="bg-primary text-accent px-8 py-3 rounded-xl font-semibold hover:bg-secondary transition-colors">
+        <a href="/products" class="bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors">
             Mulai Belanja
         </a>
     </div>
@@ -35,13 +35,13 @@
     <div x-show="cart.length > 0 || pendingOrders.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Cart Items -->
         <div class="lg:col-span-2">
-            <div class="bg-background rounded-xl shadow-lg overflow-hidden border border-accent">
-                <div class="p-6 border-b border-border bg-accent">
+            <div class="bg-background rounded-xl shadow-lg overflow-hidden border border-secondary">
+                <div class="p-6 border-b border-border bg-surface">
                     <h3 class="text-xl font-semibold text-text">Item Belanja</h3>
                 </div>
-                <div class="divide-y divide-accent">
+                <div class="divide-y divide-secondary">
                     <template x-for="(item, index) in cart" :key="item.product_id + '-' + (item.variant_id || 'no-variant')">
-                        <div class="p-6 flex items-center space-x-4 hover:bg-accent/50 transition-colors">
+                        <div class="p-6 flex items-center space-x-4 hover:bg-surface transition-colors">
                             <img :src="item.type === 'custom' ? item.foto : (item.foto ? '/storage/' + item.foto : '👕')" :alt="item.nama_produk"
                                   class="w-20 h-20 object-cover rounded-lg border border-border">
                             <div class="flex-1">
@@ -50,10 +50,10 @@
                                 <p v-if="item.variant_size" class="text-primary text-xs font-medium mt-1" x-text="'Ukuran: ' + item.variant_size"></p>
                                 <div class="flex items-center space-x-2 mt-3">
                                     <button @click="updateQuantity(index, item.quantity - 1)"
-                                            class="w-8 h-8 bg-primary text-accent rounded-full flex items-center justify-center hover:bg-secondary transition-colors">-</button>
+                                            class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">-</button>
                                     <span x-text="item.quantity" class="w-8 text-center font-semibold text-text"></span>
                                     <button @click="updateQuantity(index, item.quantity + 1)"
-                                            class="w-8 h-8 bg-primary text-accent rounded-full flex items-center justify-center hover:bg-secondary transition-colors">+</button>
+                                            class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">+</button>
                                 </div>
                             </div>
                             <div class="text-right">
@@ -73,13 +73,13 @@
 
             <!-- Pending Orders -->
             <div x-show="pendingOrders.length > 0" class="mt-8">
-                <div class="bg-background rounded-xl shadow-lg overflow-hidden border border-accent">
-                    <div class="p-6 border-b border-border bg-accent">
+                <div class="bg-background rounded-xl shadow-lg overflow-hidden border border-secondary">
+                    <div class="p-6 border-b border-border bg-surface">
                         <h3 class="text-xl font-semibold text-text">Pesanan Custom Pending</h3>
                     </div>
-                    <div class="divide-y divide-accent">
+                    <div class="divide-y divide-secondary">
                         <template x-for="(order, index) in pendingOrders" :key="order.id">
-                            <div class="p-6 hover:bg-accent/50 transition-colors">
+                            <div class="p-6 hover:bg-surface transition-colors">
                                 <div class="flex justify-between items-start">
                                     <div class="flex-1">
                                         <h4 class="font-semibold text-text">Custom Request #<span x-text="order.id"></span></h4>
@@ -104,7 +104,7 @@
 
         <!-- Order Summary -->
         <div class="lg:col-span-1">
-            <div class="bg-background rounded-xl shadow-lg p-6 sticky top-24 border border-accent">
+            <div class="bg-background rounded-xl shadow-lg p-6 sticky top-24 border border-secondary">
                 <h3 class="text-xl font-semibold text-text mb-6">Ringkasan Pesanan</h3>
                 <div class="space-y-4 mb-6">
                     <div class="flex justify-between text-textSecondary">
@@ -123,11 +123,11 @@
                 </div>
 
                 <button @click="showCheckout = true"
-                        class="w-full bg-primary text-accent px-6 py-4 rounded-xl text-lg font-semibold hover:bg-secondary transition-colors mb-4 shadow-lg">
+                        class="w-full bg-primary text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors mb-4 shadow-lg">
                     Checkout Sekarang
                 </button>
                 <a href="/products"
-                   class="w-full bg-accent text-text px-6 py-3 rounded-xl font-semibold hover:bg-primary hover:text-accent transition-colors inline-block text-center border border-border">
+                   class="w-full bg-surface text-text px-6 py-3 rounded-xl font-semibold hover:bg-primary hover:text-white transition-colors inline-block text-center border border-secondary">
                     Lanjut Belanja
                 </a>
             </div>
@@ -205,11 +205,11 @@
 
                     <div class="flex space-x-3">
                         <button type="button" @click="showCheckout = false"
-                                class="flex-1 bg-accent text-text px-4 py-2 rounded-lg font-semibold hover:bg-primary hover:text-accent transition-colors border border-border">
+                                class="flex-1 bg-surface text-text px-4 py-2 rounded-lg font-semibold hover:bg-primary hover:text-white transition-colors border border-secondary">
                             Batal
                         </button>
                         <button type="submit"
-                                class="flex-1 bg-primary text-accent px-4 py-2 rounded-lg font-semibold hover:bg-secondary transition-colors">
+                                class="flex-1 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
                             Konfirmasi Pesanan
                         </button>
                     </div>

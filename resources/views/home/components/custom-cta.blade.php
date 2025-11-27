@@ -1,5 +1,5 @@
 <!-- Custom CTA Section -->
-<section class="py-24 bg-accent/30 border-y border-primary/5">
+<section class="py-24 bg-surface border-y border-primary/10">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center space-y-8">
             <!-- Header -->

@@ -1,11 +1,11 @@
 <!-- Featured Products -->
-<section class="py-24 bg-accent relative">
+<section class="py-24 bg-surface relative">
     <!-- Background Elements -->
     <div
-        class="absolute top-0 right-0 w-96 h-96 bg-secondary/20 rounded-full blur-3xl -translate-y-48 translate-x-48">
+        class="absolute top-0 right-0 w-96 h-96 bg-secondary/15 rounded-full blur-3xl -translate-y-48 translate-x-48">
     </div>
     <div
-        class="absolute bottom-0 left-0 w-80 h-80 bg-primary/20 rounded-full blur-3xl translate-y-32 -translate-x-32">
+        class="absolute bottom-0 left-0 w-80 h-80 bg-primary/15 rounded-full blur-3xl translate-y-32 -translate-x-32">
     </div>
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,7 +21,7 @@
 
             <div class="flex flex-col sm:flex-row gap-4">
                 <button onclick="window.location.href='/products'"
-                    class="inline-flex items-center px-8 py-4 bg-background border-2 border-secondary text-text font-semibold rounded-2xl hover:bg-secondary hover:text-background transition-all duration-300 shadow-lg hover:shadow-xl group">
+                    class="inline-flex items-center px-8 py-4 bg-primary border-2 border-primary text-white font-semibold rounded-2xl hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl group">
                     <span>Lihat Semua</span>
                     <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +40,7 @@
                 <div x-data="{ showModal: false }" class="bg-background rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-secondary">
                     <!-- Product Image -->
                     <div
-                        class="aspect-square bg-accent flex items-center justify-center overflow-hidden rounded-t-2xl">
+                        class="aspect-square bg-surface flex items-center justify-center overflow-hidden rounded-t-2xl">
                         @if ($product->foto && Storage::disk('public')->exists($product->foto))
                             <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama_produk }}"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
@@ -56,7 +56,7 @@
                                 class="text-lg font-bold text-text group-hover:text-primary transition-colors line-clamp-2">
                                 {{ $product->nama_produk }}</h3>
                             <span
-                                class="bg-secondary text-background text-xs px-2 py-1 rounded-full font-semibold ml-2 flex-shrink-0">
+                                class="bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold ml-2 flex-shrink-0">
                                 {{ ucfirst($product->tipe_produk) }}
                             </span>
                         </div>
@@ -70,7 +70,7 @@
 
                         <!-- View Button -->
                         <button @click="window.location.href='/products/{{ $product->id }}'"
-                            class="mt-4 w-full bg-primary text-background py-2 px-4 rounded-lg font-semibold hover:bg-secondary transition-colors">
+                            class="mt-4 w-full bg-primary text-white py-2 px-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
                             View
                         </button>
                     </div>

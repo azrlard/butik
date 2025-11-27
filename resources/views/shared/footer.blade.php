@@ -1,7 +1,7 @@
 <!-- Footer -->
-<footer class="bg-accent text-text relative overflow-hidden">
+<footer class="bg-surface text-text relative overflow-hidden">
     <!-- Background Pattern -->
-    <div class="absolute inset-0 opacity-30" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1000 600%22%3e%3cdefs%3e%3cpattern id=%22footer-pattern%22 patternUnits=%22userSpaceOnUse%22 width=%22100%22 height=%22100%22%3e%3ccircle cx=%2250%22 cy=%2250%22 r=%221%22 fill=%22rgba(57,30,16,0.05)%22/%3e%3c/pattern%3e%3c/defs%3e%3crect width=%221000%22 height=%22600%22 fill=%22url(%23footer-pattern)%22/%3e%3c/svg%3e')"></div>
+    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1000 600%22%3e%3cdefs%3e%3cpattern id=%22footer-pattern%22 patternUnits=%22userSpaceOnUse%22 width=%22100%22 height=%22100%22%3e%3ccircle cx=%2250%22 cy=%2250%22 r=%221%22 fill=%22rgba(199,160,122,0.1)%22/%3e%3c/pattern%3e%3c/defs%3e%3crect width=%221000%22 height=%22600%22 fill=%22url(%23footer-pattern)%22/%3e%3c/svg%3e')"></div>
 
     <div class="relative pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@
                 <div class="lg:col-span-2">
                     <div class="flex items-center mb-6">
                         <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mr-4 shadow-lg">
-                            <span class="text-2xl text-accent">✨</span>
+                            <span class="text-2xl text-white">✨</span>
                         </div>
                         <div>
                             <h3 class="text-2xl font-bold text-text">Butik Online</h3>
@@ -26,11 +26,11 @@
 
                     <!-- Social Links -->
                     <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 bg-primary hover:bg-secondary rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                            <span class="text-lg text-accent">📘</span>
+                        <a href="#" class="w-10 h-10 bg-primary hover:bg-primary/80 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                            <span class="text-lg text-white">📘</span>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-primary hover:bg-secondary rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                            <span class="text-lg text-accent">📷</span>
+                        <a href="#" class="w-10 h-10 bg-primary hover:bg-primary/80 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                            <span class="text-lg text-white">📷</span>
                         </a>
                     </div>
                 </div>

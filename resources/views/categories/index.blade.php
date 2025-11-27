@@ -11,10 +11,10 @@
     @include('shared.breadcrumb')
 
     <!-- Hero Section -->
-    <section class="bg-accent text-text py-24 relative overflow-hidden">
+    <section class="bg-surface text-text py-24 relative overflow-hidden">
         <!-- Background Elements -->
-        <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-48 translate-x-48"></div>
-        <div class="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full blur-3xl translate-y-32 -translate-x-32"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-48 translate-x-48"></div>
+        <div class="absolute bottom-0 left-0 w-80 h-80 bg-secondary/10 rounded-full blur-3xl translate-y-32 -translate-x-32"></div>
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="mb-8">
@@ -27,13 +27,13 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button onclick="scrollToSection('categories')" class="inline-flex items-center px-8 py-4 bg-background text-text font-bold rounded-2xl hover:bg-secondary hover:text-background transition-all duration-300 transform hover:scale-105 shadow-xl">
+                <button onclick="scrollToSection('categories')" class="inline-flex items-center px-8 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-xl">
                     <span>Jelajahi Kategori</span>
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                     </svg>
                 </button>
-                <button onclick="scrollToSection('featured')" class="inline-flex items-center px-8 py-4 bg-secondary/20 backdrop-blur-sm border-2 border-text/30 text-text font-bold rounded-2xl hover:bg-secondary/30 transition-all duration-300">
+                <button onclick="scrollToSection('featured')" class="inline-flex items-center px-8 py-4 bg-background border-2 border-primary text-text font-bold rounded-2xl hover:bg-primary hover:text-white transition-all duration-300">
                     <span>Produk Unggulan</span>
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
@@ -116,7 +116,7 @@
             </div>
 
             <div class="text-center">
-                <a href="/products" class="inline-flex items-center px-8 py-4 bg-primary text-background font-bold rounded-2xl hover:bg-secondary transition-all duration-300 transform hover:scale-105 shadow-xl">
+                <a href="/products" class="inline-flex items-center px-8 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-xl">
                     <span>Lihat Semua Produk</span>
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -127,7 +127,7 @@
     </section>
 
     <!-- Featured Products by Category Section -->
-    <section id="featured" class="py-24 bg-accent">
+    <section id="featured" class="py-24 bg-surface">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-20">
                 <h2 class="text-4xl md:text-5xl font-black text-text mb-6">
@@ -165,7 +165,7 @@
                                     <p class="text-text">{{ $category->products->count() }} produk tersedia</p>
                                 </div>
                             </div>
-                            <a href="/products?category={{ $category->id }}" class="inline-flex items-center px-6 py-3 bg-secondary text-background font-semibold rounded-xl hover:bg-primary transition-all duration-300">
+                            <a href="/products?category={{ $category->id }}" class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition-all duration-300">
                                 <span>Lihat Semua</span>
                                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -176,7 +176,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             @foreach($category->products->take(4) as $product)
                                 <div onclick="openProductModal('{{ $product->id }}')" class="bg-background rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-secondary">
-                                    <div class="aspect-square bg-accent flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-300">
+                                    <div class="aspect-square bg-surface flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-300">
                                         @if($product->foto && file_exists(public_path('storage/' . $product->foto)))
                                             <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover rounded-lg">
                                         @else
@@ -186,7 +186,7 @@
                                     <div class="p-6">
                                         <div class="flex justify-between items-start mb-3">
                                             <h3 class="text-lg font-bold text-text group-hover:text-primary transition-colors line-clamp-2">{{ $product->nama_produk }}</h3>
-                                            <span class="bg-secondary text-background text-xs px-2 py-1 rounded-full font-semibold ml-2 flex-shrink-0">
+                                            <span class="bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold ml-2 flex-shrink-0">
                                                 {{ ucfirst($product->tipe_produk) }}
                                             </span>
                                         </div>
@@ -194,7 +194,7 @@
                                         <div class="text-2xl font-black text-primary">
                                             Rp {{ number_format($product->harga, 0, ',', '.') }}
                                         </div>
-                                        <button onclick="event.stopPropagation(); window.location.href='/products/{{ $product->id }}'" class="mt-4 w-full bg-primary text-background py-2 px-4 rounded-lg font-semibold hover:bg-secondary transition-colors">
+                                        <button onclick="event.stopPropagation(); window.location.href='/products/{{ $product->id }}'" class="mt-4 w-full bg-primary text-white py-2 px-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
                                             View
                                         </button>
                                     </div>
@@ -233,7 +233,7 @@
                 <!-- Benefit 1 -->
                 <div class="bg-background rounded-3xl p-8 shadow-xl border border-secondary hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                     <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-background" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
@@ -246,7 +246,7 @@
                 <!-- Benefit 2 -->
                 <div class="bg-background rounded-3xl p-8 shadow-xl border border-secondary hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                     <div class="w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-background" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
@@ -272,7 +272,7 @@
                 <!-- Benefit 4 -->
                 <div class="bg-background rounded-3xl p-8 shadow-xl border border-secondary hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                     <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-background" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                         </svg>
                     </div>
@@ -286,17 +286,17 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-24 bg-primary text-background">
+    <section class="py-24 bg-primary text-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-4xl md:text-5xl font-black mb-6">
                 Mulai Belanja Sekarang
             </h2>
-            <p class="text-xl text-background mb-12 max-w-2xl mx-auto">
+            <p class="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
                 Temukan produk favorit Anda dari berbagai kategori yang telah kami siapkan khusus untuk Anda.
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/products" class="inline-flex items-center px-8 py-4 bg-background text-text font-bold rounded-2xl hover:bg-secondary hover:text-background transition-all duration-300 transform hover:scale-105 shadow-xl">
+                <a href="/products" class="inline-flex items-center px-8 py-4 bg-white text-primary font-bold rounded-2xl hover:bg-surface transition-all duration-300 transform hover:scale-105 shadow-xl">
                     <span>Jelajahi Produk</span>
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
