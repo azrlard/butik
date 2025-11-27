@@ -11,13 +11,19 @@
     @include('shared.breadcrumb')
 
     <!-- Hero Section -->
-    <section class="bg-accent py-16 border-b border-secondary">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="relative py-16 border-b border-secondary overflow-hidden">
+        <!-- Background Image & Overlay -->
+        <div class="absolute inset-0 z-0">
+            <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/carosel 1.jpg');"></div>
+            <div class="absolute inset-0 bg-black/60"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
             <div class="text-center mb-8">
-                <h1 class="text-4xl md:text-6xl font-black text-text mb-6 leading-tight">
+                <h1 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
                     Semua Produk
                 </h1>
-                <p class="text-xl text-text max-w-3xl mx-auto leading-relaxed">
+                <p class="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
                     Temukan produk fashion terbaik untuk gaya Anda. Dari ready stock hingga custom order, semua ada di sini.
                 </p>
             </div>

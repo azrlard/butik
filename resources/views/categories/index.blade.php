@@ -11,17 +11,19 @@
     @include('shared.breadcrumb')
 
     <!-- Hero Section -->
-    <section class="bg-surface text-text py-24 relative overflow-hidden">
-        <!-- Background Elements -->
-        <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-48 translate-x-48"></div>
-        <div class="absolute bottom-0 left-0 w-80 h-80 bg-secondary/10 rounded-full blur-3xl translate-y-32 -translate-x-32"></div>
+    <section class="relative py-24 overflow-hidden">
+        <!-- Background Image & Overlay -->
+        <div class="absolute inset-0 z-0">
+            <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/carosel 1.jpg');"></div>
+            <div class="absolute inset-0 bg-black/60"></div>
+        </div>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
             <div class="mb-8">
-                <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+                <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white">
                     Kategori Produk
                 </h1>
-                <p class="text-xl md:text-2xl text-text max-w-4xl mx-auto leading-relaxed">
+                <p class="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed">
                     Temukan berbagai kategori fashion yang sesuai dengan gaya dan kebutuhan Anda. Dari pakaian hingga aksesoris, semua ada di sini.
                 </p>
             </div>
@@ -33,7 +35,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                     </svg>
                 </button>
-                <button onclick="scrollToSection('featured')" class="inline-flex items-center px-8 py-4 bg-background border-2 border-primary text-text font-bold rounded-2xl hover:bg-primary hover:text-white transition-all duration-300">
+                <button onclick="scrollToSection('featured')" class="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/50 text-white font-bold rounded-2xl hover:bg-white hover:text-primary transition-all duration-300">
                     <span>Produk Unggulan</span>
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
