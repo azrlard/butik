@@ -81,13 +81,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/orders/{order}/track', [OrderController::class, 'track'])->name('orders.track');
 
-    Route::get('/profile', function () {
-        return view('user.profile');
-    })->name('profile');
-
-    Route::get('/settings', function () {
-        return view('user.settings');
-    })->name('settings');
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 });
 
 // Form submission routes

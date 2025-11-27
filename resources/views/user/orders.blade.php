@@ -26,9 +26,6 @@
                         <a href="/orders" class="flex items-center px-4 py-3 bg-secondary text-background rounded-xl font-semibold">
                             📦 Riwayat Pesanan
                         </a>
-                        <a href="/settings" class="flex items-center px-4 py-3 text-text hover:bg-accent rounded-xl transition-colors">
-                            ⚙️ Pengaturan
-                        </a>
                     </div>
                 </div>
             </div>

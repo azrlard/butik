@@ -29,9 +29,6 @@
                             <a href="/orders" @click="userMenuOpen = false" class="flex items-center px-4 py-3 text-sm text-text hover:bg-primary/10 hover:text-primary transition-all duration-200 rounded-lg mx-2">
                                 Riwayat Pesanan
                             </a>
-                            <a href="/settings" @click="userMenuOpen = false" class="flex items-center px-4 py-3 text-sm text-text hover:bg-primary/10 hover:text-primary transition-all duration-200 rounded-lg mx-2">
-                                Pengaturan
-                            </a>
                             <hr class="my-2 border-border">
                             <div class="px-4">
                                 <form method="POST" action="/logout">
@@ -78,9 +75,6 @@
                     </a>
                     <a href="/orders" class="block w-full text-left px-4 py-3 text-text hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-medium">
                         Riwayat Pesanan
-                    </a>
-                    <a href="/settings" class="block w-full text-left px-4 py-3 text-text hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-medium">
-                        Pengaturan
                     </a>
                     <hr class="border-border">
                     <form method="POST" action="/logout" class="px-4">
