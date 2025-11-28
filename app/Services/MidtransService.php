@@ -22,7 +22,7 @@ class MidtransService
     {
         $params = [
             'transaction_details' => [
-                'order_id' => $order->id,
+                'order_id' => 'ORDER-' . $order->id . '-' . time(),
                 'gross_amount' => $order->total_harga,
             ],
             'customer_details' => [
@@ -62,7 +62,9 @@ class MidtransService
         $orderId = $notification['order_id'];
         $fraud = $notification['fraud_status'];
 
-        $order = Order::find($orderId);
+        // Extract actual order ID from Midtrans order_id format: ORDER-{id}-{timestamp}
+        $actualOrderId = $this->extractOrderId($orderId);
+        $order = Order::find($actualOrderId);
 
         if (!$order) {
             return false;
@@ -98,5 +100,19 @@ class MidtransService
         }
 
         return true;
+    }
+
+    /**
+     * Extract actual order ID from Midtrans order_id format
+     */
+    private function extractOrderId($midtransOrderId)
+    {
+        // Format: ORDER-{id}-{timestamp}
+        if (preg_match('/^ORDER-(\d+)-\d+$/', $midtransOrderId, $matches)) {
+            return $matches[1];
+        }
+        
+        // Fallback: return as is if format doesn't match
+        return $midtransOrderId;
     }
 }
