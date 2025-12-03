@@ -45,83 +45,116 @@ class CartController extends Controller
      */
     public function addToCart(Request $request)
     {
-        $request->validate([
-            'product_id' => 'required|integer',
-            'variant_id' => 'nullable|integer',
-            'quantity' => 'required|integer|min:1'
-        ]);
+        try {
+            $request->validate([
+                'product_id' => 'required|integer',
+                'variant_id' => 'nullable|integer',
+                'quantity' => 'required|integer|min:1'
+            ]);
 
-        $productId = $request->product_id;
-        $variantId = $request->variant_id;
-        $quantity = $request->quantity;
+            $productId = $request->product_id;
+            $variantId = $request->variant_id;
+            $quantity = $request->quantity;
 
-        $cart = Session::get('cart', []);
+            $cart = Session::get('cart', []);
 
-        // Check if product exists
-        $product = Product::with('category')->find($productId);
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
-        }
-
-        // Check variant if provided
-        if ($variantId) {
-            $variant = ProductVariant::find($variantId);
-            if (!$variant || $variant->product_id !== $productId) {
-                return response()->json(['error' => 'Variant not found'], 404);
+            // Check if product exists
+            $product = Product::with('category')->find($productId);
+            if (!$product) {
+                Log::error('Product not found', ['product_id' => $productId]);
+                return response()->json(['error' => 'Product not found'], 404);
             }
-            // Use variant price
-            $harga = $variant->price_adjustment;
-        } else {
-            // Use product price (for ready, it's min variant price)
-            $harga = $product->harga;
+
+            // Check variant if provided
+            if ($variantId) {
+                $variant = ProductVariant::find($variantId);
+                if (!$variant || $variant->product_id !== $productId) {
+                    Log::error('Variant not found or mismatch', [
+                        'variant_id' => $variantId,
+                        'product_id' => $productId
+                    ]);
+                    return response()->json(['error' => 'Variant not found'], 404);
+                }
+                // Use variant price
+                $harga = $variant->price_adjustment;
+            } else {
+                // Use product price (for ready, it's min variant price)
+                $harga = $product->harga;
+            }
+
+            // Create cart item with consistent structure
+            $cartItem = [
+                'id' => $productId, // For frontend compatibility
+                'product_id' => $productId,
+                'variant_id' => $variantId,
+                'quantity' => $quantity,
+                'nama_produk' => $product->nama_produk,
+                'harga' => $harga,
+                'deskripsi' => $product->deskripsi,
+                'foto' => $product->foto,
+                'tipe_produk' => $product->tipe_produk,
+                'category' => $product->category ? $product->category->nama_kategori : null,
+                'variant_size' => $variant ? $variant->size : null
+            ];
+
+            // Cek apakah item sudah ada di cart
+            $existingIndex = $this->findCartItemIndex($cart, $productId, $variantId);
+
+            if ($existingIndex !== false) {
+                // Update quantity jika sudah ada
+                $cart[$existingIndex]['quantity'] += $quantity;
+            } else {
+                // Tambah item baru
+                $cart[] = $cartItem;
+            }
+
+            Session::put('cart', $cart);
+
+            Log::info('Cart updated successfully', [
+                'cart_count' => count($cart),
+                'total_quantity' => $this->getCartCount(),
+                'product_id' => $productId,
+                'variant_id' => $variantId
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk berhasil ditambahkan ke keranjang',
+                'cart_count' => $this->getCartCount(),
+                'cart' => $cart // Return full cart for debugging
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error in addToCart', [
+                'errors' => $e->errors(),
+                'request' => $request->all()
+            ]);
+            return response()->json([
+                'error' => 'Validation error: ' . json_encode($e->errors())
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('Exception in addToCart', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
+            ]);
+            return response()->json([
+                'error' => 'Server error: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Create cart item with consistent structure
-        $cartItem = [
-            'id' => $productId, // For frontend compatibility
-            'product_id' => $productId,
-            'variant_id' => $variantId,
-            'quantity' => $quantity,
-            'nama_produk' => $product->nama_produk,
-            'harga' => $harga,
-            'deskripsi' => $product->deskripsi,
-            'foto' => $product->foto,
-            'tipe_produk' => $product->tipe_produk,
-            'category' => $product->category ? $product->category->nama_kategori : null,
-            'variant_size' => $variant ? $variant->size : null
-        ];
-
-        // Cek apakah item sudah ada di cart
-        $existingIndex = $this->findCartItemIndex($cart, $productId, $variantId);
-
-        if ($existingIndex !== false) {
-            // Update quantity jika sudah ada
-            $cart[$existingIndex]['quantity'] += $quantity;
-        } else {
-            // Tambah item baru
-            $cart[] = $cartItem;
-        }
-
-        Session::put('cart', $cart);
-
-        Log::info('Cart updated', [
-            'cart_count' => count($cart),
-            'total_quantity' => $this->getCartCount()
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Produk berhasil ditambahkan ke keranjang',
-            'cart_count' => $this->getCartCount(),
-            'cart' => $cart // Return full cart for debugging
-        ]);
     }
 
     // Helper method untuk mencari item di cart
     private function findCartItemIndex($cart, $productId, $variantId)
     {
         foreach ($cart as $index => $item) {
-            if ($item['product_id'] == $productId && $item['variant_id'] == $variantId) {
+            // Skip items that don't have product_id (custom items)
+            if (!isset($item['product_id'])) {
+                continue;
+            }
+            
+            // Check if this is the same product and variant
+            $itemVariantId = $item['variant_id'] ?? null;
+            if ($item['product_id'] == $productId && $itemVariantId == $variantId) {
                 return $index;
             }
         }
@@ -212,7 +245,15 @@ class CartController extends Controller
         foreach ($cart as $item) {
             $count += $item['quantity'];
         }
-        return response()->json(['count' => $count]);
+        return $count;
+    }
+
+    /**
+     * Get cart count as JSON response
+     */
+    public function getCartCountJson()
+    {
+        return response()->json(['count' => $this->getCartCount()]);
     }
 
     /**

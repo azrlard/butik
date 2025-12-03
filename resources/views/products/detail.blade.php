@@ -258,6 +258,12 @@
                     })
                     .then(response => {
                         console.log('Response received:', response);
+                        if (!response.ok) {
+                            // If response is not OK, parse it as error
+                            return response.json().then(err => {
+                                throw new Error(err.error || 'Unknown error');
+                            });
+                        }
                         return response.json();
                     })
                     .then(data => {
@@ -281,12 +287,12 @@
                             window.location.href = '/cart';
                         } else {
                             console.error('Failed to add to cart:', data.error);
-                            alert('Gagal menambahkan ke keranjang: ' + (data.error || 'Unknown error'));
+                            alert(data.error || 'Gagal menambahkan ke keranjang');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Terjadi kesalahan saat menambahkan ke keranjang');
+                        alert(error.message || 'Terjadi kesalahan saat menambahkan ke keranjang');
                     });
                 },
 
