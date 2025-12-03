@@ -64,7 +64,7 @@
                                     @if($item->product && $item->product->foto)
                                         <img src="/storage/{{ $item->product->foto }}" alt="{{ $item->product->nama_produk }}" class="w-full h-full object-cover rounded-lg">
                                     @elseif($item->customRequest && $item->customRequest->foto_referensi)
-                                        <img src="{{ $item->customRequest->foto_referensi }}" alt="Custom Request" class="w-full h-full object-cover rounded-lg">
+                                        <img src="/{{ $item->customRequest->foto_referensi }}" alt="Custom Request" class="w-full h-full object-cover rounded-lg">
                                     @else
                                         <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>

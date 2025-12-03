@@ -124,7 +124,7 @@
                                                 @if($item->product && $item->product->foto)
                                                     <img src="/storage/{{ $item->product->foto }}" alt="{{ $item->product->nama_produk }}" class="w-full h-full object-cover rounded-lg">
                                                 @elseif($item->customRequest && $item->customRequest->foto_referensi)
-                                                    <img src="{{ $item->customRequest->foto_referensi }}" alt="Custom Request" class="w-full h-full object-cover rounded-lg">
+                                                    <img src="/{{ $item->customRequest->foto_referensi }}" alt="Custom Request" class="w-full h-full object-cover rounded-lg">
                                                 @else
                                                     <span class="text-2xl">👕</span>
                                                 @endif
