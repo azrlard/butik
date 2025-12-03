@@ -36,6 +36,11 @@
                 if ($currentStatusIndex === false) {
                     $currentStatusIndex = 0;
                 }
+                
+                // If payment is successful, automatically mark processing as completed
+                if ($order->status === 'success' && $currentStatusIndex < 2) {
+                    $currentStatusIndex = 2; // Mark up to 'processing' as completed
+                }
             @endphp
 
             <div class="relative">
