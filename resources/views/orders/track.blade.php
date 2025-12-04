@@ -72,12 +72,22 @@
                                 <p class="text-sm text-gray-600 mt-1">
                                     {{ $order->updated_at->format('d M Y, H:i') }}
                                 </p>
-                                @if($order->status === 'shipped')
+                                @if($order->status === 'shipped' && $order->pengiriman)
                                     <div class="mt-3 p-3 bg-blue-50 rounded-lg">
-                                        <p class="text-sm text-blue-900 font-medium">Nomor Resi: <span class="font-mono">JNE123456789</span></p>
-                                        <p class="text-xs text-blue-700 mt-1">Estimasi tiba: 2-3 hari kerja</p>
+                                        <p class="text-sm text-blue-900 font-medium">
+                                            Nomor Resi: <span class="font-mono">{{ $order->pengiriman->no_resi ?? 'Belum tersedia' }}</span>
+                                        </p>
+                                        <p class="text-xs text-blue-700 mt-1">
+                                            Kurir: {{ $order->pengiriman->kurir ?? '-' }}
+                                        </p>
+                                        @if($order->pengiriman->tanggal_kirim)
+                                            <p class="text-xs text-blue-700 mt-1">
+                                                Tanggal Kirim: {{ \Carbon\Carbon::parse($order->pengiriman->tanggal_kirim)->format('d M Y') }}
+                                            </p>
+                                        @endif
                                     </div>
                                 @endif
+
                             @elseif($isCompleted)
                                 <p class="text-sm text-gray-500 mt-1">Selesai</p>
                             @endif

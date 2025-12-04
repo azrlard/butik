@@ -27,4 +27,33 @@ class Pengiriman extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    protected static function booted()
+    {
+        // Event untuk CREATE (saat data baru dibuat)
+        static::created(function ($pengiriman) {
+            $order = $pengiriman->order;
+            if ($order) {
+                if ($pengiriman->status_pengiriman === 'dikirim') {
+                    $order->update(['status' => 'shipped']);
+                } elseif ($pengiriman->status_pengiriman === 'sampai') {
+                    $order->update(['status' => 'delivered']);
+                }
+            }
+        });
+
+        // Event untuk UPDATE (saat data diubah)
+        static::updated(function ($pengiriman) {
+            if ($pengiriman->isDirty('status_pengiriman')) {
+                $order = $pengiriman->order;
+                if ($order) {
+                    if ($pengiriman->status_pengiriman === 'dikirim') {
+                        $order->update(['status' => 'shipped']);
+                    } elseif ($pengiriman->status_pengiriman === 'sampai') {
+                        $order->update(['status' => 'delivered']);
+                    }
+                }
+            }
+        });
+    }
 }
