@@ -67,7 +67,9 @@
                         $orders = auth()->user()->orders()->with(['orderItems.product', 'orderItems.variant', 'orderItems.customRequest'])->latest()->get();
                     @endphp
                     @forelse($orders as $order)
-                    <div class="bg-background rounded-2xl shadow-lg border border-secondary overflow-hidden">
+                    <div class="bg-background rounded-2xl shadow-lg border border-secondary overflow-hidden order-card" 
+                         data-status="{{ $order->status }}" 
+                         data-date="{{ $order->created_at->format('Y-m-d') }}">
                         <div class="p-6 border-b border-secondary">
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div>
@@ -182,9 +184,59 @@
 function filterOrders() {
     const statusFilter = document.getElementById('status-filter').value;
     const dateFilter = document.getElementById('date-filter').value;
+    const orderCards = document.querySelectorAll('.order-card');
+    let visibleCount = 0;
 
-    // Implement filtering logic here
-    console.log('Filtering orders:', { status: statusFilter, date: dateFilter });
+    orderCards.forEach(card => {
+        const status = card.getAttribute('data-status');
+        const date = new Date(card.getAttribute('data-date'));
+        const today = new Date();
+        
+        let statusMatch = (statusFilter === 'all') || (status === statusFilter);
+        
+        // Handle 'completed' status mapping for filter
+        if (statusFilter === 'delivered' && (status === 'completed' || status === 'delivered')) {
+            statusMatch = true;
+        }
+
+        let dateMatch = true;
+        if (dateFilter !== 'all') {
+            const diffTime = Math.abs(today - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (dateFilter === '7days') {
+                dateMatch = diffDays <= 7;
+            } else if (dateFilter === '30days') {
+                dateMatch = diffDays <= 30;
+            } else if (dateFilter === '90days') {
+                dateMatch = diffDays <= 90;
+            }
+        }
+
+        if (statusMatch && dateMatch) {
+            card.style.display = 'block';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Show/hide empty state
+    const emptyState = document.getElementById('empty-orders');
+    if (emptyState) {
+        if (visibleCount === 0 && orderCards.length > 0) {
+            // If we have orders but filtered them all out, show a "no results" message
+            // or just show the empty state if that's preferred. 
+            // For now, let's just show the empty state if it exists.
+            emptyState.style.display = 'block';
+            emptyState.querySelector('h3').textContent = 'Tidak ada pesanan yang cocok';
+            emptyState.querySelector('p').textContent = 'Coba ubah filter pencarian Anda';
+        } else if (orderCards.length === 0) {
+             emptyState.style.display = 'block';
+        } else {
+            emptyState.style.display = 'none';
+        }
+    }
 }
 
 function viewOrderDetail(orderId) {
