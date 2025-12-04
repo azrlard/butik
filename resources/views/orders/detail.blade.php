@@ -25,6 +25,7 @@
                             'success' => 'bg-green-100 text-green-800',
                             'processing' => 'bg-blue-100 text-blue-800',
                             'shipped' => 'bg-indigo-100 text-indigo-800',
+                            'completed' => 'bg-green-100 text-green-800',
                             'delivered' => 'bg-green-100 text-green-800',
                             'failed' => 'bg-red-100 text-red-800',
                             'expired' => 'bg-gray-100 text-gray-800',
@@ -35,6 +36,7 @@
                             'success' => 'Pembayaran Berhasil',
                             'processing' => 'Sedang Diproses',
                             'shipped' => 'Dalam Pengiriman',
+                            'completed' => 'Selesai',
                             'delivered' => 'Selesai',
                             'failed' => 'Pembayaran Gagal',
                             'expired' => 'Kadaluarsa',
@@ -168,7 +170,7 @@
                                 </a>
                             @endif
                             
-                            @if(in_array($order->status, ['success', 'processing', 'shipped']))
+                            @if(in_array($order->status, ['success', 'processing', 'shipped', 'completed', 'delivered']))
                                 <a href="{{ route('orders.track', $order) }}" class="block w-full bg-white text-gray-700 text-center font-semibold py-3 px-4 rounded-lg border-2 border-gray-200 hover:border-primary hover:text-primary transition-all">
                                     Lacak Pesanan
                                 </a>

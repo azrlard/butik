@@ -73,7 +73,7 @@
                                 <div>
                                     <div class="flex items-center gap-3 mb-2">
                                         <h3 class="text-xl font-bold text-text">Order #{{ $order->id }}</h3>
-                                        <span class="px-3 py-1 {{ $order->status === 'pending' ? 'bg-accent text-text' : ($order->status === 'success' ? 'bg-green-100 text-green-800' : ($order->status === 'processing' ? 'bg-yellow-100 text-yellow-800' : ($order->status === 'shipped' ? 'bg-blue-100 text-blue-800' : ($order->status === 'delivered' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')))) }} rounded-full text-sm font-semibold">
+                                        <span class="px-3 py-1 {{ $order->status === 'pending' ? 'bg-accent text-text' : ($order->status === 'success' ? 'bg-green-100 text-green-800' : ($order->status === 'processing' ? 'bg-yellow-100 text-yellow-800' : ($order->status === 'shipped' ? 'bg-blue-100 text-blue-800' : ($order->status === 'completed' || $order->status === 'delivered' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')))) }} rounded-full text-sm font-semibold">
                                             @switch($order->status)
                                                 @case('pending')
                                                     Menunggu Pembayaran
@@ -87,6 +87,7 @@
                                                 @case('shipped')
                                                     Dalam Pengiriman
                                                     @break
+                                                @case('completed')
                                                 @case('delivered')
                                                     Selesai
                                                     @break
@@ -146,7 +147,7 @@
                                     <button onclick="viewOrderDetail('{{ $order->id }}')" class="w-full bg-primary text-background px-4 py-3 rounded-xl font-semibold hover:bg-secondary transition-colors">
                                         Lihat Detail
                                     </button>
-                                    @if($order->status === 'delivered')
+                                    @if($order->status === 'completed' || $order->status === 'delivered')
                                     <button onclick="writeReview('{{ $order->id }}')" class="w-full bg-secondary text-background px-4 py-3 rounded-xl font-semibold hover:bg-primary transition-colors">
                                         Tulis Ulasan
                                     </button>

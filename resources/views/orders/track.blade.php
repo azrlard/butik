@@ -29,7 +29,7 @@
                     ['key' => 'success', 'label' => 'Pembayaran Berhasil', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
                     ['key' => 'processing', 'label' => 'Sedang Diproses', 'icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'],
                     ['key' => 'shipped', 'label' => 'Dalam Pengiriman', 'icon' => 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'],
-                    ['key' => 'delivered', 'label' => 'Selesai', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
+                    ['key' => 'completed', 'label' => 'Selesai', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
                 ];
 
                 $currentStatusIndex = array_search($order->status, array_column($statuses, 'key'));
@@ -140,7 +140,7 @@
                 <a href="{{ route('orders.show', $order) }}" class="flex-1 bg-white text-gray-700 text-center font-semibold py-3 px-4 rounded-lg border-2 border-gray-200 hover:border-primary hover:text-primary transition-all">
                     Lihat Detail
                 </a>
-                @if($order->status === 'delivered')
+                @if($order->status === 'completed')
                 <button class="flex-1 bg-primary text-white text-center font-semibold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors">
                     Tulis Ulasan
                 </button>

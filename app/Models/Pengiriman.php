@@ -37,7 +37,7 @@ class Pengiriman extends Model
                 if ($pengiriman->status_pengiriman === 'dikirim') {
                     $order->update(['status' => 'shipped']);
                 } elseif ($pengiriman->status_pengiriman === 'sampai') {
-                    $order->update(['status' => 'delivered']);
+                    $order->update(['status' => 'completed']);
                 }
             }
         });
@@ -50,7 +50,7 @@ class Pengiriman extends Model
                     if ($pengiriman->status_pengiriman === 'dikirim') {
                         $order->update(['status' => 'shipped']);
                     } elseif ($pengiriman->status_pengiriman === 'sampai') {
-                        $order->update(['status' => 'delivered']);
+                        $order->update(['status' => 'completed']);
                     }
                 }
             }
