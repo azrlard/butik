@@ -35,8 +35,17 @@ class ProductResource extends Resource
                 Forms\Components\Textarea::make('deskripsi')
                     ->nullable(),
                 Forms\Components\FileUpload::make('foto')
+                    ->label('Foto Utama')
                     ->image()
                     ->directory('products')
+                    ->nullable(),
+                Forms\Components\FileUpload::make('gallery')
+                    ->label('Galeri Foto Tambahan (Max 3)')
+                    ->image()
+                    ->multiple()
+                    ->maxFiles(3)
+                    ->directory('products/gallery')
+                    ->reorderable()
                     ->nullable(),
                 Forms\Components\Select::make('tipe_produk')
                     ->options([

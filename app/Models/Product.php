@@ -10,7 +10,11 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id', 'nama_produk', 'deskripsi', 'harga', 'foto', 'tipe_produk',
+        'category_id', 'nama_produk', 'deskripsi', 'harga', 'foto', 'gallery', 'tipe_produk',
+    ];
+
+    protected $casts = [
+        'gallery' => 'array',
     ];
 
     protected $attributes = [

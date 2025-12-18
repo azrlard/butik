@@ -28,7 +28,7 @@
                                     $filePath = storage_path('app/public/' . $fullImagePath);
                                 @endphp
                                 @if($product->foto && file_exists($filePath))
-                                    <img src="{{ asset('storage/' . $fullImagePath) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover">
+                                    <img :src="mainImage" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover">
                                 @else
                                     <span class="text-8xl text-text">📦</span>
                                 @endif
@@ -37,22 +37,58 @@
 
                         <!-- Thumbnail Images -->
                         <div class="grid grid-cols-4 gap-3">
-                            @for($i = 0; $i < 4; $i++)
-                                <div class="bg-background rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow border border-border">
-                                    <div class="aspect-square bg-accent flex items-center justify-center">
-                                        @php
-                                            $imagePath = $product->foto;
-                                            $fullImagePath = str_contains($imagePath, 'products/') ? $imagePath : 'products/' . $imagePath;
-                                            $filePath = storage_path('app/public/' . $fullImagePath);
-                                        @endphp
-                                        @if($product->foto && file_exists($filePath))
-                                            <img src="{{ asset('storage/' . $fullImagePath) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover">
-                                        @else
-                                            <span class="text-3xl text-text">📦</span>
-                                        @endif
-                                    </div>
+                            <!-- Main Photo Thumbnail -->
+                            <div @click="mainImage = '{{ asset('storage/' . (str_contains($product->foto, 'products/') ? $product->foto : 'products/' . $product->foto)) }}'"
+                                 class="bg-background rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow border border-border"
+                                 :class="mainImage === '{{ asset('storage/' . (str_contains($product->foto, 'products/') ? $product->foto : 'products/' . $product->foto)) }}' ? 'border-primary ring-2 ring-primary/20' : ''">
+                                <div class="aspect-square bg-accent flex items-center justify-center">
+                                    @php
+                                        $imagePath = $product->foto;
+                                        $fullImagePath = str_contains($imagePath, 'products/') ? $imagePath : 'products/' . $imagePath;
+                                        $filePath = storage_path('app/public/' . $fullImagePath);
+                                    @endphp
+                                    @if($product->foto && file_exists($filePath))
+                                        <img src="{{ asset('storage/' . $fullImagePath) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover">
+                                    @else
+                                        <span class="text-3xl text-text">📦</span>
+                                    @endif
                                 </div>
-                            @endfor
+                            </div>
+
+                            <!-- Gallery Thumbnails -->
+                            @if($product->gallery && count($product->gallery) > 0)
+                                @foreach(array_slice($product->gallery, 0, 3) as $galleryImage)
+                                    <div @click="mainImage = '{{ asset('storage/' . $galleryImage) }}'"
+                                         class="bg-background rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow border border-border"
+                                         :class="mainImage === '{{ asset('storage/' . $galleryImage) }}' ? 'border-primary ring-2 ring-primary/20' : ''">
+                                        <div class="aspect-square bg-accent flex items-center justify-center">
+                                            @if(file_exists(storage_path('app/public/' . $galleryImage)))
+                                                <img src="{{ asset('storage/' . $galleryImage) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover">
+                                            @else
+                                                <span class="text-3xl text-text">📦</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                                
+                                {{-- Fill remaining slots up to 4 if gallery has < 3 items --}}
+                                @for($i = count($product->gallery); $i < 3; $i++)
+                                    <div class="bg-background rounded-lg shadow-md overflow-hidden opacity-50 border border-border">
+                                        <div class="aspect-square bg-accent flex items-center justify-center">
+                                            <span class="text-3xl text-textSecondary opacity-30">📦</span>
+                                        </div>
+                                    </div>
+                                @endfor
+                            @else
+                                {{-- Fallback if no gallery images, show main photo 3 more times as placeholders (original behavior) --}}
+                                @for($i = 0; $i < 3; $i++)
+                                    <div class="bg-background rounded-lg shadow-md overflow-hidden opacity-50 border border-border">
+                                        <div class="aspect-square bg-accent flex items-center justify-center">
+                                            <span class="text-3xl text-textSecondary opacity-30">📦</span>
+                                        </div>
+                                    </div>
+                                @endfor
+                            @endif
                         </div>
                     </div>
 
@@ -219,6 +255,7 @@
     <script>
         function productDetailComponent() {
             return {
+                mainImage: '{{ asset('storage/' . (str_contains($product->foto, 'products/') ? $product->foto : 'products/' . $product->foto)) }}',
                 selectedVariantId: {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }},
 
                 addToCart(productId, variantId, isLoggedIn) {
@@ -318,5 +355,78 @@
                 }
             }
         }
+    </script>
+
+    <script>
+        // Load similar products
+        document.addEventListener('DOMContentLoaded', function() {
+            const productId = {{ $product->id }};
+            const similarProductsContainer = document.getElementById('similar-products');
+
+            fetch(`/api/products/${productId}/similar`)
+                .then(response => response.json())
+                .then(products => {
+                    if (products.length === 0) {
+                        similarProductsContainer.innerHTML = `
+                            <div class="col-span-full text-center py-8">
+                                <p class="text-textSecondary opacity-80">Tidak ada produk serupa yang tersedia</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    similarProductsContainer.innerHTML = products.map(product => {
+                        // Determine image path
+                        let imagePath = product.foto;
+                        let fullImagePath = imagePath && imagePath.includes('products/') ? imagePath : 'products/' + imagePath;
+                        let imageUrl = product.foto ? `/storage/${fullImagePath}` : '';
+
+                        // Get price - use variant price if available, otherwise base price
+                        let price = product.harga;
+                        if (product.tipe_produk === 'ready' && product.variants && product.variants.length > 0) {
+                            price = product.variants[0].price_adjustment;
+                        }
+
+                        return `
+                            <a href="/products/${product.id}" class="group bg-background rounded-2xl shadow-lg overflow-hidden border border-border hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="aspect-square bg-accent overflow-hidden">
+                                    ${product.foto ? 
+                                        `<img src="${imageUrl}" alt="${product.nama_produk}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">` :
+                                        `<div class="w-full h-full flex items-center justify-center">
+                                            <span class="text-6xl">📦</span>
+                                        </div>`
+                                    }
+                                </div>
+                                <div class="p-5">
+                                    ${product.category ? 
+                                        `<span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary text-accent mb-3">
+                                            ${product.category.nama_kategori}
+                                        </span>` : ''
+                                    }
+                                    <h3 class="text-lg font-bold text-text mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                                        ${product.nama_produk}
+                                    </h3>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xl font-bold text-primary">
+                                            Rp ${new Intl.NumberFormat('id-ID').format(price)}
+                                        </span>
+                                        ${product.terjual ? 
+                                            `<span class="text-sm text-textSecondary opacity-80">${product.terjual} terjual</span>` : ''
+                                        }
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                    }).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading similar products:', error);
+                    similarProductsContainer.innerHTML = `
+                        <div class="col-span-full text-center py-8">
+                            <p class="text-textSecondary opacity-80">Gagal memuat produk serupa</p>
+                        </div>
+                    `;
+                });
+        });
     </script>
 @endsection

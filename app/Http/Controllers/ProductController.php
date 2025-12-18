@@ -148,4 +148,34 @@ class ProductController extends Controller
         $product = Product::with(['category', 'variants'])->findOrFail($id);
         return view('products.detail', compact('product'));
     }
+
+    /**
+     * Get similar products (same category, excluding current product)
+     */
+    public function getSimilarProducts($id)
+    {
+        $product = Product::findOrFail($id);
+        
+        $similarProducts = Product::with(['category', 'variants'])
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $id)
+            ->limit(4)
+            ->get();
+
+        return response()->json($similarProducts->map(function($product) {
+            return [
+                'id' => $product->id,
+                'nama_produk' => $product->nama_produk,
+                'deskripsi' => $product->deskripsi,
+                'harga' => $product->harga,
+                'stok' => $product->stok,
+                'foto' => $product->foto,
+                'tipe_produk' => $product->tipe_produk,
+                'category_id' => $product->category_id,
+                'category' => $product->category,
+                'variants' => $product->variants,
+                'terjual' => $product->terjual ?? 0
+            ];
+        }));
+    }
 }

@@ -71,7 +71,7 @@
                         <!-- View Button -->
                         <button @click="window.location.href='/products/{{ $product->id }}'"
                             class="mt-4 w-full bg-primary text-white py-2 px-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
-                            View
+                            Lihat Detail
                         </button>
                     </div>
                 </div>

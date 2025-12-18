@@ -15,6 +15,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/products', [ProductController::class, 'indexView'])->name('products.index');
 
 Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'showDetail'])->name('products.detail');
+Route::get('/api/products/{id}/similar', [App\Http\Controllers\ProductController::class, 'getSimilarProducts'])->name('products.similar');
+
 
 Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 
