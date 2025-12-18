@@ -37,6 +37,8 @@ class ProductResource extends Resource
                 Forms\Components\FileUpload::make('foto')
                     ->label('Foto Utama')
                     ->image()
+                    ->disk('public')
+                    ->visibility('public')
                     ->directory('products')
                     ->nullable(),
                 Forms\Components\FileUpload::make('gallery')
@@ -44,6 +46,8 @@ class ProductResource extends Resource
                     ->image()
                     ->multiple()
                     ->maxFiles(3)
+                    ->disk('public')
+                    ->visibility('public')
                     ->directory('products/gallery')
                     ->reorderable()
                     ->nullable(),
