@@ -60,4 +60,13 @@ class Product extends Model
         // For ready stock products, sum all variant stocks
         return $this->variants()->sum('stock');
     }
+
+    public function getTerjualAttribute()
+    {
+        return $this->orderItems()
+            ->whereHas('order', function ($query) {
+                $query->whereIn('status', ['paid', 'success', 'shipped', 'completed']);
+            })
+            ->sum('jumlah');
+    }
 }

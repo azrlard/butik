@@ -113,7 +113,12 @@
                             <div class="flex items-center gap-4 mb-6">
                                 <span class="text-sm text-textSecondary opacity-80">{{ $product->terjual ?? 0 }} terjual</span>
                                 <span class="text-secondary">|</span>
-                                <span id="availability-text" class="text-sm text-primary font-medium">✓ Stok tersedia</span>
+                                <span id="availability-text" 
+                                      class="text-sm font-medium"
+                                      :class="selectedStock > 0 ? 'text-primary' : 'text-red-500'"
+                                      x-text="selectedStock > 0 ? '✓ Stok tersedia' : '✕ Stok habis'">
+                                    ✓ Stok tersedia
+                                </span>
                             </div>
 
                             <!-- Price -->
@@ -201,7 +206,7 @@
                                 @if($product->tipe_produk === 'ready')
                                     <div class="flex justify-between py-2 border-b border-border">
                                         <span class="text-textSecondary opacity-80">Ketersediaan</span>
-                                        <span id="detail-availability" class="text-primary font-medium">{{ $product->variants->sum('stock') ?? 0 }} unit tersedia</span>
+                                        <span id="detail-availability" class="text-primary font-medium" x-text="selectedStock + ' unit tersedia'">{{ $product->variants->sum('stock') ?? 0 }} unit tersedia</span>
                                     </div>
                                     <div class="flex justify-between py-2 border-b border-border">
                                         <span class="text-textSecondary opacity-80">Pengiriman</span>
@@ -257,6 +262,7 @@
             return {
                 mainImage: '{{ asset('storage/' . (str_contains($product->foto, 'products/') ? $product->foto : 'products/' . $product->foto)) }}',
                 selectedVariantId: {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->id : 'null' }},
+                selectedStock: {{ ($product->tipe_produk === 'ready' && $product->variants && $product->variants->count() > 0) ? $product->variants->first()->stock : ($product->tipe_produk === 'custom' ? 999 : 0) }},
 
                 addToCart(productId, variantId, isLoggedIn) {
                     console.log('addToCart called with:', { productId, variantId, isLoggedIn });
@@ -336,6 +342,7 @@
                 selectSize(size, variantId, stock, priceAdjustment) {
                     console.log('Size selected:', { size, variantId, stock, priceAdjustment });
                     this.selectedVariantId = variantId;
+                    this.selectedStock = stock;
 
                     // Update price display
                     const priceElement = document.getElementById('product-price');

@@ -7,14 +7,41 @@
                 </a>
             </div>
             <div class="hidden md:flex items-center space-x-1">
-                <a href="/" class="text-text hover:text-primary px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-primary/10 hover:shadow-md">Home</a>
-                <!-- POSISI DITUKAR: Kategori sekarang sebelum Produk -->
-                <a href="/categories" class="text-text hover:text-primary px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-primary/10 hover:shadow-md">Kategori</a>
-                <a href="/products" class="text-text hover:text-primary px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-primary/10 hover:shadow-md">Produk</a>
-                <a href="/custom" class="text-text hover:text-primary px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-primary/10 hover:shadow-md">Custom</a>
-                <a href="/cart" class="text-text hover:text-primary px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-primary/10 hover:shadow-md flex items-center">
+                @php
+                    $navItems = [
+                        ['label' => 'Home', 'url' => '/', 'pattern' => '/'],
+                        ['label' => 'Kategori', 'url' => '/categories', 'pattern' => 'categories*'],
+                        ['label' => 'Produk', 'url' => '/products', 'pattern' => 'products*'],
+                        ['label' => 'Custom', 'url' => '/custom', 'pattern' => 'custom*'],
+                    ];
+                @endphp
+
+                @foreach($navItems as $item)
+                    @php
+                        $isActive = ($item['pattern'] === '/') ? request()->is('/') : request()->is($item['pattern']);
+                    @endphp
+                    <a href="{{ $item['url'] }}" 
+                       class="relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 group
+                              {{ $isActive ? 'text-primary bg-primary/10 shadow-sm' : 'text-text hover:text-primary hover:bg-primary/5' }}">
+                        {{ $item['label'] }}
+                        @if($isActive)
+                            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full transform transition-transform duration-300 origin-left"></span>
+                        @else
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary rounded-full transform transition-all duration-300 origin-left group-hover:w-full"></span>
+                        @endif
+                    </a>
+                @endforeach
+
+                <a href="/cart" 
+                   class="relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 group flex items-center
+                          {{ request()->is('cart*') ? 'text-primary bg-primary/10 shadow-sm' : 'text-text hover:text-primary hover:bg-primary/5' }}">
                     Keranjang
                     <span id="cart-count-desktop" class="ml-2 bg-primary text-xs rounded-full h-5 w-5 flex items-center justify-center text-white font-semibold">0</span>
+                    @if(request()->is('cart*'))
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full transform transition-transform duration-300 origin-left"></span>
+                    @else
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary rounded-full transform transition-all duration-300 origin-left group-hover:w-full"></span>
+                    @endif
                 </a>
                 @if(auth()->check())
                     <div x-data="{ userMenuOpen: false }" class="relative">
@@ -59,12 +86,20 @@
     <!-- Mobile Menu - POSISI JUGA DITUKAR -->
     <div x-show="mobileMenuOpen" x-transition x-cloak class="md:hidden bg-gradient-to-r from-surface to-accent border-t border-border shadow-xl">
         <div class="px-4 pt-4 pb-6 space-y-2">
-            <a href="/" class="block w-full text-left px-4 py-3 text-text hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-medium">Home</a>
-            <!-- POSISI DITUKAR: Kategori sekarang sebelum Produk -->
-            <a href="/categories" class="block w-full text-left px-4 py-3 text-text hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-medium">Kategori</a>
-            <a href="/products" class="block w-full text-left px-4 py-3 text-text hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-medium">Produk</a>
-            <a href="/custom" class="block w-full text-left px-4 py-3 text-text hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-medium">Custom</a>
-            <a href="/cart" class="flex items-center justify-between w-full px-4 py-3 text-text hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-medium">
+            @foreach($navItems as $item)
+                @php
+                    $isActive = ($item['pattern'] === '/') ? request()->is('/') : request()->is($item['pattern']);
+                @endphp
+                <a href="{{ $item['url'] }}" 
+                   class="block w-full text-left px-4 py-3 rounded-lg transition-all duration-300 font-medium
+                          {{ $isActive ? 'text-primary bg-primary/10 border-l-4 border-primary' : 'text-text hover:text-primary hover:bg-primary/5' }}">
+                    {{ $item['label'] }}
+                </a>
+            @endforeach
+
+            <a href="/cart" 
+               class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all duration-300 font-medium
+                      {{ request()->is('cart*') ? 'text-primary bg-primary/10 border-l-4 border-primary' : 'text-text hover:text-primary hover:bg-primary/5' }}">
                 Keranjang
                 <span id="cart-count-mobile" class="bg-primary text-xs rounded-full h-5 w-5 flex items-center justify-center text-white font-semibold">0</span>
             </a>
