@@ -37,8 +37,8 @@
     <!-- Content -->
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-20">
         <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight text-white drop-shadow-2xl">
-            Temukan Gaya<br>
-            <span class="text-primary drop-shadow-2xl">Unikmu</span>
+            Eksplor Gaya<br>
+            <span class="text-primary drop-shadow-2xl">Unikmu di Ozzy Costume</span>
         </h1>
 
         <p class="text-xl md:text-2xl lg:text-3xl mb-12 opacity-90 max-w-4xl mx-auto leading-relaxed font-light text-white drop-shadow-lg">
