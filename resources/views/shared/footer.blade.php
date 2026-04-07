@@ -44,7 +44,7 @@
             <!-- Contact -->
             <div>
                 <h4 class="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">Kontak</h4>
-                <ul class="space-y-2.5">
+                <ul class="space-y-2.5 mb-4">
                     <li>
                         <a href="mailto:info@butikonline.com" class="text-sm text-gray-600 hover:text-primary transition-colors">
                             info@butikonline.com
@@ -59,6 +59,17 @@
                         Jakarta, Indonesia
                     </li>
                 </ul>
+                <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm h-32">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126920.24163483478!2d106.759478!3d-6.2297465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e3fa73%3A0x700ef47fa608902d!2sJakarta!5e0!3m2!1sid!2sid!4v1712478000000!5m2!1sid!2sid" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
             </div>
         </div>
 

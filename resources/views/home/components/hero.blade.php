@@ -5,17 +5,17 @@
         <div class="swiper-wrapper">
             <!-- Slide 1 -->
             <div class="swiper-slide">
-                <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/carosel 1.jpg');"></div>
+                <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/hero_1.png');"></div>
             </div>
 
             <!-- Slide 2 -->
             <div class="swiper-slide">
-                <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/carosel 1.jpg');"></div>
+                <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/hero_2.png');"></div>
             </div>
 
             <!-- Slide 3 -->
             <div class="swiper-slide">
-                <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/carosel 1.jpg');"></div>
+                <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/hero_3.png');"></div>
             </div>
         </div>
 
