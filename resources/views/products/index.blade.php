@@ -14,7 +14,7 @@
     <section class="relative py-16 border-b border-secondary overflow-hidden">
         <!-- Background Image & Overlay -->
         <div class="absolute inset-0 z-0">
-            <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/images/carosel 1.jpg');"></div>
+            <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('/im    ages/carosel 1.jpg');"></div>
             <div class="absolute inset-0 bg-black/60"></div>
         </div>
 
