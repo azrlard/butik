@@ -12,8 +12,8 @@ class CheckAdminRole
     {
         $adminGuard = Auth::guard('admin');
 
-        if (!$adminGuard->check() || $adminGuard->user()->role !== 'admin') {
-            abort(403, 'Unauthorized. Admin access only.');
+        if (!$adminGuard->check() || !in_array($adminGuard->user()->role, ['admin', 'manajer'])) {
+            abort(403, 'Unauthorized. Admin / Manajer access only.');
         }
 
         return $next($request);

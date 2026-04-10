@@ -40,10 +40,11 @@ class UserResource extends Resource
                 Forms\Components\Select::make('role')
                     ->options([
                         'admin' => 'Admin',
-                        'user' => 'User',
+                        'customer' => 'Customer',
+                        'manajer' => 'Manajer',
                     ])
                     ->required()
-                    ->default('user'),
+                    ->default('customer'),
                 Forms\Components\Textarea::make('alamat')
                     ->nullable(),
                 Forms\Components\TextInput::make('no_hp')
@@ -74,11 +75,13 @@ class UserResource extends Resource
                 Tables\Filters\SelectFilter::make('role')
                     ->options([
                         'admin' => 'Admin',
-                        'user' => 'User',
+                        'customer' => 'Customer',
+                        'manajer' => 'Manajer',
                     ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -101,5 +104,20 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth('admin')->check() && auth('admin')->user()->role === 'manajer';
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth('admin')->check() && auth('admin')->user()->role === 'manajer';
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth('admin')->check() && auth('admin')->user()->role === 'manajer';
     }
 }
