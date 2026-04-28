@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Ozzy Costume')
             ->authGuard('admin')
             ->colors([
                 'primary' => Color::Amber,
