@@ -103,15 +103,24 @@
 
 
         <!-- Submit Button -->
-        <button type="submit" :disabled="isSubmitting" class="w-full bg-primary text-background px-8 py-4 rounded-2xl text-lg font-bold hover:bg-secondary transition-all duration-300 transform hover:scale-[1.02] shadow-2xl shadow-primary/25 hover:shadow-primary/40 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
-            <svg x-show="!isSubmitting" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-            </svg>
-            <svg x-show="isSubmitting" x-cloak class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-            </svg>
-            <span x-text="isSubmitting ? 'Mengirim...' : 'Kirim Permintaan Custom'"></span>
-        </button>
+        @if(!auth()->check())
+            <button type="button" onclick="alert('Silakan login terlebih dahulu'); window.location.href='/login';" class="w-full bg-primary text-background px-8 py-4 rounded-2xl text-lg font-bold hover:bg-secondary transition-all duration-300 transform hover:scale-[1.02] shadow-2xl shadow-primary/25 hover:shadow-primary/40 flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+                <span>Kirim Permintaan Custom</span>
+            </button>
+        @else
+            <button type="submit" :disabled="isSubmitting" class="w-full bg-primary text-background px-8 py-4 rounded-2xl text-lg font-bold hover:bg-secondary transition-all duration-300 transform hover:scale-[1.02] shadow-2xl shadow-primary/25 hover:shadow-primary/40 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg x-show="!isSubmitting" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+                <svg x-show="isSubmitting" x-cloak class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                <span x-text="isSubmitting ? 'Mengirim...' : 'Kirim Permintaan Custom'"></span>
+            </button>
+        @endif
     </form>
 </div>
 
@@ -148,17 +157,11 @@ function customForm() {
         },
 
         submitForm() {
+
             if (this.selectedFiles.length === 0) {
                 alert('Silakan upload minimal satu foto referensi.');
                 return false;
             }
-
-            // Check if user is logged in
-            @if(!auth()->check())
-                // Redirect to login page if not logged in
-                window.location.href = '/login';
-                return false;
-            @endif
 
             this.isSubmitting = true;
 

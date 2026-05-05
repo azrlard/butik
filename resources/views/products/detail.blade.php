@@ -268,6 +268,7 @@
                     console.log('addToCart called with:', { productId, variantId, isLoggedIn });
 
                     if (!isLoggedIn) {
+                        alert('Anda harus login untuk melakukan checkout');
                         // Redirect to login page if not logged in
                         window.location.href = '/login';
                         return;

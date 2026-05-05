@@ -122,10 +122,17 @@
                     </div>
                 </div>
 
-                <button @click="showCheckout = true"
-                        class="w-full bg-primary text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors mb-4 shadow-lg">
-                    Checkout Sekarang
-                </button>
+                @if(!auth()->check())
+                    <button onclick="alert('Anda harus login untuk melakukan checkout'); window.location.href='/login';"
+                            class="w-full bg-primary text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors mb-4 shadow-lg">
+                        Checkout Sekarang
+                    </button>
+                @else
+                    <button @click="showCheckout = true"
+                            class="w-full bg-primary text-white px-6 py-4 rounded-xl text-lg font-semibold hover:bg-primary/90 transition-colors mb-4 shadow-lg">
+                        Checkout Sekarang
+                    </button>
+                @endif
                 <a href="/products"
                    class="w-full bg-surface text-text px-6 py-3 rounded-xl font-semibold hover:bg-primary hover:text-white transition-colors inline-block text-center border border-secondary">
                     Lanjut Belanja

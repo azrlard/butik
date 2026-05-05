@@ -1,0 +1,110 @@
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><title>Tabel Pengujian</title>
+<style>
+table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+table, th, td { border: 1px solid black; }
+th, td { padding: 8px; text-align: center; }
+th { background-color: #f2f2f2; }
+</style>
+</head>
+<body>
+<h1>Tabel Pengujian Sistem Ozzy Costume</h1>
+
+<h2>a. Pengujian Fitur User</h2>
+<p><b>Tabel 4. 1 Pengujian Fitur User</b></p>
+<table>
+<tr><th>No</th><th>Fitur</th><th>Skenario Uji</th><th>Proses yang Diharapkan</th><th>Output yang Diharapkan</th><th>Hasil</th></tr>
+<tr><td>1</td><td>Registrasi User</td><td>Registrasi dengan data valid</td><td>Sistem menyimpan user baru</td><td>Pesan "Registrasi berhasil! Selamat datang!"</td><td>Sesuai</td></tr>
+<tr><td>2</td><td>Registrasi User</td><td>Registrasi dengan data kosong</td><td>Sistem menolak penyimpanan</td><td>Pesan "Field wajib diisi"</td><td>Sesuai</td></tr>
+<tr><td>3</td><td>Registrasi User</td><td>Registrasi dengan email yang sudah terdaftar</td><td>Sistem menolak penyimpanan</td><td>Pesan "Email sudah digunakan"</td><td>Sesuai</td></tr>
+<tr><td>4</td><td>Registrasi User</td><td>Registrasi dengan password tidak cocok</td><td>Sistem menolak penyimpanan</td><td>Pesan "Konfirmasi password tidak sesuai"</td><td>Sesuai</td></tr>
+<tr><td>5</td><td>Login User</td><td>Login dengan data valid</td><td>Sistem memberi akses</td><td>Dashboard / Halaman utama tampil</td><td>Sesuai</td></tr>
+<tr><td>6</td><td>Login User</td><td>Login dengan password salah</td><td>Sistem menolak login</td><td>Pesan "Email atau password salah"</td><td>Sesuai</td></tr>
+<tr><td>7</td><td>Login User</td><td>Login dengan email tidak terdaftar</td><td>Sistem menolak login</td><td>Pesan "Email atau password salah"</td><td>Sesuai</td></tr>
+<tr><td>8</td><td>Edit Profil</td><td>Mengubah profil valid</td><td>Sistem menyimpan perubahan</td><td>Pesan "Profil berhasil diperbarui!"</td><td>Sesuai</td></tr>
+<tr><td>9</td><td>Edit Profil</td><td>Mengubah email dengan email yang sudah dipakai</td><td>Sistem menolak perubahan</td><td>Pesan "Email sudah digunakan"</td><td>Sesuai</td></tr>
+<tr><td>10</td><td>Logout</td><td>Melakukan logout</td><td>Sistem mengakhiri sesi</td><td>Diarahkan ke halaman utama dengan pesan "Anda telah berhasil logout"</td><td>Sesuai</td></tr>
+</table>
+
+<h2>b. Pengujian Fitur Produk</h2>
+<p><b>Tabel 4. 2 Pengujian Fitur Produk</b></p>
+<table>
+<tr><th>No</th><th>Fitur</th><th>Skenario Uji</th><th>Proses yang Diharapkan</th><th>Output yang Diharapkan</th><th>Hasil</th></tr>
+<tr><td>1</td><td>Lihat Produk</td><td>Mengakses halaman produk</td><td>Sistem menampilkan daftar produk</td><td>Daftar produk tampil dengan gambar, nama, dan harga</td><td>Sesuai</td></tr>
+<tr><td>2</td><td>Filter Produk</td><td>Memfilter produk berdasarkan kategori</td><td>Sistem menyaring data produk</td><td>Produk sesuai kategori yang dipilih tampil</td><td>Sesuai</td></tr>
+<tr><td>3</td><td>Filter Produk</td><td>Memfilter berdasarkan tipe produk (Ready Stock / Custom)</td><td>Sistem menyaring data produk</td><td>Produk sesuai tipe yang dipilih tampil</td><td>Sesuai</td></tr>
+<tr><td>4</td><td>Cari Produk</td><td>Mencari produk berdasarkan nama</td><td>Sistem mencari dan menyaring data</td><td>Produk yang dicari tampil di hasil pencarian</td><td>Sesuai</td></tr>
+<tr><td>5</td><td>Detail Produk</td><td>Mengklik tombol "Lihat Detail"</td><td>Sistem menampilkan detail produk</td><td>Halaman detail produk tampil dengan informasi lengkap</td><td>Sesuai</td></tr>
+<tr><td>6</td><td>Lihat Kategori</td><td>Mengakses halaman kategori</td><td>Sistem menampilkan semua kategori</td><td>Daftar kategori tampil</td><td>Sesuai</td></tr>
+</table>
+
+<h2>c. Pengujian Fitur Keranjang (Cart)</h2>
+<p><b>Tabel 4. 3 Pengujian Fitur Keranjang</b></p>
+<table>
+<tr><th>No</th><th>Fitur</th><th>Skenario Uji</th><th>Proses yang Diharapkan</th><th>Output yang Diharapkan</th><th>Hasil</th></tr>
+<tr><td>1</td><td>Tambah ke Keranjang</td><td>Menambahkan produk dengan varian valid</td><td>Sistem menyimpan item ke session cart</td><td>Pesan "Produk berhasil ditambahkan ke keranjang" dan jumlah keranjang bertambah</td><td>Sesuai</td></tr>
+<tr><td>2</td><td>Tambah ke Keranjang</td><td>Menambahkan produk tanpa memilih varian</td><td>Sistem menolak penambahan</td><td>Pesan validasi varian harus dipilih</td><td>Sesuai</td></tr>
+<tr><td>3</td><td>Lihat Keranjang</td><td>Mengakses halaman keranjang</td><td>Sistem menampilkan isi keranjang</td><td>Daftar produk dalam keranjang tampil</td><td>Sesuai</td></tr>
+<tr><td>4</td><td>Lihat Keranjang</td><td>Mengakses keranjang kosong</td><td>Sistem menampilkan halaman kosong</td><td>Pesan "Keranjang kosong" dan tombol "Mulai Belanja" tampil</td><td>Sesuai</td></tr>
+<tr><td>5</td><td>Ubah Jumlah</td><td>Mengubah jumlah item di keranjang</td><td>Sistem memperbarui jumlah item</td><td>Jumlah dan total harga diperbarui</td><td>Sesuai</td></tr>
+<tr><td>6</td><td>Hapus Item</td><td>Menghapus item dari keranjang</td><td>Sistem menghapus item dari session</td><td>Item hilang dari keranjang</td><td>Sesuai</td></tr>
+</table>
+
+<h2>d. Pengujian Fitur Custom Request</h2>
+<p><b>Tabel 4. 4 Pengujian Fitur Custom Request</b></p>
+<table>
+<tr><th>No</th><th>Fitur</th><th>Skenario Uji</th><th>Proses yang Diharapkan</th><th>Output yang Diharapkan</th><th>Hasil</th></tr>
+<tr><td>1</td><td>Buat Custom Request</td><td>Mengisi form custom dengan data valid</td><td>Sistem menyimpan data dan menambahkan ke keranjang</td><td>Diarahkan ke halaman keranjang</td><td>Sesuai</td></tr>
+<tr><td>2</td><td>Buat Custom Request</td><td>Mengisi form tanpa keterangan desain</td><td>Sistem menolak penyimpanan</td><td>Pesan "Field keterangan wajib diisi"</td><td>Sesuai</td></tr>
+<tr><td>3</td><td>Buat Custom Request</td><td>Mengisi form tanpa memilih kategori produk</td><td>Sistem menolak penyimpanan</td><td>Pesan "Field kategori wajib dipilih"</td><td>Sesuai</td></tr>
+<tr><td>4</td><td>Buat Custom Request</td><td>Mengunggah referensi gambar valid</td><td>Sistem menyimpan file gambar</td><td>File tersimpan dan tampil di keranjang</td><td>Sesuai</td></tr>
+<tr><td>5</td><td>Buat Custom Request</td><td>Tidak login saat membuat custom request</td><td>Sistem menolak permintaan</td><td>Pesan "Silakan login terlebih dahulu"</td><td>Sesuai</td></tr>
+<tr><td>6</td><td>Hapus Custom Request</td><td>Menghapus custom request dari keranjang</td><td>Sistem menghapus item</td><td>Item custom hilang dari keranjang</td><td>Sesuai</td></tr>
+</table>
+
+<h2>e. Pengujian Fitur Pemesanan (Order)</h2>
+<p><b>Tabel 4. 5 Pengujian Fitur Pemesanan</b></p>
+<table>
+<tr><th>No</th><th>Fitur</th><th>Skenario Uji</th><th>Proses yang Diharapkan</th><th>Output yang Diharapkan</th><th>Hasil</th></tr>
+<tr><td>1</td><td>Checkout</td><td>Melakukan checkout dengan data valid</td><td>Sistem membuat order dan merekam data pembayaran</td><td>Diarahkan ke halaman pembayaran Midtrans</td><td>Sesuai</td></tr>
+<tr><td>2</td><td>Checkout</td><td>Melakukan checkout tanpa mengisi alamat pengiriman</td><td>Sistem menolak checkout</td><td>Pesan "Alamat pengiriman wajib diisi"</td><td>Sesuai</td></tr>
+<tr><td>3</td><td>Checkout</td><td>Melakukan checkout tanpa login</td><td>Sistem menolak checkout</td><td>Pesan "Anda harus login untuk melakukan checkout"</td><td>Sesuai</td></tr>
+<tr><td>4</td><td>Pembayaran</td><td>Melakukan pembayaran via Midtrans</td><td>Sistem memproses pembayaran dan memperbarui status</td><td>Status order berubah menjadi success</td><td>Sesuai</td></tr>
+<tr><td>5</td><td>Lihat Order</td><td>Mengakses riwayat pesanan</td><td>Sistem menampilkan daftar pesanan</td><td>Daftar pesanan user tampil</td><td>Sesuai</td></tr>
+<tr><td>6</td><td>Detail Order</td><td>Membuka detail pesanan milik sendiri</td><td>Sistem menampilkan detail pesanan</td><td>Halaman detail pesanan tampil</td><td>Sesuai</td></tr>
+<tr><td>7</td><td>Detail Order</td><td>Membuka detail pesanan milik user lain</td><td>Sistem menolak akses</td><td>Halaman error 403 (Forbidden) tampil</td><td>Sesuai</td></tr>
+<tr><td>8</td><td>Lacak Pesanan</td><td>Melacak status pengiriman pesanan</td><td>Sistem menampilkan halaman pelacakan</td><td>Status pengiriman pesanan tampil</td><td>Sesuai</td></tr>
+</table>
+
+<h2>f. Pengujian Fitur Admin (Panel Filament)</h2>
+<p><b>Tabel 4. 6 Pengujian Fitur Admin</b></p>
+<table>
+<tr><th>No</th><th>Fitur</th><th>Skenario Uji</th><th>Proses yang Diharapkan</th><th>Output yang Diharapkan</th><th>Hasil</th></tr>
+<tr><td>1</td><td>Login Admin</td><td>Login dengan kredensial valid</td><td>Sistem memberi akses panel admin</td><td>Dashboard admin tampil</td><td>Sesuai</td></tr>
+<tr><td>2</td><td>Login Admin</td><td>Login dengan password salah</td><td>Sistem menolak login</td><td>Pesan "Email atau password salah"</td><td>Sesuai</td></tr>
+<tr><td>3</td><td>Kelola Produk</td><td>Admin menambahkan produk baru</td><td>Sistem menyimpan data produk baru</td><td>Produk baru tampil di daftar produk</td><td>Sesuai</td></tr>
+<tr><td>4</td><td>Kelola Produk</td><td>Admin mengubah data produk</td><td>Sistem memperbarui data produk</td><td>Produk diperbarui di daftar produk</td><td>Sesuai</td></tr>
+<tr><td>5</td><td>Kelola Produk</td><td>Admin menghapus produk</td><td>Sistem menghapus data produk</td><td>Produk tidak tampil di daftar produk</td><td>Sesuai</td></tr>
+<tr><td>6</td><td>Kelola Kategori</td><td>Admin menambahkan kategori baru</td><td>Sistem menyimpan kategori baru</td><td>Kategori baru tampil di daftar</td><td>Sesuai</td></tr>
+<tr><td>7</td><td>Kelola Kategori</td><td>Admin menghapus kategori</td><td>Sistem menghapus data kategori</td><td>Kategori tidak tampil di daftar</td><td>Sesuai</td></tr>
+<tr><td>8</td><td>Kelola Pesanan</td><td>Admin melihat semua pesanan</td><td>Sistem menampilkan daftar pesanan</td><td>Semua pesanan user tampil</td><td>Sesuai</td></tr>
+<tr><td>9</td><td>Kelola Pembayaran</td><td>Admin melihat riwayat pembayaran</td><td>Sistem menampilkan data pembayaran</td><td>Data pembayaran tampil dengan status</td><td>Sesuai</td></tr>
+<tr><td>10</td><td>Kelola Pengiriman</td><td>Admin memperbarui status pengiriman</td><td>Sistem menyimpan status pengiriman baru</td><td>Status pengiriman diperbarui</td><td>Sesuai</td></tr>
+<tr><td>11</td><td>Kelola Custom Request</td><td>Admin melihat daftar custom request</td><td>Sistem menampilkan semua custom request</td><td>Daftar custom request tampil</td><td>Sesuai</td></tr>
+<tr><td>12</td><td>Kelola User</td><td>Admin melihat daftar user terdaftar</td><td>Sistem menampilkan semua data user</td><td>Daftar user tampil</td><td>Sesuai</td></tr>
+<tr><td>13</td><td>Kelola Varian Produk</td><td>Admin menambahkan varian produk</td><td>Sistem menyimpan varian produk</td><td>Varian baru tampil pada produk</td><td>Sesuai</td></tr>
+</table>
+
+<h2>g. Pengujian Fitur Manajer</h2>
+<p><b>Tabel 4. 7 Pengujian Fitur Manajer</b></p>
+<table>
+<tr><th>No</th><th>Fitur</th><th>Skenario Uji</th><th>Proses yang Diharapkan</th><th>Output yang Diharapkan</th><th>Hasil</th></tr>
+<tr><td>1</td><td>Login Manajer</td><td>Login dengan akun peran manajer</td><td>Sistem memberi akses panel manajer</td><td>Dashboard manajer tampil</td><td>Sesuai</td></tr>
+<tr><td>2</td><td>Kelola Admin</td><td>Manajer menambahkan akun admin baru</td><td>Sistem menyimpan akun admin baru</td><td>Akun admin baru tampil di daftar user</td><td>Sesuai</td></tr>
+<tr><td>3</td><td>Kelola Admin</td><td>Manajer mengubah data admin</td><td>Sistem memperbarui data admin</td><td>Data admin diperbarui di daftar user</td><td>Sesuai</td></tr>
+<tr><td>4</td><td>Kelola Admin</td><td>Manajer menghapus akun admin</td><td>Sistem menghapus akun admin</td><td>Akun admin tidak tampil di daftar user</td><td>Sesuai</td></tr>
+<tr><td>5</td><td>Monitoring Transaksi</td><td>Manajer melihat semua transaksi</td><td>Sistem menampilkan daftar semua transaksi</td><td>Semua data transaksi tampil</td><td>Sesuai</td></tr>
+<tr><td>6</td><td>Monitoring User</td><td>Manajer melihat semua user terdaftar</td><td>Sistem menampilkan daftar semua user</td><td>Semua data user tampil</td><td>Sesuai</td></tr>
+</table>
+</body>
+</html>
