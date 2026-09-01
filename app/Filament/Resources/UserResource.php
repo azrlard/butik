@@ -108,16 +108,16 @@ class UserResource extends Resource
 
     public static function canCreate(): bool
     {
-        return auth('admin')->check() && auth('admin')->user()->role === 'manajer';
+        return auth('admin')->check() && in_array(auth('admin')->user()->role, ['admin', 'manajer']);
     }
 
     public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth('admin')->check() && auth('admin')->user()->role === 'manajer';
+        return auth('admin')->check() && in_array(auth('admin')->user()->role, ['admin', 'manajer']);
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth('admin')->check() && auth('admin')->user()->role === 'manajer';
+        return auth('admin')->check() && in_array(auth('admin')->user()->role, ['admin', 'manajer']);
     }
 }
