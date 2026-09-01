@@ -10,7 +10,7 @@ use App\Http\Controllers\CustomRequestController;
 use App\Models\Category;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('/products', [ProductController::class, 'indexView'])->name('products.index');
 
