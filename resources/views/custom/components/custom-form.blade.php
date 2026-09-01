@@ -11,7 +11,22 @@
         <p class="text-purple-100">Isi detail permintaan Anda dengan lengkap</p>
     </div>
 
-    <form x-data="customForm()" @submit="return submitForm()" method="POST" action="/custom-request" enctype="multipart/form-data" class="p-8">
+    @if(session('error'))
+        <div class="m-8 mb-0 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl">
+            {{ session('error') }}
+        </div>
+    @endif
+    @if($errors->any())
+        <div class="m-8 mb-0 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form x-data="customForm()" @submit="if (!submitForm($event)) $event.preventDefault()" method="POST" action="/custom-request" enctype="multipart/form-data" class="p-8">
         @csrf
         <!-- Product Information -->
         <div class="mb-8">
@@ -79,7 +94,7 @@
                 <input type="file" x-ref="fileInput" name="foto_referensi" accept="image/*" class="hidden" @change="handleFileSelect">
                 <div class="text-6xl mb-4 text-text group-hover:text-primary transition-colors">📷</div>
                 <p class="text-text mb-2 font-semibold group-hover:text-primary transition-colors">Klik untuk upload foto referensi</p>
-                <p class="text-sm text-text">Format: JPG, PNG, GIF (Max 5MB per file)</p>
+                <p class="text-sm text-text">Format: JPG, PNG, GIF, WEBP (Max 5MB per file)</p>
                 <div class="mt-4 px-4 py-2 bg-secondary text-background rounded-lg text-sm inline-block">
                     Pilih File
                 </div>
@@ -91,7 +106,7 @@
                             <img :src="file.preview" class="w-10 h-10 object-cover rounded" :alt="file.name">
                             <span class="text-sm text-text" x-text="file.name"></span>
                         </div>
-                        <button @click="removeFile(index)" class="text-red-500 hover:text-red-700">
+                        <button type="button" @click="removeFile(index)" class="text-red-500 hover:text-red-700">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -100,7 +115,6 @@
                 </template>
             </div>
         </div>
-
 
         <!-- Submit Button -->
         @if(!auth()->check())
@@ -142,11 +156,11 @@ function customForm() {
                 // Create preview
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    this.selectedFiles.push({
+                    this.selectedFiles = [{
                         file: file,
                         name: file.name,
                         preview: e.target.result
-                    });
+                    }];
                 };
                 reader.readAsDataURL(file);
             }
@@ -154,17 +168,24 @@ function customForm() {
 
         removeFile(index) {
             this.selectedFiles.splice(index, 1);
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = '';
+            }
         },
 
-        submitForm() {
-
+        submitForm(event) {
             if (this.selectedFiles.length === 0) {
                 alert('Silakan upload minimal satu foto referensi.');
                 return false;
             }
 
-            this.isSubmitting = true;
+            // Check if user is logged in
+            @if(!auth()->check())
+                window.location.href = '/login';
+                return false;
+            @endif
 
+            this.isSubmitting = true;
             return true;
         }
     }

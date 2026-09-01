@@ -32,6 +32,10 @@ class OrderItemResource extends Resource
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'nama_produk')
                     ->nullable(),
+                Forms\Components\Select::make('variant_id')
+                    ->relationship('variant', 'size')
+                    ->label('Varian / Size')
+                    ->nullable(),
                 Forms\Components\Select::make('custom_request_id')
                     ->relationship('customRequest', 'id')
                     ->nullable(),
@@ -62,6 +66,10 @@ class OrderItemResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('product.nama_produk')
                     ->label('Produk'),
+                Tables\Columns\TextColumn::make('variant.size')
+                    ->label('Ukuran')
+                    ->badge()
+                    ->color('primary'),
                 Tables\Columns\TextColumn::make('customRequest.id')
                     ->label('Custom Request ID'),
                 Tables\Columns\TextColumn::make('jumlah')

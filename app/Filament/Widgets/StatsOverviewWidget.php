@@ -33,8 +33,8 @@ class StatsOverviewWidget extends BaseWidget
         $activeProducts = Product::where('stok', '>', 0)->count();
         
         // Users
-        $totalUsers = User::where('role', 'user')->count();
-        $newUsersThisMonth = User::where('role', 'user')
+        $totalUsers = User::where('role', 'customer')->count();
+        $newUsersThisMonth = User::where('role', 'customer')
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->count();

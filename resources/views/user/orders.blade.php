@@ -64,7 +64,7 @@
                 <!-- Orders List -->
                 <div id="orders-list" class="space-y-6">
                     @php
-                        $orders = auth()->user()->orders()->with(['orderItems.product', 'orderItems.variant', 'orderItems.customRequest'])->latest()->get();
+                        $orders = $orders ?? auth()->user()->orders()->with(['orderItems.product', 'orderItems.variant', 'orderItems.customRequest', 'pengiriman'])->latest()->get();
                     @endphp
                     @forelse($orders as $order)
                     <div class="bg-background rounded-2xl shadow-lg border border-secondary overflow-hidden order-card" 
@@ -177,6 +177,8 @@
                     </div>
                     @endforelse
                 </div>
+            </div>
+        </div>
     </div>
 </div>
 

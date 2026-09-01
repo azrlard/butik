@@ -170,7 +170,7 @@
                                 </button>
 
                                 @if($product->tipe_produk === 'custom')
-                                    <button onclick="navigateTo('custom'); showNotification('Melanjutkan ke custom request...');"
+                                    <button onclick="window.location.href = '/custom';"
                                             class="flex-1 bg-gradient-to-r from-secondary to-accent text-text px-8 py-4 rounded-xl font-semibold hover:from-primary hover:to-secondary hover:text-accent transition-all transform hover:scale-105 shadow-lg border border-border">
                                         <div class="flex items-center justify-center gap-2">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

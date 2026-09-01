@@ -31,10 +31,10 @@ class CustomRequestController extends Controller
      */
     public function store(Request $request)
     {
-        // For frontend submissions, make user_id optional and default to 1
+        // For frontend submissions, make user_id optional and default to authenticated user
         $request->validate([
             'user_id' => 'nullable|exists:users,id',
-            'foto_referensi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_referensi' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'keterangan' => 'required|string',
             'harga_estimasi' => 'nullable|numeric|min:0',
             'product-category' => 'required|string|max:255',

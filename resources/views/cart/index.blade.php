@@ -40,14 +40,14 @@
                     <h3 class="text-xl font-semibold text-text">Item Belanja</h3>
                 </div>
                 <div class="divide-y divide-secondary">
-                    <template x-for="(item, index) in cart" :key="item.product_id + '-' + (item.variant_id || 'no-variant')">
+                    <template x-for="(item, index) in cart" :key="item.type === 'custom' ? (item.id || ('custom-' + index)) : (item.product_id + '-' + (item.variant_id || 'no-variant'))">
                         <div class="p-6 flex items-center space-x-4 hover:bg-surface transition-colors">
                             <img :src="item.type === 'custom' ? item.foto : (item.foto ? '/storage/' + item.foto : '👕')" :alt="item.nama_produk"
                                   class="w-20 h-20 object-cover rounded-lg border border-border">
                             <div class="flex-1">
                                 <h4 class="font-semibold text-text" x-text="item.nama_produk"></h4>
                                 <p class="text-textSecondary text-sm opacity-75 mt-1" x-text="item.deskripsi || 'Deskripsi tidak tersedia'"></p>
-                                <p v-if="item.variant_size" class="text-primary text-xs font-medium mt-1" x-text="'Ukuran: ' + item.variant_size"></p>
+                                <p x-show="item.variant_size" class="text-primary text-xs font-medium mt-1" x-text="'Ukuran: ' + item.variant_size"></p>
                                 <div class="flex items-center space-x-2 mt-3">
                                     <button @click="updateQuantity(index, item.quantity - 1)"
                                             class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">-</button>
@@ -159,23 +159,23 @@
 
                 <form @submit.prevent="processCheckout" method="POST" action="/orders">
                     @csrf
-                    <input type="hidden" name="user_id" :value="{{ auth()->check() ? auth()->id() : '1' }}">
+                    <input type="hidden" name="user_id" value="{{ auth()->id() ?? '' }}">
                     <div class="space-y-4 mb-6">
                         <div>
                             <label for="customer-name" class="block text-sm font-medium text-text mb-1">Nama Lengkap</label>
-                            <input type="text" id="customer-name" name="customer_name" required
+                            <input type="text" id="customer-name" name="customer_name" value="{{ auth()->check() ? auth()->user()->name : '' }}" required
                                    class="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-text bg-background">
                         </div>
 
                         <div>
                             <label for="customer-email" class="block text-sm font-medium text-text mb-1">Email</label>
-                            <input type="email" id="customer-email" name="customer_email" required
+                            <input type="email" id="customer-email" name="customer_email" value="{{ auth()->check() ? auth()->user()->email : '' }}" required
                                    class="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-text bg-background">
                         </div>
 
                         <div>
                             <label for="customer-phone" class="block text-sm font-medium text-text mb-1">Nomor Telepon</label>
-                            <input type="tel" id="customer-phone" name="customer_phone" required
+                            <input type="tel" id="customer-phone" name="customer_phone" value="{{ auth()->check() ? auth()->user()->no_hp : '' }}" required
                                    class="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-text bg-background">
                         </div>
 
@@ -183,7 +183,7 @@
                             <label for="shipping-address" class="block text-sm font-medium text-text mb-1">Alamat Pengiriman</label>
                             <textarea id="shipping-address" name="alamat_pengiriman" rows="3" required
                                       placeholder="Masukkan alamat lengkap pengiriman"
-                                      class="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-text bg-background resize-none"></textarea>
+                                      class="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-text bg-background resize-none">{{ auth()->check() ? auth()->user()->alamat : '' }}</textarea>
                         </div>
 
                         <div>

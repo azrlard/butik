@@ -177,7 +177,7 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             @foreach($category->products->take(4) as $product)
-                                <div onclick="openProductModal('{{ $product->id }}')" class="bg-background rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-secondary">
+                                <div onclick="window.location.href='/products/{{ $product->id }}'" class="bg-background rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group overflow-hidden border border-secondary">
                                     <div class="aspect-square bg-surface flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-300">
                                         @if($product->foto && file_exists(public_path('storage/' . $product->foto)))
                                             <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama_produk }}" class="w-full h-full object-cover rounded-lg">

@@ -285,14 +285,28 @@ class CartController extends Controller
      */
     public function removeCustom(Request $request)
     {
-        $request->validate(['index' => 'required|integer']);
         $cart = Session::get('cart', []);
-        if (isset($cart[$request->index]) && $cart[$request->index]['type'] === 'custom') {
-            unset($cart[$request->index]);
-            $cart = array_values($cart); // Reindex
-            Session::put('cart', $cart);
-            return response()->json(['success' => true]);
+        $id = $request->id;
+        $index = $request->index;
+
+        if ($id) {
+            foreach ($cart as $key => $item) {
+                if (isset($item['id']) && $item['id'] === $id) {
+                    unset($cart[$key]);
+                    $cart = array_values($cart);
+                    Session::put('cart', $cart);
+                    return response()->json(['success' => true, 'count' => $this->getCartCount()]);
+                }
+            }
         }
+
+        if ($index !== null && isset($cart[$index])) {
+            unset($cart[$index]);
+            $cart = array_values($cart);
+            Session::put('cart', $cart);
+            return response()->json(['success' => true, 'count' => $this->getCartCount()]);
+        }
+
         return response()->json(['success' => false, 'error' => 'Item not found']);
     }
 

@@ -9,8 +9,8 @@
                             <p class="text-sm font-medium text-gray-600">{{ $stat->getDescription() }}</p>
                             <p class="text-2xl font-bold text-gray-900">{{ $stat->getValue() }}</p>
                         </div>
-                        <div class="text-{{ $stat->getColor() }}-500">
-                            <x-heroicon-o-{{ $stat->getDescriptionIcon() }} class="w-8 h-8" />
+                        <div class="{{ $stat->getColor() === 'success' ? 'text-emerald-500' : ($stat->getColor() === 'primary' ? 'text-blue-500' : ($stat->getColor() === 'info' ? 'text-sky-500' : ($stat->getColor() === 'warning' ? 'text-amber-500' : 'text-gray-500'))) }}">
+                            <x-dynamic-component :component="$stat->getDescriptionIcon() ?? 'heroicon-m-chart-bar'" class="w-8 h-8" />
                         </div>
                     </div>
                 </div>

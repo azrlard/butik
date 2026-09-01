@@ -20,17 +20,23 @@ class MidtransService
 
     public function createTransaction(Order $order)
     {
+        $itemDetails = $this->getItemDetails($order);
+        $grossAmount = 0;
+        foreach ($itemDetails as $item) {
+            $grossAmount += $item['price'] * $item['quantity'];
+        }
+
         $params = [
             'transaction_details' => [
                 'order_id' => 'ORDER-' . $order->id . '-' . time(),
-                'gross_amount' => $order->total_harga,
+                'gross_amount' => $grossAmount > 0 ? $grossAmount : (int) round($order->total_harga),
             ],
             'customer_details' => [
                 'first_name' => $order->customer_name,
                 'email' => $order->customer_email,
                 'phone' => $order->customer_phone,
             ],
-            'item_details' => $this->getItemDetails($order),
+            'item_details' => $itemDetails,
         ];
 
         try {
@@ -44,12 +50,29 @@ class MidtransService
     private function getItemDetails(Order $order)
     {
         $items = [];
+        $order->loadMissing(['orderItems.product', 'orderItems.variant', 'orderItems.customRequest']);
+
         foreach ($order->orderItems as $item) {
+            $name = 'Produk';
+            if ($item->product) {
+                $name = $item->product->nama_produk;
+                if ($item->variant && $item->variant->size) {
+                    $name .= ' (' . $item->variant->size . ')';
+                }
+            } elseif ($item->customRequest) {
+                $name = 'Custom - ' . ($item->customRequest->product_category ?? 'Request');
+            }
+
+            // Midtrans requires name max 50 characters
+            $name = mb_substr($name, 0, 50);
+
+            $itemId = $item->product_id ? (string) $item->product_id : ('CR-' . ($item->custom_request_id ?? $item->id));
+
             $items[] = [
-                'id' => $item->product_id,
-                'price' => $item->harga_satuan,
-                'quantity' => $item->jumlah,
-                'name' => $item->product->nama ?? 'Product',
+                'id' => $itemId,
+                'price' => (int) round($item->harga_satuan),
+                'quantity' => (int) $item->jumlah,
+                'name' => $name,
             ];
         }
         return $items;
@@ -57,10 +80,14 @@ class MidtransService
 
     public function handleNotification(array $notification)
     {
-        $transaction = $notification['transaction_status'];
-        $type = $notification['payment_type'];
-        $orderId = $notification['order_id'];
-        $fraud = $notification['fraud_status'];
+        $transaction = $notification['transaction_status'] ?? null;
+        $type = $notification['payment_type'] ?? null;
+        $orderId = $notification['order_id'] ?? null;
+        $fraud = $notification['fraud_status'] ?? null;
+
+        if (!$orderId) {
+            return false;
+        }
 
         // Extract actual order ID from Midtrans order_id format: ORDER-{id}-{timestamp}
         $actualOrderId = $this->extractOrderId($orderId);
@@ -108,8 +135,8 @@ class MidtransService
     private function extractOrderId($midtransOrderId)
     {
         // Format: ORDER-{id}-{timestamp}
-        if (preg_match('/^ORDER-(\d+)-\d+$/', $midtransOrderId, $matches)) {
-            return $matches[1];
+        if (preg_match('/^ORDER-(\d+)(?:-\d+)?$/', $midtransOrderId, $matches)) {
+            return (int) $matches[1];
         }
         
         // Fallback: return as is if format doesn't match

@@ -27,44 +27,47 @@ Route::get('/custom', function () {
 
 Route::get('/categories', [CategoryController::class, 'indexView'])->name('categories.index');
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
 
-Route::post('/login', function (Request $request) {
-    $credentials = $request->only('email', 'password');
+    Route::post('/login', function (Request $request) {
+        $credentials = $request->only('email', 'password');
 
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
-        return redirect()->intended('/')->with('success', 'Login berhasil!');
-    }
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/')->with('success', 'Login berhasil!');
+        }
 
-    return back()->withErrors([
-        'email' => 'Email atau password salah.',
-    ])->withInput($request->only('email'));
-})->name('login.post');
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->withInput($request->only('email'));
+    })->name('login.post');
 
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
+    Route::get('/register', function () {
+        return view('auth.register');
+    })->name('register');
 
-Route::post('/register', function (Request $request) {
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed',
-    ]);
+    Route::post('/register', function (Request $request) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
 
-    $user = \App\Models\User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => \Illuminate\Support\Facades\Hash::make($request->password),
-    ]);
+        $user = \App\Models\User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'role' => 'customer',
+        ]);
 
-    Auth::login($user);
+        Auth::login($user);
 
-    return redirect('/')->with('success', 'Registrasi berhasil! Selamat datang!');
-})->name('register.post');
+        return redirect('/')->with('success', 'Registrasi berhasil! Selamat datang!');
+    })->name('register.post');
+});
 
 // Logout route
 Route::post('/logout', function () {
@@ -76,10 +79,7 @@ Route::post('/logout', function () {
 
 // Protected routes for authenticated users
 Route::middleware(['auth'])->group(function () {
-    Route::get('/orders', function () {
-        return view('user.orders');
-    })->name('orders');
-
+    Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/orders/{order}/track', [OrderController::class, 'track'])->name('orders.track');
 

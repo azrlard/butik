@@ -25,11 +25,16 @@ class SalesReport extends Page
 
     public function getStats(): array
     {
-        // Total penjualan hari ini
-        $todaySales = Order::whereDate('created_at', today())->sum('total_harga');
+        $paidStatuses = ['paid', 'success', 'shipped', 'completed', 'delivered'];
 
-        // Total penjualan bulan ini
-        $monthlySales = Order::whereMonth('created_at', now()->month)
+        // Total penjualan hari ini (pesanan berhasil/lunas)
+        $todaySales = Order::whereIn('status', $paidStatuses)
+                            ->whereDate('created_at', today())
+                            ->sum('total_harga');
+
+        // Total penjualan bulan ini (pesanan berhasil/lunas)
+        $monthlySales = Order::whereIn('status', $paidStatuses)
+                            ->whereMonth('created_at', now()->month)
                             ->whereYear('created_at', now()->year)
                             ->sum('total_harga');
 
@@ -38,8 +43,9 @@ class SalesReport extends Page
                              ->whereYear('created_at', now()->year)
                              ->count();
 
-        // Rata-rata nilai pesanan
-        $avgOrderValue = Order::whereMonth('created_at', now()->month)
+        // Rata-rata nilai pesanan lunas
+        $avgOrderValue = Order::whereIn('status', $paidStatuses)
+                             ->whereMonth('created_at', now()->month)
                              ->whereYear('created_at', now()->year)
                              ->avg('total_harga') ?? 0;
 

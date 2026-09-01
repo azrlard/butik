@@ -44,11 +44,15 @@ class Product extends Model
     public function getHargaAttribute()
     {
         if ($this->tipe_produk === 'custom') {
-            return $this->attributes['harga'] ?? 0;
+            return (float) ($this->attributes['harga'] ?? 0);
         }
 
-        // For ready stock products, get price from variants or return 0
-        return $this->variants()->min('price_adjustment') ?? 0;
+        // For ready stock products, get price from loaded variants or query min
+        if ($this->relationLoaded('variants')) {
+            return (float) ($this->variants->min('price_adjustment') ?? 0);
+        }
+
+        return (float) ($this->variants()->min('price_adjustment') ?? 0);
     }
 
     public function getStokAttribute()
@@ -58,7 +62,11 @@ class Product extends Model
         }
 
         // For ready stock products, sum all variant stocks
-        return $this->variants()->sum('stock');
+        if ($this->relationLoaded('variants')) {
+            return (int) $this->variants->sum('stock');
+        }
+
+        return (int) $this->variants()->sum('stock');
     }
 
     public function getTerjualAttribute()

@@ -22,6 +22,19 @@ class OrderController extends Controller
     }
 
     /**
+     * Display orders history page for authenticated user.
+     */
+    public function userOrders()
+    {
+        $orders = Auth::user()->orders()
+            ->with(['orderItems.product', 'orderItems.variant', 'orderItems.customRequest', 'pengiriman'])
+            ->latest()
+            ->get();
+
+        return view('user.orders', compact('orders'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -67,20 +80,16 @@ class OrderController extends Controller
                     // Create CustomRequest
                     $customRequest = \App\Models\CustomRequest::create([
                         'user_id' => $request->user_id,
-                        'keterangan' => $item['keterangan'],
-                        'harga_estimasi' => $item['harga'],
+                        'keterangan' => $item['keterangan'] ?? '',
+                        'harga_estimasi' => $item['harga'] ?? 0,
                         'status' => 'pending',
-                        'product_category' => $item['product_category'],
+                        'product_category' => $item['product_category'] ?? 'General',
                         'customer_name' => $request->customer_name,
                         'customer_email' => $request->customer_email,
                         'customer_phone' => $request->customer_phone,
+                        'alamat' => $request->alamat_pengiriman,
+                        'foto_referensi' => $item['foto_referensi'] ?? null,
                     ]);
-
-                    // Handle file upload if any
-                    if (isset($item['foto_referensi']) && $item['foto_referensi']) {
-                        // Assuming file is uploaded separately, but for now, store path
-                        $customRequest->update(['foto_referensi' => $item['foto_referensi']]);
-                    }
 
                     $orderItems[] = [
                         'product_id' => null,
@@ -105,9 +114,12 @@ class OrderController extends Controller
                         if (isset($item['variant_id']) && $item['variant_id']) {
                             $variant = \App\Models\ProductVariant::find($item['variant_id']);
                             if ($variant) {
+                                if ($variant->stock < $item['jumlah']) {
+                                    throw new \Exception("Stok untuk varian {$product->nama_produk} ({$variant->size}) tidak mencukupi (tersedia: {$variant->stock})");
+                                }
                                 $hargaSatuan = $variant->price_adjustment;
                             } else {
-                                throw new \Exception("Variant with ID {$item['variant_id']} not found");
+                                throw new \Exception("Variant dengan ID {$item['variant_id']} tidak ditemukan");
                             }
                         } else {
                             $hargaSatuan = $product->harga;
@@ -126,7 +138,7 @@ class OrderController extends Controller
                             'variant' => $variant,
                         ];
                     } else {
-                        throw new \Exception("Product with ID {$item['product_id']} not found");
+                        throw new \Exception("Produk dengan ID {$item['product_id']} tidak ditemukan");
                     }
                 }
             }

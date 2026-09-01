@@ -55,6 +55,10 @@ class CustomRequestResource extends Resource
                     ->label('Telepon Customer'),
                 Forms\Components\TextInput::make('product_category')
                     ->label('Kategori Produk'),
+                Forms\Components\Textarea::make('alamat')
+                    ->label('Alamat Pengiriman')
+                    ->columnSpanFull()
+                    ->nullable(),
             ]);
     }
 
@@ -84,6 +88,10 @@ class CustomRequestResource extends Resource
                     ->label('Email Customer'),
                 Tables\Columns\TextColumn::make('customer_phone')
                     ->label('Telepon Customer'),
+                Tables\Columns\TextColumn::make('alamat')
+                    ->label('Alamat')
+                    ->limit(30)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('product_category')
                     ->label('Kategori Produk'),
                 Tables\Columns\TextColumn::make('created_at')

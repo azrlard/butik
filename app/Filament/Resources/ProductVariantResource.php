@@ -29,7 +29,7 @@ class ProductVariantResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('product_id')
-                    ->relationship('product', 'nama_produk')
+                    ->relationship('product', 'nama_produk', fn (Builder $query) => $query->where('tipe_produk', 'ready'))
                     ->required()
                     ->searchable()
                     ->helperText('Pilih produk ready stock yang akan diberi variant'),
